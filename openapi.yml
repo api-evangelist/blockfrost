@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 0.1.67
-  title: Blockfrost.io ~ API Documentation
+  title: Blockfrost Blockfrost.io ~ API Documentation
   x-logo:
     url: 'https://staging.blockfrost.io/images/logo.svg'
     altText: Blockfrost
@@ -353,7 +353,7 @@ paths:
     get:
       tags:
         - Health
-      summary: Root endpoint
+      summary: Blockfrost Root endpoint
       description: >
         Root endpoint has no other function than to point end users to
         documentation.
@@ -388,7 +388,7 @@ paths:
     get:
       tags:
         - Health
-      summary: Backend health status
+      summary: Blockfrost Backend health status
       security: []
       description: >
         Return backend status as a boolean. Your application should handle
@@ -420,7 +420,7 @@ paths:
     get:
       tags:
         - Health
-      summary: Current backend time
+      summary: Blockfrost Current backend time
       description: |
         This endpoint provides the current UNIX time. Your application might
         use this to verify if the client clock is not out of sync.
@@ -452,7 +452,7 @@ paths:
     get:
       tags:
         - Cardano » Blocks
-      summary: Latest block
+      summary: Blockfrost Latest block
       description: |
         Return the latest block available to the backends, also known as the
         tip of the blockchain.
@@ -479,7 +479,7 @@ paths:
     get:
       tags:
         - Cardano » Blocks
-      summary: Latest block transactions
+      summary: Blockfrost Latest block transactions
       description: Return the transactions within the latest block.
       parameters:
         - in: query
@@ -539,7 +539,7 @@ paths:
     get:
       tags:
         - Cardano » Blocks
-      summary: Specific block
+      summary: Blockfrost Specific block
       description: |
         Return the content of a requested block.
       parameters:
@@ -574,7 +574,7 @@ paths:
     get:
       tags:
         - Cardano » Blocks
-      summary: Listing of next blocks
+      summary: Blockfrost Listing of next blocks
       description: |
         Return the list of blocks following a specific block.
       parameters:
@@ -627,7 +627,7 @@ paths:
     get:
       tags:
         - Cardano » Blocks
-      summary: Listing of previous blocks
+      summary: Blockfrost Listing of previous blocks
       description: |
         Return the list of blocks preceding a specific block.
       parameters:
@@ -680,7 +680,7 @@ paths:
     get:
       tags:
         - Cardano » Blocks
-      summary: Specific block in a slot
+      summary: Blockfrost Specific block in a slot
       description: |
         Return the content of a requested block for a specific slot.
       parameters:
@@ -715,7 +715,7 @@ paths:
     get:
       tags:
         - Cardano » Blocks
-      summary: Specific block in a slot in an epoch
+      summary: Blockfrost Specific block in a slot in an epoch
       description: |
         Return the content of a requested block for a specific slot in an epoch.
       parameters:
@@ -758,7 +758,7 @@ paths:
     get:
       tags:
         - Cardano » Blocks
-      summary: Block transactions
+      summary: Blockfrost Block transactions
       description: Return the transactions within the block.
       parameters:
         - in: path
@@ -826,7 +826,7 @@ paths:
     get:
       tags:
         - Cardano » Blocks
-      summary: Addresses affected in a specific block
+      summary: Blockfrost Addresses affected in a specific block
       description: >-
         Return list of addresses affected in the specified block with additional
         information, sorted by the bech32 address, ascending.
@@ -880,7 +880,7 @@ paths:
     get:
       tags:
         - Cardano » Ledger
-      summary: Blockchain genesis
+      summary: Blockfrost Blockchain genesis
       description: Return the information about blockchain genesis.
       responses:
         '200':
@@ -903,7 +903,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: Delegate Representatives (DReps)
+      summary: Blockfrost Delegate Representatives (DReps)
       description: Return the information about Delegate Representatives (DReps)
       parameters:
         - in: query
@@ -962,7 +962,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: Specific DRep
+      summary: Blockfrost Specific DRep
       description: DRep information.
       parameters:
         - in: path
@@ -993,7 +993,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: DRep delegators
+      summary: Blockfrost DRep delegators
       description: List of Drep delegators.
       parameters:
         - in: path
@@ -1056,7 +1056,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: DRep metadata
+      summary: Blockfrost DRep metadata
       description: DRep metadata information.
       parameters:
         - in: path
@@ -1087,7 +1087,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: DRep updates
+      summary: Blockfrost DRep updates
       description: List of certificate updates to the DRep.
       parameters:
         - in: path
@@ -1150,7 +1150,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: DRep votes
+      summary: Blockfrost DRep votes
       description: History of Drep votes.
       parameters:
         - in: path
@@ -1213,7 +1213,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: Proposals
+      summary: Blockfrost Proposals
       description: Return the information about Proposals
       parameters:
         - in: query
@@ -1272,7 +1272,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: Specific proposal
+      summary: Blockfrost Specific proposal
       description: Proposal information.
       parameters:
         - in: path
@@ -1310,7 +1310,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: Specific parameters proposal
+      summary: Blockfrost Specific parameters proposal
       description: Parameters proposal details.
       parameters:
         - in: path
@@ -1350,7 +1350,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: Specific withdrawals proposal
+      summary: Blockfrost Specific withdrawals proposal
       description: Parameters withdrawals details.
       parameters:
         - in: path
@@ -1390,7 +1390,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: Proposal votes
+      summary: Blockfrost Proposal votes
       description: History of Proposal votes.
       parameters:
         - in: path
@@ -1460,7 +1460,7 @@ paths:
     get:
       tags:
         - Cardano » Governance
-      summary: Specific proposal metadata
+      summary: Blockfrost Specific proposal metadata
       description: Proposal metadata information.
       parameters:
         - in: path
@@ -1498,7 +1498,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Latest epoch
+      summary: Blockfrost Latest epoch
       description: 'Return the information about the latest, therefore current, epoch.'
       responses:
         '200':
@@ -1523,7 +1523,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Latest epoch protocol parameters
+      summary: Blockfrost Latest epoch protocol parameters
       description: Return the protocol parameters for the latest epoch.
       responses:
         '200':
@@ -1548,7 +1548,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Specific epoch
+      summary: Blockfrost Specific epoch
       description: Return the content of the requested epoch.
       parameters:
         - in: path
@@ -1581,7 +1581,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Listing of next epochs
+      summary: Blockfrost Listing of next epochs
       description: Return the list of epochs following a specific epoch.
       parameters:
         - in: path
@@ -1632,7 +1632,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Listing of previous epochs
+      summary: Blockfrost Listing of previous epochs
       description: Return the list of epochs preceding a specific epoch.
       parameters:
         - in: path
@@ -1683,7 +1683,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Stake distribution
+      summary: Blockfrost Stake distribution
       description: Return the active stake distribution for the specified epoch.
       parameters:
         - in: path
@@ -1734,7 +1734,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Stake distribution by pool
+      summary: Blockfrost Stake distribution by pool
       description: >-
         Return the active stake distribution for the epoch specified by stake
         pool.
@@ -1794,7 +1794,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Block distribution
+      summary: Blockfrost Block distribution
       description: Return the blocks minted for the epoch specified.
       parameters:
         - in: path
@@ -1859,7 +1859,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Block distribution by pool
+      summary: Blockfrost Block distribution by pool
       description: Return the block minted for the epoch specified by stake pool.
       parameters:
         - in: path
@@ -1931,7 +1931,7 @@ paths:
     get:
       tags:
         - Cardano » Epochs
-      summary: Protocol parameters
+      summary: Blockfrost Protocol parameters
       description: Return the protocol parameters for the epoch specified.
       parameters:
         - in: path
@@ -1964,7 +1964,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Specific transaction
+      summary: Blockfrost Specific transaction
       description: Return content of the requested transaction.
       parameters:
         - in: path
@@ -1998,7 +1998,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction UTXOs
+      summary: Blockfrost Transaction UTXOs
       description: Return the inputs and UTXOs of the specific transaction.
       parameters:
         - in: path
@@ -2032,7 +2032,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction stake addresses certificates
+      summary: Blockfrost Transaction stake addresses certificates
       description: >
         Obtain information about (de)registration of stake addresses within a
         transaction.
@@ -2070,7 +2070,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction delegation certificates
+      summary: Blockfrost Transaction delegation certificates
       description: >
         Obtain information about delegation certificates of a specific
         transaction.
@@ -2108,7 +2108,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction withdrawal
+      summary: Blockfrost Transaction withdrawal
       description: Obtain information about withdrawals of a specific transaction.
       parameters:
         - in: path
@@ -2142,7 +2142,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction MIRs
+      summary: Blockfrost Transaction MIRs
       description: >-
         Obtain information about Move Instantaneous Rewards (MIRs) of a specific
         transaction.
@@ -2180,7 +2180,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction stake pool registration and update certificates
+      summary: Blockfrost Transaction stake pool registration and update certificates
       description: >
         Obtain information about stake pool registration and update certificates
         of a specific transaction.
@@ -2218,7 +2218,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction stake pool retirement certificates
+      summary: Blockfrost Transaction stake pool retirement certificates
       description: >
         Obtain information about stake pool retirements within a specific
         transaction.
@@ -2256,7 +2256,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction metadata
+      summary: Blockfrost Transaction metadata
       description: Obtain the transaction metadata.
       parameters:
         - in: path
@@ -2290,7 +2290,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction metadata in CBOR
+      summary: Blockfrost Transaction metadata in CBOR
       description: Obtain the transaction metadata in CBOR.
       parameters:
         - in: path
@@ -2324,7 +2324,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction redeemers
+      summary: Blockfrost Transaction redeemers
       description: Obtain the transaction redeemers.
       parameters:
         - in: path
@@ -2358,7 +2358,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction required signers
+      summary: Blockfrost Transaction required signers
       description: Obtain the extra transaction witnesses.
       parameters:
         - in: path
@@ -2392,7 +2392,7 @@ paths:
     get:
       tags:
         - Cardano » Transactions
-      summary: Transaction CBOR
+      summary: Blockfrost Transaction CBOR
       description: Obtain the CBOR serialized transaction
       parameters:
         - in: path
@@ -2426,7 +2426,7 @@ paths:
     post:
       tags:
         - Cardano » Transactions
-      summary: Submit a transaction
+      summary: Blockfrost Submit a transaction
       description: |
         Submit an already serialized transaction to the network.
 
@@ -2498,7 +2498,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Specific account address
+      summary: Blockfrost Specific account address
       description: |
         Obtain information about a specific stake account.
       parameters:
@@ -2532,7 +2532,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Account reward history
+      summary: Blockfrost Account reward history
       description: |
         Obtain information about the reward history of a specific account.
       parameters:
@@ -2598,7 +2598,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Account history
+      summary: Blockfrost Account history
       description: |
         Obtain information about the history of a specific account.
       parameters:
@@ -2664,7 +2664,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Account delegation history
+      summary: Blockfrost Account delegation history
       description: Obtain information about the delegation of a specific account.
       parameters:
         - in: path
@@ -2729,7 +2729,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Account registration history
+      summary: Blockfrost Account registration history
       description: >
         Obtain information about the registrations and deregistrations of a
         specific account.
@@ -2796,7 +2796,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Account withdrawal history
+      summary: Blockfrost Account withdrawal history
       description: |
         Obtain information about the withdrawals of a specific account.
       parameters:
@@ -2862,7 +2862,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Account MIR history
+      summary: Blockfrost Account MIR history
       description: |
         Obtain information about the MIRs of a specific account.
       parameters:
@@ -2928,7 +2928,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Account associated addresses
+      summary: Blockfrost Account associated addresses
       description: >
         Obtain information about the addresses of a specific account.
 
@@ -2998,7 +2998,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Assets associated with the account addresses
+      summary: Blockfrost Assets associated with the account addresses
       description: >
         Obtain information about assets associated with addresses of a specific
         account.
@@ -3069,7 +3069,7 @@ paths:
     get:
       tags:
         - Cardano » Accounts
-      summary: Detailed information about account associated addresses
+      summary: Blockfrost Detailed information about account associated addresses
       description: >
         Obtain summed details about all addresses associated with a given
         account.
@@ -3109,7 +3109,7 @@ paths:
     get:
       tags:
         - Cardano » Mempool
-      summary: Mempool
+      summary: Blockfrost Mempool
       description: |
         Return transactions that are currently stored in Blockfrost mempool,
         waiting to be included in a newly minted block.
@@ -3172,7 +3172,7 @@ paths:
     get:
       tags:
         - Cardano » Mempool
-      summary: Specific transaction in the mempool
+      summary: Blockfrost Specific transaction in the mempool
       description: |
         Return content of the requested transaction.
 
@@ -3211,7 +3211,7 @@ paths:
     get:
       tags:
         - Cardano » Mempool
-      summary: Mempool by address
+      summary: Blockfrost Mempool by address
       description: >
         List of mempool transactions where at least one of the transaction
         inputs or outputs belongs to the address.
@@ -3285,7 +3285,7 @@ paths:
     get:
       tags:
         - Cardano » Metadata
-      summary: Transaction metadata labels
+      summary: Blockfrost Transaction metadata labels
       description: |
         List of all used transaction metadata labels.
       parameters:
@@ -3344,7 +3344,7 @@ paths:
     get:
       tags:
         - Cardano » Metadata
-      summary: Transaction metadata content in JSON
+      summary: Blockfrost Transaction metadata content in JSON
       description: Transaction metadata per label.
       parameters:
         - in: path
@@ -3409,7 +3409,7 @@ paths:
     get:
       tags:
         - Cardano » Metadata
-      summary: Transaction metadata content in CBOR
+      summary: Blockfrost Transaction metadata content in CBOR
       description: Transaction metadata per label.
       parameters:
         - in: path
@@ -3474,7 +3474,7 @@ paths:
     get:
       tags:
         - Cardano » Addresses
-      summary: Specific address
+      summary: Blockfrost Specific address
       description: Obtain information about a specific address.
       parameters:
         - in: path
@@ -3508,7 +3508,7 @@ paths:
     get:
       tags:
         - Cardano » Addresses
-      summary: Extended information of a specific address
+      summary: Blockfrost Extended information of a specific address
       description: |
         Obtain extended information about a specific address.
       parameters:
@@ -3543,7 +3543,7 @@ paths:
     get:
       tags:
         - Cardano » Addresses
-      summary: Address details
+      summary: Blockfrost Address details
       description: Obtain details about an address.
       parameters:
         - in: path
@@ -3577,7 +3577,7 @@ paths:
     get:
       tags:
         - Cardano » Addresses
-      summary: Address UTXOs
+      summary: Blockfrost Address UTXOs
       description: UTXOs of the address.
       parameters:
         - in: path
@@ -3643,7 +3643,7 @@ paths:
     get:
       tags:
         - Cardano » Addresses
-      summary: Address UTXOs of a given asset
+      summary: Blockfrost Address UTXOs of a given asset
       description: UTXOs of the address.
       parameters:
         - in: path
@@ -3718,7 +3718,7 @@ paths:
       deprecated: true
       tags:
         - Cardano » Addresses
-      summary: Address txs
+      summary: Blockfrost Address txs
       description: Transactions on the address.
       parameters:
         - in: path
@@ -3784,7 +3784,7 @@ paths:
     get:
       tags:
         - Cardano » Addresses
-      summary: Address transactions
+      summary: Blockfrost Address transactions
       description: Transactions on the address.
       parameters:
         - in: path
@@ -3872,7 +3872,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: List of stake pools
+      summary: Blockfrost List of stake pools
       description: List of registered stake pools.
       parameters:
         - in: query
@@ -3930,7 +3930,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: List of stake pools with additional information
+      summary: Blockfrost List of stake pools with additional information
       description: List of registered stake pools with additional information.
       parameters:
         - in: query
@@ -3988,7 +3988,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: List of retired stake pools
+      summary: Blockfrost List of retired stake pools
       description: List of already retired pools.
       parameters:
         - in: query
@@ -4046,7 +4046,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: List of retiring stake pools
+      summary: Blockfrost List of retiring stake pools
       description: List of stake pools retiring in the upcoming epochs
       parameters:
         - in: query
@@ -4104,7 +4104,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: Specific stake pool
+      summary: Blockfrost Specific stake pool
       description: Pool information.
       parameters:
         - in: path
@@ -4137,7 +4137,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: Stake pool history
+      summary: Blockfrost Stake pool history
       description: |
         History of stake pool parameters over epochs.
       parameters:
@@ -4203,7 +4203,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: Stake pool metadata
+      summary: Blockfrost Stake pool metadata
       description: |
         Stake pool registration metadata.
       parameters:
@@ -4239,7 +4239,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: Stake pool relays
+      summary: Blockfrost Stake pool relays
       description: Relays of a stake pool.
       parameters:
         - in: path
@@ -4272,7 +4272,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: Stake pool delegators
+      summary: Blockfrost Stake pool delegators
       description: List of current stake pools delegators.
       parameters:
         - in: path
@@ -4337,7 +4337,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: Stake pool blocks
+      summary: Blockfrost Stake pool blocks
       description: List of stake pools blocks.
       parameters:
         - in: path
@@ -4402,7 +4402,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: Stake pool updates
+      summary: Blockfrost Stake pool updates
       description: List of certificate updates to the stake pool.
       parameters:
         - in: path
@@ -4467,7 +4467,7 @@ paths:
     get:
       tags:
         - Cardano » Pools
-      summary: Stake pool votes
+      summary: Blockfrost Stake pool votes
       description: History of stake pools votes.
       parameters:
         - in: path
@@ -4532,7 +4532,7 @@ paths:
     get:
       tags:
         - Cardano » Assets
-      summary: Assets
+      summary: Blockfrost Assets
       description: |
         List of assets. If an asset is completely burned,
         it will stay on the list with quantity 0 (order of assets is immutable).
@@ -4595,7 +4595,7 @@ paths:
     get:
       tags:
         - Cardano » Assets
-      summary: Specific asset
+      summary: Blockfrost Specific asset
       description: Information about a specific asset
       parameters:
         - in: path
@@ -4629,7 +4629,7 @@ paths:
     get:
       tags:
         - Cardano » Assets
-      summary: Asset history
+      summary: Blockfrost Asset history
       description: History of a specific asset
       parameters:
         - in: path
@@ -4696,7 +4696,7 @@ paths:
       deprecated: true
       tags:
         - Cardano » Assets
-      summary: Asset txs
+      summary: Blockfrost Asset txs
       description: List of a specific asset transactions
       parameters:
         - in: path
@@ -4762,7 +4762,7 @@ paths:
     get:
       tags:
         - Cardano » Assets
-      summary: Asset transactions
+      summary: Blockfrost Asset transactions
       description: List of a specific asset transactions
       parameters:
         - in: path
@@ -4828,7 +4828,7 @@ paths:
     get:
       tags:
         - Cardano » Assets
-      summary: Asset addresses
+      summary: Blockfrost Asset addresses
       description: List of a addresses containing a specific asset
       parameters:
         - in: path
@@ -4894,7 +4894,7 @@ paths:
     get:
       tags:
         - Cardano » Assets
-      summary: Assets of a specific policy
+      summary: Blockfrost Assets of a specific policy
       description: List of asset minted under a specific policy
       parameters:
         - in: path
@@ -4959,7 +4959,7 @@ paths:
     get:
       tags:
         - Cardano » Scripts
-      summary: Scripts
+      summary: Blockfrost Scripts
       description: List of scripts.
       parameters:
         - in: query
@@ -5017,7 +5017,7 @@ paths:
     get:
       tags:
         - Cardano » Scripts
-      summary: Specific script
+      summary: Blockfrost Specific script
       description: Information about a specific script
       parameters:
         - in: path
@@ -5050,7 +5050,7 @@ paths:
     get:
       tags:
         - Cardano » Scripts
-      summary: Script JSON
+      summary: Blockfrost Script JSON
       description: JSON representation of a `timelock` script
       parameters:
         - in: path
@@ -5083,7 +5083,7 @@ paths:
     get:
       tags:
         - Cardano » Scripts
-      summary: Script CBOR
+      summary: Blockfrost Script CBOR
       description: CBOR representation of a `plutus` script
       parameters:
         - in: path
@@ -5116,7 +5116,7 @@ paths:
     get:
       tags:
         - Cardano » Scripts
-      summary: Redeemers of a specific script
+      summary: Blockfrost Redeemers of a specific script
       description: List of redeemers of a specific script
       parameters:
         - in: path
@@ -5181,7 +5181,7 @@ paths:
     get:
       tags:
         - Cardano » Scripts
-      summary: Datum value
+      summary: Blockfrost Datum value
       description: Query JSON value of a datum by its hash
       parameters:
         - in: path
@@ -5214,7 +5214,7 @@ paths:
     get:
       tags:
         - Cardano » Scripts
-      summary: Datum CBOR value
+      summary: Blockfrost Datum CBOR value
       description: Query CBOR serialised datum by its hash
       parameters:
         - in: path
@@ -5247,7 +5247,7 @@ paths:
     get:
       tags:
         - Cardano » Utilities
-      summary: Derive an address
+      summary: Blockfrost Derive an address
       description: Derive Shelley address from an xpub
       parameters:
         - in: path
@@ -5295,7 +5295,7 @@ paths:
     post:
       tags:
         - Cardano » Utilities
-      summary: Submit a transaction for execution units evaluation
+      summary: Blockfrost Submit a transaction for execution units evaluation
       description: >
         Submit an already serialized transaction to evaluate how much execution
         units it requires.
@@ -5372,8 +5372,7 @@ paths:
       tags:
         - Cardano » Utilities
       summary: >-
-        Submit a transaction for execution units evaluation (additional UTXO
-        set)
+        Blockfrost Submit a transaction for execution units evaluation (additional UTXO set)
       description: >
         Submit a JSON payload with transaction CBOR and additional UTXO set to
         evaluate how much execution units it requires.
@@ -5504,7 +5503,7 @@ paths:
     post:
       tags:
         - IPFS » Add
-      summary: Add a file to IPFS
+      summary: Blockfrost Add a file to IPFS
       operationId: ipfs_add
       description: >
         You need to `/ipfs/pin/add` an object to avoid it being garbage
@@ -5575,7 +5574,7 @@ paths:
     get:
       tags:
         - IPFS » Gateway
-      summary: Relay to an IPFS gateway
+      summary: Blockfrost Relay to an IPFS gateway
       description: >
         Retrieve an object from the IPFS gateway (useful if you do not want to
         rely on a public gateway, such as `ipfs.blockfrost.dev`).
@@ -5617,7 +5616,7 @@ paths:
     post:
       tags:
         - IPFS » Pins
-      summary: Pin an object
+      summary: Blockfrost Pin an object
       description: >-
         Pinning is necessary to avoid regular garbage collection (deletion) of
         IPFS objects. Non-pinned objects are regularly being removed without
@@ -5670,7 +5669,7 @@ paths:
     get:
       tags:
         - IPFS » Pins
-      summary: List pinned objects
+      summary: Blockfrost List pinned objects
       description: |
         List objects pinned to local storage
 
@@ -5777,7 +5776,7 @@ paths:
     get:
       tags:
         - IPFS » Pins
-      summary: Get details about pinned object
+      summary: Blockfrost Get details about pinned object
       description: |
         Get information about locally pinned IPFS object
 
@@ -5861,7 +5860,7 @@ paths:
     post:
       tags:
         - IPFS » Pins
-      summary: Remove a IPFS pin
+      summary: Blockfrost Remove a IPFS pin
       description: |
         Remove pinned objects from local storage
 
@@ -5964,7 +5963,7 @@ paths:
     get:
       tags:
         - Cardano » Network
-      summary: Network information
+      summary: Blockfrost Network information
       description: Return detailed network information.
       responses:
         '200':
@@ -5989,7 +5988,7 @@ paths:
     get:
       tags:
         - Cardano » Network
-      summary: Query summary of blockchain eras
+      summary: Blockfrost Query summary of blockchain eras
       description: |
         Returns start and end of each era along with
         parameters that can vary between hard forks.
@@ -6018,7 +6017,7 @@ paths:
     get:
       tags:
         - Nut.link
-      summary: Specific nut.link address
+      summary: Blockfrost Specific nut.link address
       description: List metadata about specific address
       parameters:
         - in: path
@@ -6050,7 +6049,7 @@ paths:
     get:
       tags:
         - Nut.link
-      summary: List of tickers of an oracle
+      summary: Blockfrost List of tickers of an oracle
       description: List of records of a specific oracle
       parameters:
         - in: path
@@ -6114,7 +6113,7 @@ paths:
     get:
       tags:
         - Nut.link
-      summary: Specific ticker for an address
+      summary: Blockfrost Specific ticker for an address
       description: List of records of a specific ticker
       parameters:
         - in: path
@@ -6184,7 +6183,7 @@ paths:
     get:
       tags:
         - Nut.link
-      summary: Specific ticker
+      summary: Blockfrost Specific ticker
       description: List of records of a specific ticker
       parameters:
         - in: path
@@ -6796,10 +6795,10 @@ components:
           getRwdCred = KeyHashObj (KeyHash
           "71317e951b20aa46e9fbf45a46a6e950d5723a481225519655bf6c60")},Coin
           20000000)])
-        ratified_epoch: null
+        ratified_epoch:
         enacted_epoch: 123
-        dropped_epoch: null
-        expired_epoch: null
+        dropped_epoch:
+        expired_epoch:
         expiration: 120
     proposal_parameters:
       type: object
@@ -6876,7 +6875,7 @@ components:
             extra_entropy:
               type: string
               nullable: true
-              example: null
+              example:
               description: Seed for extra entropy
             protocol_major_ver:
               type: integer
@@ -7457,7 +7456,7 @@ components:
         extra_entropy:
           type: string
           nullable: true
-          example: null
+          example:
           description: Seed for extra entropy
         protocol_major_ver:
           type: integer
@@ -7849,7 +7848,7 @@ components:
         invalid_before:
           type: string
           nullable: true
-          example: null
+          example:
           description: Left (included) endpoint of the timelock validity intervals
         invalid_hereafter:
           type: string
@@ -8872,7 +8871,7 @@ components:
             invalid_before:
               type: string
               nullable: true
-              example: null
+              example:
               description: Left (included) endpoint of the timelock validity intervals
             invalid_hereafter:
               type: string
@@ -9108,7 +9107,7 @@ components:
           - count
       example:
         - label: '1990'
-          cip10: null
+          cip10:
           count: '1'
         - label: '1967'
           cip10: nut.link metadata oracles registry
@@ -9151,7 +9150,7 @@ components:
               - value: '0.15409850555139935'
                 source: ergoOracles
         - tx_hash: 4237501da3cfdd53ade91e8911e764bd0699d88fd43b12f44a1f459b89bc91be
-          json_metadata: null
+          json_metadata:
     tx_metadata_label_cbor:
       type: array
       items:
@@ -9175,11 +9174,11 @@ components:
           - metadata
       example:
         - tx_hash: 257d75c8ddb0434e9b63e29ebb6241add2b835a307aa33aedba2effe09ed4ec8
-          cbor_metadata: null
-          metadata: null
+          cbor_metadata:
+          metadata:
         - tx_hash: e865f2cc01ca7381cf98dcdc4de07a5e8674b8ea16e6a18e3ed60c186fde2b9c
-          cbor_metadata: null
-          metadata: null
+          cbor_metadata:
+          metadata:
         - tx_hash: 4237501da3cfdd53ade91e8911e764bd0699d88fd43b12f44a1f459b89bc91be
           cbor_metadata: \xa100a16b436f6d62696e6174696f6e8601010101010c
           metadata: a100a16b436f6d62696e6174696f6e8601010101010c
@@ -9285,7 +9284,7 @@ components:
             - unit: >-
                 b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
               quantity: '12'
-              decimals: null
+              decimals:
               has_nft_onchain_metadata: true
         stake_address:
           type: string
@@ -9449,8 +9448,8 @@ components:
               quantity: '42000000'
           block: 7eb8e27d18686c7db9a18f8bbcfe34e3fed6e047afaa2d969904d15e934847e6
           data_hash: 9e478573ab81ea7a8e31891ce0648b81229f408d596a3483e6f4f9b92d3cf710
-          inline_datum: null
-          reference_script_hash: null
+          inline_datum:
+          reference_script_hash:
         - address: >-
             addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz
           tx_hash: 4c4e67bafa15e742c13c592b65c8f74c769cd7d9af04c848099672d1ba391b49
@@ -9459,9 +9458,9 @@ components:
             - unit: lovelace
               quantity: '729235000'
           block: 953f1b80eb7c11a7ffcd67cbd4fde66e824a451aca5a4065725e5174b81685b7
-          data_hash: null
-          inline_datum: null
-          reference_script_hash: null
+          data_hash:
+          inline_datum:
+          reference_script_hash:
         - address: >-
             addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz
           tx_hash: 768c63e27a1c816a83dc7b07e78af673b2400de8849ea7e7b734ae1333d100d2
@@ -9473,9 +9472,9 @@ components:
                 b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
               quantity: '12'
           block: 5c571f83fe6c784d3fbc223792627ccf0eea96773100f9aedecf8b1eda4544d7
-          data_hash: null
-          inline_datum: null
-          reference_script_hash: null
+          data_hash:
+          inline_datum:
+          reference_script_hash:
     address_txs_content:
       type: array
       items:
