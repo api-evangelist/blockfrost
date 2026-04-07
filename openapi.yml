@@ -329,8 +329,6 @@ servers:
 security:
   - project_id: []
 tags:
-  - name: Health
-  - name: Metrics
   - name: Cardano » Accounts
   - name: Cardano » Addresses
   - name: Cardano » Assets
@@ -345,9 +343,12 @@ tags:
   - name: Cardano » Scripts
   - name: Cardano » Transactions
   - name: Cardano » Utilities
+  - name: Health
   - name: IPFS » Add
   - name: IPFS » Gateway
   - name: IPFS » Pins
+  - name: Metrics
+  - name: Nut.link
 paths:
   /:
     get:
