@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-proposal-withdrawals-structure.json",
+  "name": "proposal_withdrawals",
+  "description": "proposal_withdrawals schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "required": [
+      "stake_address",
+      "amount"
+    ],
+    "type": "object",
+    "properties": {
+      "stake_address": {
+        "description": "Bech32 stake address",
+        "type": "string"
+      },
+      "amount": {
+        "description": "Withdrawal amount in Lovelaces",
+        "type": "string"
+      }
+    }
+  }
+}

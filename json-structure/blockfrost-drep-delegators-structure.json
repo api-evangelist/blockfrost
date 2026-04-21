@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-drep-delegators-structure.json",
+  "name": "drep_delegators",
+  "description": "drep_delegators schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "required": [
+      "address",
+      "amount"
+    ],
+    "type": "object",
+    "properties": {
+      "address": {
+        "description": "Bech32 encoded stake addresses",
+        "type": "string"
+      },
+      "amount": {
+        "description": "Currently delegated amount",
+        "type": "string"
+      }
+    }
+  }
+}

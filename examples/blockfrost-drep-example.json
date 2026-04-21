@@ -1,0 +1,11 @@
+{
+  "drep_id": "example-value",
+  "hex": "example-value",
+  "amount": "example-value",
+  "active": true,
+  "active_epoch": 1000,
+  "has_script": true,
+  "retired": true,
+  "expired": true,
+  "last_active_epoch": 1000
+}

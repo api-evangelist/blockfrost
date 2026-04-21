@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-schema/blockfrost-block-content-addresses-schema.json",
+  "title": "block_content_addresses",
+  "description": "block_content_addresses schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": "string",
+        "description": "Address that was affected in the specified block"
+      },
+      "transactions": {
+        "type": "array",
+        "description": "List of transactions containing the address either in their inputs or outputs. Sorted by transaction index within a block, ascending.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "tx_hash": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "tx_hash"
+          ]
+        }
+      }
+    },
+    "required": [
+      "address",
+      "transactions"
+    ]
+  }
+}

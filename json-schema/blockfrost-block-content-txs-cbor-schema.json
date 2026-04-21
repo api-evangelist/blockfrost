@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-schema/blockfrost-block-content-txs-cbor-schema.json",
+  "title": "block_content_txs_cbor",
+  "description": "block_content_txs_cbor schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tx_hash": {
+        "type": "string",
+        "description": "Hash of the transaction"
+      },
+      "cbor": {
+        "type": "string",
+        "description": "CBOR representation of the transaction data"
+      }
+    },
+    "required": [
+      "tx_hash",
+      "cbor"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-block-content-array-structure.json",
+  "name": "block_content_array",
+  "description": "block_content_array schema from Blockfrost API",
+  "type": "array",
+  "items": {}
+}

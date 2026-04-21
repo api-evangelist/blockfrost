@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-dreps-structure.json",
+  "name": "dreps",
+  "description": "dreps schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "required": [
+      "drep_id",
+      "hex"
+    ],
+    "type": "object",
+    "properties": {
+      "drep_id": {
+        "description": "The Bech32 encoded DRep address",
+        "type": "string"
+      },
+      "hex": {
+        "description": "The raw bytes of the DRep",
+        "type": "string"
+      }
+    }
+  }
+}

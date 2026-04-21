@@ -1,0 +1,13 @@
+{
+  "id": "example-value",
+  "tx_hash": "a1b2c3ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "cert_index": 1000,
+  "governance_type": "hard_fork_initiation",
+  "deposit": "example-value",
+  "return_address": "addr1qx0y9z...",
+  "ratified_epoch": 1000,
+  "enacted_epoch": 1000,
+  "dropped_epoch": 1000,
+  "expired_epoch": 1000,
+  "expiration": 1000
+}

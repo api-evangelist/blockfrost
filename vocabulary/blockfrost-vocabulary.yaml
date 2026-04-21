@@ -1,0 +1,200 @@
+vocabulary: "1.0.0"
+
+info:
+  provider: Blockfrost
+  description: Unified taxonomy for the Blockfrost Cardano blockchain API covering blocks, transactions, accounts, addresses, assets, epochs, and governance.
+  created: "2026-04-19"
+  modified: "2026-04-19"
+
+operational:
+  apis:
+    - namespace: blockfrost
+      version: "0.1.87"
+      baseUrl: https://cardano-mainnet.blockfrost.io/api/v0
+      status: active
+      description: Cardano mainnet blockchain API
+
+  resources:
+    - name: blocks
+      description: Cardano blockchain block data
+      api: blockfrost
+      actions: [get, list]
+    - name: transactions
+      description: Cardano transaction data and submission
+      api: blockfrost
+      actions: [get, submit]
+    - name: accounts
+      description: Cardano stake account data
+      api: blockfrost
+      actions: [get]
+    - name: addresses
+      description: Cardano address UTXOs and balances
+      api: blockfrost
+      actions: [get]
+    - name: assets
+      description: Cardano native assets (fungible and NFT)
+      api: blockfrost
+      actions: [get, list]
+    - name: epochs
+      description: Cardano epoch data and protocol parameters
+      api: blockfrost
+      actions: [get]
+    - name: governance
+      description: Cardano governance proposals and DRep data
+      api: blockfrost
+      actions: [get, list]
+
+  actions:
+    - name: get
+      description: Retrieve a single resource by identifier
+      httpMethod: GET
+      pattern: read
+    - name: list
+      description: Retrieve a paginated list of resources
+      httpMethod: GET
+      pattern: read
+    - name: submit
+      description: Submit a signed transaction to the blockchain
+      httpMethod: POST
+      pattern: write
+
+  schemas:
+    core:
+      - name: block_content
+        description: Cardano block with hash, slot, epoch, and transaction data
+        key_properties: [hash, height, slot, epoch, time, tx_count]
+      - name: transaction
+        description: Cardano transaction with inputs, outputs, and metadata
+        key_properties: [hash, block, block_height, slot, index, output_amount, fees]
+      - name: account
+        description: Cardano stake account with rewards and delegation
+        key_properties: [stake_address, active, active_epoch, controlled_amount, rewards_sum]
+      - name: address
+        description: Cardano address with balance and UTXOs
+        key_properties: [address, amount, stake_address, type, script]
+      - name: asset
+        description: Cardano native asset with policy and supply
+        key_properties: [asset, policy_id, asset_name, quantity, initial_mint_tx_hash]
+
+  parameters:
+    pagination:
+      - name: count
+        type: integer
+        description: Number of results per page (max 100)
+      - name: page
+        type: integer
+        description: Page number
+      - name: order
+        type: string
+        description: Sort order (asc or desc)
+    identifiers:
+      - name: hash_or_number
+        type: string
+        description: Block hash or block number
+      - name: hash
+        type: string
+        description: Transaction hash
+      - name: stake_address
+        type: string
+        description: Bech32 stake address
+      - name: address
+        type: string
+        description: Bech32 payment address
+      - name: asset
+        type: string
+        description: Asset ID (policy_id + asset_name)
+
+  enums:
+    addressTypes:
+      - value: shelley
+        description: Shelley era address
+      - value: byron
+        description: Byron era address
+      - value: reward
+        description: Reward/stake address
+
+  authentication:
+    schemes:
+      - type: apikey
+        description: project_id header from blockfrost.io project settings
+        apis: [blockfrost]
+
+capability:
+  workflows:
+    - name: Blockfrost Cardano Explorer
+      file: capabilities/blockfrost-cardano-explorer.yaml
+      description: Cardano blockchain exploration for developers, dApp builders, and analysts
+      apis: [Blockfrost API]
+      tools: 8
+      personas: [dApp Developer, Blockchain Analyst, NFT Creator, DeFi User]
+      domains: [Blockchain, Web3]
+
+  personas:
+    - id: dapp-developer
+      name: dApp Developer
+      description: Builds decentralized applications on Cardano using blockchain data and transaction submission
+      workflows: [Blockfrost Cardano Explorer]
+    - id: blockchain-analyst
+      name: Blockchain Analyst
+      description: Analyzes on-chain data including blocks, transactions, and account activity
+      workflows: [Blockfrost Cardano Explorer]
+    - id: nft-creator
+      name: NFT Creator
+      description: Mints and manages Cardano native assets and NFT collections
+      workflows: [Blockfrost Cardano Explorer]
+    - id: defi-user
+      name: DeFi User
+      description: Interacts with Cardano DeFi protocols and monitors address and account activity
+      workflows: [Blockfrost Cardano Explorer]
+
+  domains:
+    - name: Blockchain
+      description: Core blockchain data and transaction management
+      resources: [blocks, transactions, epochs]
+      workflows: [Blockfrost Cardano Explorer]
+    - name: Web3
+      description: Decentralized identity, assets, and governance
+      resources: [accounts, addresses, assets, governance]
+      workflows: [Blockfrost Cardano Explorer]
+
+  namespaces:
+    - name: blockfrost
+      type: consumed
+      baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    - name: blockfrost-cardano-explorer-api
+      type: rest-exposed
+      port: 8080
+    - name: blockfrost-cardano-explorer-mcp
+      type: mcp-exposed
+      port: 9090
+
+  binds:
+    - name: BLOCKFROST_PROJECT_ID
+      description: Blockfrost project ID for API authentication
+      workflows: [Blockfrost Cardano Explorer]
+
+crossReference:
+  - resource: blocks
+    operations: [get, list]
+    workflows: [Blockfrost Cardano Explorer]
+    personas: [dApp Developer, Blockchain Analyst]
+  - resource: transactions
+    operations: [get, submit]
+    workflows: [Blockfrost Cardano Explorer]
+    personas: [dApp Developer, DeFi User]
+  - resource: accounts
+    operations: [get]
+    workflows: [Blockfrost Cardano Explorer]
+    personas: [Blockchain Analyst, DeFi User]
+  - resource: addresses
+    operations: [get]
+    workflows: [Blockfrost Cardano Explorer]
+    personas: [dApp Developer, DeFi User, Blockchain Analyst]
+  - resource: assets
+    operations: [get, list]
+    workflows: [Blockfrost Cardano Explorer]
+    personas: [NFT Creator, dApp Developer, Blockchain Analyst]
+  - resource: epochs
+    operations: [get]
+    workflows: [Blockfrost Cardano Explorer]
+    personas: [Blockchain Analyst, dApp Developer]

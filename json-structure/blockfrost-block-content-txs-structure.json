@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-block-content-txs-structure.json",
+  "name": "block_content_txs",
+  "description": "block_content_txs schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "description": "Hash of the transaction",
+    "type": "string"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-genesis-content-structure.json",
+  "name": "genesis_content",
+  "description": "genesis_content schema from Blockfrost API",
+  "required": [
+    "active_slots_coefficient",
+    "update_quorum",
+    "max_lovelace_supply",
+    "network_magic",
+    "epoch_length",
+    "system_start",
+    "slots_per_kes_period",
+    "slot_length",
+    "max_kes_evolutions",
+    "security_param"
+  ],
+  "type": "object",
+  "properties": {
+    "active_slots_coefficient": {
+      "description": "The proportion of slots in which blocks should be issued",
+      "type": "double"
+    },
+    "update_quorum": {
+      "description": "Determines the quorum needed for votes on the protocol parameter updates",
+      "type": "int32"
+    },
+    "max_lovelace_supply": {
+      "description": "The total number of lovelace in the system",
+      "type": "string"
+    },
+    "network_magic": {
+      "description": "Network identifier",
+      "type": "int32"
+    },
+    "epoch_length": {
+      "description": "Number of slots in an epoch",
+      "type": "int32"
+    },
+    "system_start": {
+      "description": "Time of slot 0 in UNIX time",
+      "type": "int32"
+    },
+    "slots_per_kes_period": {
+      "description": "Number of slots in an KES period",
+      "type": "int32"
+    },
+    "slot_length": {
+      "description": "Duration of one slot in seconds",
+      "type": "int32"
+    },
+    "max_kes_evolutions": {
+      "description": "The maximum number of time a KES key can be evolved before a pool operator must create a new operational certificate",
+      "type": "int32"
+    },
+    "security_param": {
+      "description": "Security parameter k",
+      "type": "int32"
+    }
+  }
+}

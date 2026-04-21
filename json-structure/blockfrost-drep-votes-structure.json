@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-drep-votes-structure.json",
+  "name": "drep_votes",
+  "description": "drep_votes schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "required": [
+      "tx_hash",
+      "cert_index",
+      "proposal_id",
+      "proposal_tx_hash",
+      "proposal_cert_index",
+      "vote"
+    ],
+    "type": "object",
+    "properties": {
+      "tx_hash": {
+        "description": "Hash of the vote transaction.",
+        "type": "string"
+      },
+      "cert_index": {
+        "description": "Index of the certificate within the vote transaction.",
+        "type": "int32"
+      },
+      "proposal_id": {
+        "description": "Governance Action Identifier (CIP-0129) of the proposal being voted on.",
+        "type": "string"
+      },
+      "proposal_tx_hash": {
+        "description": "Hash of the proposal transaction.",
+        "type": "string"
+      },
+      "proposal_cert_index": {
+        "description": "Index of the certificate within the proposal transaction.",
+        "type": "int32"
+      },
+      "vote": {
+        "description": "The Vote. Can be one of yes, no, abstain.",
+        "enum": [
+          "yes",
+          "no",
+          "abstain"
+        ],
+        "type": "string"
+      }
+    }
+  }
+}

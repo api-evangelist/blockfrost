@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-drep-metadata-structure.json",
+  "name": "drep_metadata",
+  "description": "drep_metadata schema from Blockfrost API",
+  "required": [
+    "drep_id",
+    "hex",
+    "url",
+    "hash",
+    "json_metadata",
+    "bytes"
+  ],
+  "type": "object",
+  "properties": {
+    "drep_id": {
+      "description": "Bech32 encoded addresses",
+      "type": "string"
+    },
+    "hex": {
+      "description": "The raw bytes of the DRep",
+      "type": "string"
+    },
+    "url": {
+      "description": "URL to the drep metadata",
+      "type": "string"
+    },
+    "hash": {
+      "description": "Hash of the metadata file",
+      "type": "string"
+    },
+    "json_metadata": {
+      "description": "Content of the JSON metadata (validated CIP-119)",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "array",
+          "items": {}
+        },
+        {
+          "type": "int32"
+        },
+        {
+          "type": "double"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "bytes": {
+      "description": "Content of the metadata (raw)",
+      "type": "string"
+    },
+    "error": {
+      "description": "Present when metadata could not be fetched or validated.",
+      "required": [
+        "code",
+        "message"
+      ],
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Stable machine-readable error code.",
+          "enum": [
+            "HASH_MISMATCH",
+            "CONNECTION_ERROR",
+            "HTTP_RESPONSE_ERROR",
+            "DECODE_ERROR",
+            "SIZE_EXCEEDED",
+            "UNKNOWN_ERROR"
+          ],
+          "type": "string"
+        },
+        "message": {
+          "description": "Human-readable description of the error.",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

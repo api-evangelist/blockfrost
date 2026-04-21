@@ -1,0 +1,235 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "blockfrost": "https://blockfrost.io/schema/",
+    "schema": "https://schema.org/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "time": {
+      "@id": "blockfrost:time",
+      "@type": "xsd:integer"
+    },
+    "height": {
+      "@id": "blockfrost:height",
+      "@type": "xsd:integer"
+    },
+    "hash": "dcterms:identifier",
+    "slot": {
+      "@id": "blockfrost:slot",
+      "@type": "xsd:integer"
+    },
+    "epoch": {
+      "@id": "blockfrost:epoch",
+      "@type": "xsd:integer"
+    },
+    "epoch_slot": {
+      "@id": "blockfrost:epoch_slot",
+      "@type": "xsd:integer"
+    },
+    "slot_leader": {
+      "@id": "blockfrost:slot_leader",
+      "@type": "xsd:string"
+    },
+    "size": {
+      "@id": "blockfrost:size",
+      "@type": "xsd:integer"
+    },
+    "tx_count": {
+      "@id": "blockfrost:tx_count",
+      "@type": "xsd:integer"
+    },
+    "output": {
+      "@id": "blockfrost:output",
+      "@type": "xsd:string"
+    },
+    "fees": {
+      "@id": "blockfrost:fees",
+      "@type": "xsd:string"
+    },
+    "block_vrf": {
+      "@id": "blockfrost:block_vrf",
+      "@type": "xsd:string"
+    },
+    "op_cert": {
+      "@id": "blockfrost:op_cert",
+      "@type": "xsd:string"
+    },
+    "op_cert_counter": {
+      "@id": "blockfrost:op_cert_counter",
+      "@type": "xsd:string"
+    },
+    "previous_block": {
+      "@id": "blockfrost:previous_block",
+      "@type": "xsd:string"
+    },
+    "next_block": {
+      "@id": "blockfrost:next_block",
+      "@type": "xsd:string"
+    },
+    "confirmations": {
+      "@id": "blockfrost:confirmations",
+      "@type": "xsd:integer"
+    },
+    "drep_id": {
+      "@id": "blockfrost:drep_id",
+      "@type": "xsd:string"
+    },
+    "hex": {
+      "@id": "blockfrost:hex",
+      "@type": "xsd:string"
+    },
+    "url": "schema:url",
+    "json_metadata": {
+      "@id": "blockfrost:json_metadata",
+      "@type": "xsd:string"
+    },
+    "bytes": {
+      "@id": "blockfrost:bytes",
+      "@type": "xsd:string"
+    },
+    "error": {
+      "@id": "blockfrost:error",
+      "@type": "xsd:string"
+    },
+    "amount": {
+      "@id": "blockfrost:amount",
+      "@type": "xsd:string"
+    },
+    "active": {
+      "@id": "blockfrost:active",
+      "@type": "xsd:boolean"
+    },
+    "active_epoch": {
+      "@id": "blockfrost:active_epoch",
+      "@type": "xsd:integer"
+    },
+    "has_script": {
+      "@id": "blockfrost:has_script",
+      "@type": "xsd:boolean"
+    },
+    "retired": {
+      "@id": "blockfrost:retired",
+      "@type": "xsd:boolean"
+    },
+    "expired": {
+      "@id": "blockfrost:expired",
+      "@type": "xsd:boolean"
+    },
+    "last_active_epoch": {
+      "@id": "blockfrost:last_active_epoch",
+      "@type": "xsd:integer"
+    },
+    "active_slots_coefficient": {
+      "@id": "blockfrost:active_slots_coefficient",
+      "@type": "xsd:decimal"
+    },
+    "update_quorum": {
+      "@id": "blockfrost:update_quorum",
+      "@type": "xsd:integer"
+    },
+    "max_lovelace_supply": {
+      "@id": "blockfrost:max_lovelace_supply",
+      "@type": "xsd:string"
+    },
+    "network_magic": {
+      "@id": "blockfrost:network_magic",
+      "@type": "xsd:integer"
+    },
+    "epoch_length": {
+      "@id": "blockfrost:epoch_length",
+      "@type": "xsd:integer"
+    },
+    "system_start": {
+      "@id": "blockfrost:system_start",
+      "@type": "xsd:integer"
+    },
+    "slots_per_kes_period": {
+      "@id": "blockfrost:slots_per_kes_period",
+      "@type": "xsd:integer"
+    },
+    "slot_length": {
+      "@id": "blockfrost:slot_length",
+      "@type": "xsd:integer"
+    },
+    "max_kes_evolutions": {
+      "@id": "blockfrost:max_kes_evolutions",
+      "@type": "xsd:integer"
+    },
+    "security_param": {
+      "@id": "blockfrost:security_param",
+      "@type": "xsd:integer"
+    },
+    "id": {
+      "@id": "blockfrost:id",
+      "@type": "xsd:string"
+    },
+    "tx_hash": {
+      "@id": "blockfrost:tx_hash",
+      "@type": "xsd:string"
+    },
+    "cert_index": {
+      "@id": "blockfrost:cert_index",
+      "@type": "xsd:integer"
+    },
+    "parameters": {
+      "@id": "blockfrost:parameters",
+      "@type": "xsd:string"
+    },
+    "governance_type": {
+      "@id": "blockfrost:governance_type",
+      "@type": "xsd:string"
+    },
+    "governance_description": {
+      "@id": "blockfrost:governance_description",
+      "@type": "xsd:string"
+    },
+    "deposit": {
+      "@id": "blockfrost:deposit",
+      "@type": "xsd:string"
+    },
+    "return_address": {
+      "@id": "blockfrost:return_address",
+      "@type": "xsd:string"
+    },
+    "ratified_epoch": {
+      "@id": "blockfrost:ratified_epoch",
+      "@type": "xsd:integer"
+    },
+    "enacted_epoch": {
+      "@id": "blockfrost:enacted_epoch",
+      "@type": "xsd:integer"
+    },
+    "dropped_epoch": {
+      "@id": "blockfrost:dropped_epoch",
+      "@type": "xsd:integer"
+    },
+    "expired_epoch": {
+      "@id": "blockfrost:expired_epoch",
+      "@type": "xsd:integer"
+    },
+    "expiration": {
+      "@id": "blockfrost:expiration",
+      "@type": "xsd:integer"
+    },
+    "block_content_addresses": "blockfrost:block_content_addresses",
+    "block_content_array": "blockfrost:block_content_array",
+    "block_content": "blockfrost:block_content",
+    "block_content_txs_cbor": "blockfrost:block_content_txs_cbor",
+    "block_content_txs": "blockfrost:block_content_txs",
+    "drep_delegators": "blockfrost:drep_delegators",
+    "drep_metadata": "blockfrost:drep_metadata",
+    "drep": "blockfrost:drep",
+    "drep_updates": "blockfrost:drep_updates",
+    "drep_votes": "blockfrost:drep_votes",
+    "dreps": "blockfrost:dreps",
+    "genesis_content": "blockfrost:genesis_content",
+    "onchain_metadata_cip25": "blockfrost:onchain_metadata_cip25",
+    "onchain_metadata_cip68_ft_333": "blockfrost:onchain_metadata_cip68_ft_333",
+    "onchain_metadata_cip68_nft_222": "blockfrost:onchain_metadata_cip68_nft_222",
+    "onchain_metadata_cip68_rft_444": "blockfrost:onchain_metadata_cip68_rft_444",
+    "proposal_parameters": "blockfrost:proposal_parameters",
+    "proposal": "blockfrost:proposal",
+    "proposal_withdrawals": "blockfrost:proposal_withdrawals",
+    "proposals": "blockfrost:proposals"
+  }
+}

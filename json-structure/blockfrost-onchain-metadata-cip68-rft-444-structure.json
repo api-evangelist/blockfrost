@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-onchain-metadata-cip68-rft-444-structure.json",
+  "name": "onchain_metadata_cip68_rft_444",
+  "description": "onchain_metadata_cip68_rft_444 schema from Blockfrost API"
+}

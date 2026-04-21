@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-proposals-structure.json",
+  "name": "proposals",
+  "description": "proposals schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "required": [
+      "id",
+      "tx_hash",
+      "cert_index",
+      "governance_type"
+    ],
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "Governance Action Identifier (CIP-0129)",
+        "type": "string"
+      },
+      "tx_hash": {
+        "description": "Hash of the proposal transaction.",
+        "type": "string"
+      },
+      "cert_index": {
+        "description": "Index of the certificate within the proposal transaction.",
+        "type": "int32"
+      },
+      "governance_type": {
+        "description": "Type of proposal.",
+        "enum": [
+          "hard_fork_initiation",
+          "new_committee",
+          "new_constitution",
+          "info_action",
+          "no_confidence",
+          "parameter_change",
+          "treasury_withdrawals"
+        ],
+        "type": "string"
+      }
+    }
+  }
+}

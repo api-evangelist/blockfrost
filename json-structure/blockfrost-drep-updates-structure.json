@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-drep-updates-structure.json",
+  "name": "drep_updates",
+  "description": "drep_updates schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "required": [
+      "tx_hash",
+      "cert_index",
+      "action"
+    ],
+    "type": "object",
+    "properties": {
+      "tx_hash": {
+        "description": "Transaction ID",
+        "type": "string"
+      },
+      "cert_index": {
+        "description": "Index of the certificate within the update transaction.",
+        "type": "int32"
+      },
+      "action": {
+        "description": "Action in the certificate",
+        "enum": [
+          "registered",
+          "deregistered",
+          "updated"
+        ],
+        "type": "string"
+      }
+    }
+  }
+}

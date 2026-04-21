@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-block-content-structure.json",
+  "name": "block_content",
+  "description": "block_content schema from Blockfrost API",
+  "required": [
+    "time",
+    "height",
+    "hash",
+    "slot",
+    "epoch",
+    "epoch_slot",
+    "slot_leader",
+    "size",
+    "tx_count",
+    "output",
+    "fees",
+    "block_vrf",
+    "op_cert",
+    "op_cert_counter",
+    "previous_block",
+    "next_block",
+    "confirmations"
+  ],
+  "type": "object",
+  "properties": {
+    "time": {
+      "description": "Block creation time in UNIX time",
+      "type": "int32"
+    },
+    "height": {
+      "description": "Block number",
+      "type": "int32"
+    },
+    "hash": {
+      "description": "Hash of the block",
+      "type": "string"
+    },
+    "slot": {
+      "description": "Slot number",
+      "type": "int32"
+    },
+    "epoch": {
+      "description": "Epoch number",
+      "type": "int32"
+    },
+    "epoch_slot": {
+      "description": "Slot within the epoch",
+      "type": "int32"
+    },
+    "slot_leader": {
+      "description": "Bech32 ID of the slot leader or specific block description in case there is no slot leader",
+      "type": "string"
+    },
+    "size": {
+      "description": "Block size in Bytes",
+      "type": "int32"
+    },
+    "tx_count": {
+      "description": "Number of transactions in the block",
+      "type": "int32"
+    },
+    "output": {
+      "description": "Total output within the block in Lovelaces",
+      "type": "string"
+    },
+    "fees": {
+      "description": "Total fees within the block in Lovelaces",
+      "type": "string"
+    },
+    "block_vrf": {
+      "description": "VRF key of the block",
+      "type": "string"
+    },
+    "op_cert": {
+      "description": "The hash of the operational certificate of the block producer",
+      "type": "string"
+    },
+    "op_cert_counter": {
+      "description": "The value of the counter used to produce the operational certificate",
+      "type": "string"
+    },
+    "previous_block": {
+      "description": "Hash of the previous block",
+      "type": "string"
+    },
+    "next_block": {
+      "description": "Hash of the next block",
+      "type": "string"
+    },
+    "confirmations": {
+      "description": "Number of block confirmations",
+      "type": "int32"
+    }
+  }
+}

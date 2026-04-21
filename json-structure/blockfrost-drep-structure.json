@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-drep-structure.json",
+  "name": "drep",
+  "description": "drep schema from Blockfrost API",
+  "required": [
+    "drep_id",
+    "hex",
+    "amount",
+    "active",
+    "active_epoch",
+    "has_script",
+    "retired",
+    "expired",
+    "last_active_epoch"
+  ],
+  "type": "object",
+  "properties": {
+    "drep_id": {
+      "description": "Bech32 encoded DRep address",
+      "type": "string"
+    },
+    "hex": {
+      "description": "The raw bytes of the DRep",
+      "type": "string"
+    },
+    "amount": {
+      "description": "The total amount of voting power this DRep is delegated.",
+      "type": "string"
+    },
+    "active": {
+      "description": "Registration state of the DRep",
+      "deprecated": true,
+      "type": "boolean"
+    },
+    "active_epoch": {
+      "description": "Epoch of the most recent registration",
+      "deprecated": true,
+      "type": "int32"
+    },
+    "has_script": {
+      "description": "Flag which shows if this DRep credentials are a script hash",
+      "type": "boolean"
+    },
+    "retired": {
+      "description": "Registration state of the DRep. Set to `true` if the DRep has been deregistered; otherwise, `false`.",
+      "type": "boolean"
+    },
+    "expired": {
+      "description": "Whether the DRep has been inactive for a consecutive number of epochs (determined by a epoch parameter `drep_activity`)",
+      "type": "boolean"
+    },
+    "last_active_epoch": {
+      "description": "Epoch of the most recent action - registration, update, deregistration or voting",
+      "type": "int32"
+    }
+  }
+}

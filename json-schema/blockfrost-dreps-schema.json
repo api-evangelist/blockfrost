@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-schema/blockfrost-dreps-schema.json",
+  "title": "dreps",
+  "description": "dreps schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "drep_id": {
+        "type": "string",
+        "description": "The Bech32 encoded DRep address"
+      },
+      "hex": {
+        "type": "string",
+        "description": "The raw bytes of the DRep"
+      }
+    },
+    "required": [
+      "drep_id",
+      "hex"
+    ]
+  }
+}

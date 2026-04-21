@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-schema/blockfrost-drep-delegators-schema.json",
+  "title": "drep_delegators",
+  "description": "drep_delegators schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": "string",
+        "description": "Bech32 encoded stake addresses"
+      },
+      "amount": {
+        "type": "string",
+        "description": "Currently delegated amount"
+      }
+    },
+    "required": [
+      "address",
+      "amount"
+    ]
+  }
+}

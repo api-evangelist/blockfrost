@@ -1,0 +1,183 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: Blockfrost Cardano Explorer
+  description: >-
+    Workflow capability for Cardano blockchain exploration and dApp integration using the Blockfrost API.
+    Enables developers, analysts, and dApp builders to query blocks, transactions, accounts,
+    addresses, native assets, and epochs on the Cardano mainnet.
+  tags:
+    - Blockchain
+    - Cardano
+    - Cryptocurrency
+    - DApps
+    - NFT
+    - Web3
+  created: "2026-04-19"
+  modified: "2026-04-19"
+
+binds:
+  - namespace: env
+    keys:
+      BLOCKFROST_PROJECT_ID: BLOCKFROST_PROJECT_ID
+
+capability:
+  consumes:
+    - import: blockfrost
+      location: ./shared/blockfrost-api.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: blockfrost-cardano-explorer-api
+      description: Unified REST API for Cardano blockchain exploration.
+      resources:
+        - path: /v1/blocks/latest
+          name: latest-block
+          operations:
+            - method: GET
+              name: get-latest-block
+              description: Get the latest Cardano block
+              call: "blockfrost.get-latest-block"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/transactions/{hash}
+          name: transactions
+          operations:
+            - method: GET
+              name: get-transaction
+              description: Get transaction by hash
+              call: "blockfrost.get-transaction"
+              with:
+                hash: "rest.hash"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/accounts/{stake_address}
+          name: accounts
+          operations:
+            - method: GET
+              name: get-account
+              description: Get stake account information
+              call: "blockfrost.get-account"
+              with:
+                stake_address: "rest.stake_address"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/addresses/{address}
+          name: addresses
+          operations:
+            - method: GET
+              name: get-address
+              description: Get address information
+              call: "blockfrost.get-address"
+              with:
+                address: "rest.address"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/assets/{asset}
+          name: assets
+          operations:
+            - method: GET
+              name: get-asset
+              description: Get native asset information
+              call: "blockfrost.get-asset"
+              with:
+                asset: "rest.asset"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: blockfrost-cardano-explorer-mcp
+      transport: http
+      description: MCP server for AI-assisted Cardano blockchain exploration and analysis.
+      tools:
+        - name: get-latest-block
+          description: Get the latest block on the Cardano mainnet blockchain with slot, epoch, and transaction count information.
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-latest-block"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-block
+          description: Get a specific Cardano block by hash or block number.
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-block"
+          with:
+            hash_or_number: "tools.hash_or_number"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-transaction
+          description: Get details of a specific Cardano transaction by its hash, including inputs, outputs, and metadata.
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-transaction"
+          with:
+            hash: "tools.hash"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-account
+          description: Get Cardano stake account information including rewards, delegation, and pool information.
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-account"
+          with:
+            stake_address: "tools.stake_address"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-address
+          description: Get information about a Cardano address including ADA balance, UTXOs, and native asset holdings.
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-address"
+          with:
+            address: "tools.address"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-asset
+          description: Get information about a Cardano native asset including policy, name, supply, and on-chain metadata.
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-asset"
+          with:
+            asset: "tools.asset"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-latest-epoch
+          description: Get the current Cardano epoch information including start time, end time, and protocol parameters.
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-latest-epoch"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: submit-transaction
+          description: Submit a signed Cardano transaction (CBOR encoded) to the blockchain network.
+          hints:
+            readOnly: false
+            openWorld: false
+          call: "blockfrost.submit-transaction"
+          with:
+            tx_data: "tools.tx_data"
+          outputParameters:
+            - type: object
+              mapping: "$."

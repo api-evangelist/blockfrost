@@ -1,0 +1,264 @@
+# Blockfrost Spectral Ruleset
+# Enforces conventions from the Blockfrost Cardano blockchain API OpenAPI specification.
+
+rules:
+
+  # INFO / METADATA
+  info-title-prefix:
+    description: API title must start with "Blockfrost"
+    severity: warn
+    given: '$.info.title'
+    then:
+      function: pattern
+      functionOptions:
+        match: '^Blockfrost'
+
+  info-description-required:
+    description: Info object must have a description
+    severity: error
+    given: '$.info'
+    then:
+      field: description
+      function: truthy
+
+  info-version-required:
+    description: Info object must have a version
+    severity: error
+    given: '$.info'
+    then:
+      field: version
+      function: truthy
+
+  info-contact-required:
+    description: Info object should have contact information
+    severity: warn
+    given: '$.info'
+    then:
+      field: contact
+      function: truthy
+
+  info-license-required:
+    description: Info object should have license information
+    severity: info
+    given: '$.info'
+    then:
+      field: license
+      function: truthy
+
+  # OPENAPI VERSION
+  openapi-version:
+    description: Must use OpenAPI 3.x
+    severity: error
+    given: '$'
+    then:
+      field: openapi
+      function: pattern
+      functionOptions:
+        match: '^3\.'
+
+  # SERVERS
+  servers-defined:
+    description: At least one server must be defined
+    severity: error
+    given: '$'
+    then:
+      field: servers
+      function: truthy
+
+  servers-https:
+    description: Server URLs must use HTTPS
+    severity: error
+    given: '$.servers[*].url'
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https://'
+
+  # PATHS — NAMING CONVENTIONS
+  paths-kebab-case:
+    description: Path segments must use lowercase with underscores or kebab-case
+    severity: warn
+    given: '$.paths[*]~'
+    then:
+      function: pattern
+      functionOptions:
+        match: '^(/[a-z0-9_{}.-]+)+$'
+
+  paths-no-trailing-slash:
+    description: Paths must not have trailing slashes
+    severity: warn
+    given: '$.paths[*]~'
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: '/$'
+
+  # OPERATIONS
+  operation-summary-required:
+    description: Every operation must have a summary
+    severity: error
+    given: '$.paths[*][get,post,put,patch,delete]'
+    then:
+      field: summary
+      function: truthy
+
+  operation-summary-prefix:
+    description: Operation summaries must start with "Blockfrost"
+    severity: warn
+    given: '$.paths[*][get,post,put,patch,delete].summary'
+    then:
+      function: pattern
+      functionOptions:
+        match: '^Blockfrost'
+
+  operation-description-required:
+    description: Every operation must have a description
+    severity: warn
+    given: '$.paths[*][get,post,put,patch,delete]'
+    then:
+      field: description
+      function: truthy
+
+  operation-id-required:
+    description: Every operation must have an operationId
+    severity: error
+    given: '$.paths[*][get,post,put,patch,delete]'
+    then:
+      field: operationId
+      function: truthy
+
+  operation-id-snake-case:
+    description: operationId should use snake_case
+    severity: info
+    given: '$.paths[*][get,post,put,patch,delete].operationId'
+    then:
+      function: pattern
+      functionOptions:
+        match: '^[a-z][a-z0-9_]*$'
+
+  operation-tags-required:
+    description: Every operation must have at least one tag
+    severity: warn
+    given: '$.paths[*][get,post,put,patch,delete]'
+    then:
+      field: tags
+      function: truthy
+
+  # PARAMETERS
+  parameter-description-required:
+    description: Every parameter must have a description
+    severity: warn
+    given: '$.paths[*][get,post,put,patch,delete].parameters[*]'
+    then:
+      field: description
+      function: truthy
+
+  parameter-schema-required:
+    description: Every parameter must define a schema
+    severity: error
+    given: '$.paths[*][get,post,put,patch,delete].parameters[*]'
+    then:
+      field: schema
+      function: truthy
+
+  pagination-count-or-limit:
+    description: List endpoints should support count pagination parameter
+    severity: info
+    given: '$.paths[*].get'
+    then:
+      field: parameters
+      function: truthy
+
+  # RESPONSES
+  response-success-required:
+    description: Every operation must define at least one 2xx response
+    severity: error
+    given: '$.paths[*][get,post,put,patch,delete]'
+    then:
+      field: responses
+      function: truthy
+
+  response-400-defined:
+    description: Operations should define a 400 Bad Request response
+    severity: info
+    given: '$.paths[*][get,post,put,patch,delete].responses'
+    then:
+      field: '400'
+      function: truthy
+
+  response-403-defined:
+    description: Operations should define a 403 Forbidden response
+    severity: info
+    given: '$.paths[*][get,post,put,patch,delete].responses'
+    then:
+      field: '403'
+      function: truthy
+
+  response-description-required:
+    description: Every response must have a description
+    severity: error
+    given: '$.paths[*][get,post,put,patch,delete].responses[*]'
+    then:
+      field: description
+      function: truthy
+
+  # SCHEMAS
+  schema-description-required:
+    description: Top-level schemas must have a description
+    severity: warn
+    given: '$.components.schemas[*]'
+    then:
+      field: description
+      function: truthy
+
+  # SECURITY
+  security-schemes-defined:
+    description: At least one security scheme must be defined
+    severity: error
+    given: '$.components'
+    then:
+      field: securitySchemes
+      function: truthy
+
+  security-global-defined:
+    description: Global security must be defined
+    severity: warn
+    given: '$'
+    then:
+      field: security
+      function: truthy
+
+  # HTTP METHOD CONVENTIONS
+  get-no-request-body:
+    description: GET operations must not have a request body
+    severity: error
+    given: '$.paths[*].get'
+    then:
+      field: requestBody
+      function: falsy
+
+  # GENERAL QUALITY
+  no-empty-descriptions:
+    description: Descriptions must not be empty strings
+    severity: error
+    given: '$..description'
+    then:
+      function: pattern
+      functionOptions:
+        match: '.+'
+
+  tags-global-defined:
+    description: Global tags array should be defined
+    severity: info
+    given: '$'
+    then:
+      field: tags
+      function: truthy
+
+  external-docs-encouraged:
+    description: External documentation should be provided
+    severity: info
+    given: '$'
+    then:
+      field: externalDocs
+      function: truthy

@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-schema/blockfrost-onchain-metadata-cip68-nft-222-schema.json",
+  "title": "onchain_metadata_cip68_nft_222",
+  "description": "onchain_metadata_cip68_nft_222 schema from Blockfrost API"
+}

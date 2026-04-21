@@ -1,0 +1,288 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: Blockfrost API
+  description: RESTful API for interacting with the Cardano blockchain including accounts, addresses, transactions, blocks, assets, epochs, governance, and IPFS.
+  tags:
+    - Blockchain
+    - Cardano
+    - Cryptocurrency
+    - Web3
+  created: "2026-04-19"
+  modified: "2026-04-19"
+
+binds:
+  - namespace: env
+    keys:
+      BLOCKFROST_PROJECT_ID: BLOCKFROST_PROJECT_ID
+
+capability:
+  consumes:
+    - type: http
+      namespace: blockfrost
+      baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+      description: Blockfrost Cardano mainnet API
+      authentication:
+        type: apikey
+        key: project_id
+        value: "{{BLOCKFROST_PROJECT_ID}}"
+        placement: header
+      resources:
+        - name: health
+          path: /health
+          description: API health check
+          operations:
+            - name: get-health
+              method: GET
+              description: Return backend status
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: blocks
+          path: /blocks
+          description: Cardano block data
+          operations:
+            - name: get-latest-block
+              method: GET
+              description: Get the latest block
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: get-block
+              method: GET
+              description: Get a specific block by hash or number
+              inputParameters:
+                - name: hash_or_number
+                  in: path
+                  type: string
+                  required: true
+                  description: Block hash or block number
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: transactions
+          path: /txs
+          description: Cardano transaction data
+          operations:
+            - name: get-transaction
+              method: GET
+              description: Get a specific transaction
+              inputParameters:
+                - name: hash
+                  in: path
+                  type: string
+                  required: true
+                  description: Transaction hash
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: submit-transaction
+              method: POST
+              description: Submit a signed transaction to the network
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: application/cbor
+                data:
+                  tx_data: "{{tools.tx_data}}"
+
+        - name: accounts
+          path: /accounts
+          description: Cardano stake account data
+          operations:
+            - name: get-account
+              method: GET
+              description: Get stake account information
+              inputParameters:
+                - name: stake_address
+                  in: path
+                  type: string
+                  required: true
+                  description: Bech32 stake address
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: addresses
+          path: /addresses
+          description: Cardano address data
+          operations:
+            - name: get-address
+              method: GET
+              description: Get address information
+              inputParameters:
+                - name: address
+                  in: path
+                  type: string
+                  required: true
+                  description: Bech32 address
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: assets
+          path: /assets
+          description: Cardano native assets
+          operations:
+            - name: get-asset
+              method: GET
+              description: Get asset information
+              inputParameters:
+                - name: asset
+                  in: path
+                  type: string
+                  required: true
+                  description: Asset ID (policy_id + asset_name in hex)
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: epochs
+          path: /epochs
+          description: Cardano epoch data
+          operations:
+            - name: get-latest-epoch
+              method: GET
+              description: Get the latest epoch
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: blockfrost-rest
+      resources:
+        - path: /v1/blocks/latest
+          name: latest-block
+          operations:
+            - method: GET
+              name: get-latest-block
+              description: Get the latest Cardano block
+              call: "blockfrost.get-latest-block"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/transactions/{hash}
+          name: transaction
+          operations:
+            - method: GET
+              name: get-transaction
+              description: Get a Cardano transaction by hash
+              call: "blockfrost.get-transaction"
+              with:
+                hash: "rest.hash"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: blockfrost-mcp
+      transport: http
+      tools:
+        - name: get-latest-block
+          description: Get the latest block on the Cardano mainnet blockchain
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-latest-block"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-block
+          description: Get a specific Cardano block by hash or block number
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-block"
+          with:
+            hash_or_number: "tools.hash_or_number"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-transaction
+          description: Get details of a specific Cardano transaction by hash
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-transaction"
+          with:
+            hash: "tools.hash"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-account
+          description: Get Cardano stake account information by stake address
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-account"
+          with:
+            stake_address: "tools.stake_address"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-address
+          description: Get information about a Cardano address including balance and UTXOs
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-address"
+          with:
+            address: "tools.address"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-asset
+          description: Get information about a Cardano native asset including metadata and supply
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-asset"
+          with:
+            asset: "tools.asset"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-latest-epoch
+          description: Get the current epoch information on the Cardano blockchain
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "blockfrost.get-latest-epoch"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: submit-transaction
+          description: Submit a signed Cardano transaction to the blockchain network
+          hints:
+            readOnly: false
+            openWorld: false
+          call: "blockfrost.submit-transaction"
+          with:
+            tx_data: "tools.tx_data"
+          outputParameters:
+            - type: object
+              mapping: "$."

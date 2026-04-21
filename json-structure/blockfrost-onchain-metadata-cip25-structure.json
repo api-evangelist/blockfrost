@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-onchain-metadata-cip25-structure.json",
+  "name": "onchain_metadata_cip25",
+  "description": "onchain_metadata_cip25 schema from Blockfrost API"
+}

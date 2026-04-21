@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-structure/blockfrost-proposal-structure.json",
+  "name": "proposal",
+  "description": "proposal schema from Blockfrost API",
+  "required": [
+    "id",
+    "tx_hash",
+    "cert_index",
+    "governance_type",
+    "deposit",
+    "return_address",
+    "governance_description",
+    "ratified_epoch",
+    "enacted_epoch",
+    "dropped_epoch",
+    "expired_epoch",
+    "expiration"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Governance Action Identifier (CIP-0129)",
+      "type": "string"
+    },
+    "tx_hash": {
+      "description": "Hash of the proposal transaction.",
+      "type": "string"
+    },
+    "cert_index": {
+      "description": "Index of the certificate within the proposal transaction.",
+      "type": "int32"
+    },
+    "governance_type": {
+      "description": "Type of proposal.",
+      "enum": [
+        "hard_fork_initiation",
+        "new_committee",
+        "new_constitution",
+        "info_action",
+        "no_confidence",
+        "parameter_change",
+        "treasury_withdrawals"
+      ],
+      "type": "string"
+    },
+    "governance_description": {
+      "description": "An object describing the content of this GovActionProposal in a readable way.",
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "deposit": {
+      "description": "The deposit amount paid for this proposal.",
+      "type": "string"
+    },
+    "return_address": {
+      "description": "Bech32 stake address of the reward address to receive the deposit when it is repaid.",
+      "type": "string"
+    },
+    "ratified_epoch": {
+      "description": "The epoch at which the proposal was ratified. Null if the proposal has not been ratified.",
+      "type": "int32"
+    },
+    "enacted_epoch": {
+      "description": "The epoch at which the proposal was enacted. Null if the proposal has not been enacted.",
+      "type": "int32"
+    },
+    "dropped_epoch": {
+      "description": "The epoch at which the proposal was dropped. A proposal is dropped if it expires or if any of its dependencies expire.",
+      "type": "int32"
+    },
+    "expired_epoch": {
+      "description": "The epoch at which the proposal expired. Null if the proposal has not expired.",
+      "type": "int32"
+    },
+    "expiration": {
+      "description": "The epoch at which this governance action will expire.",
+      "type": "int32"
+    }
+  }
+}

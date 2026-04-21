@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockfrost/refs/heads/main/json-schema/blockfrost-proposal-withdrawals-schema.json",
+  "title": "proposal_withdrawals",
+  "description": "proposal_withdrawals schema from Blockfrost API",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "stake_address": {
+        "type": "string",
+        "example": "stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7",
+        "description": "Bech32 stake address"
+      },
+      "amount": {
+        "type": "string",
+        "description": "Withdrawal amount in Lovelaces"
+      }
+    },
+    "required": [
+      "stake_address",
+      "amount"
+    ]
+  }
+}
