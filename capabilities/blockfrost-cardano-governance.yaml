@@ -1,0 +1,937 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockfrost.io ~ API Documentation — Cardano » Governance
+  description: 'Blockfrost.io ~ API Documentation — Cardano » Governance. 17 operations. Lead operation: Blockfrost Delegate
+    Representatives (DReps). Self-contained Naftiko capability covering one Blockfrost business surface.'
+  tags:
+  - Blockfrost
+  - Cardano » Governance
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOCKFROST_API_KEY: BLOCKFROST_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: blockfrost-cardano-governance
+    baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    description: Blockfrost.io ~ API Documentation — Cardano » Governance business capability. Self-contained, no shared references.
+    resources:
+    - name: governance-dreps
+      path: /governance/dreps
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Delegate Representatives (DReps)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: governance-dreps-drep_id
+      path: /governance/dreps/{drep_id}
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Specific DRep
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: drep_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal DRep ID.
+          required: true
+    - name: governance-dreps-drep_id-delegators
+      path: /governance/dreps/{drep_id}/delegators
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost DRep Delegators
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: drep_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal drep ID.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: governance-dreps-drep_id-metadata
+      path: /governance/dreps/{drep_id}/metadata
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost DRep Metadata
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: drep_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal DRep ID.
+          required: true
+    - name: governance-dreps-drep_id-updates
+      path: /governance/dreps/{drep_id}/updates
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost DRep Updates
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: drep_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal DRep ID.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: governance-dreps-drep_id-votes
+      path: /governance/dreps/{drep_id}/votes
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost DRep Votes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: drep_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal drep ID.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: governance-proposals
+      path: /governance/proposals
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Proposals
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: governance-proposals-gov_action_id
+      path: /governance/proposals/{gov_action_id}
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost GovActionID Proposal
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: gov_action_id
+          in: path
+          type: string
+          description: Governance Action Identifier (CIP-0129)
+          required: true
+    - name: governance-proposals-gov_action_id-metadata
+      path: /governance/proposals/{gov_action_id}/metadata
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost GovActionID Proposal Metadata
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: gov_action_id
+          in: path
+          type: string
+          description: Governance Action Identifier (CIP-0129)
+          required: true
+    - name: governance-proposals-gov_action_id-parameters
+      path: /governance/proposals/{gov_action_id}/parameters
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost GovActionID Proposal Parameters
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: gov_action_id
+          in: path
+          type: string
+          description: Governance Action Identifier (CIP-0129)
+          required: true
+    - name: governance-proposals-gov_action_id-votes
+      path: /governance/proposals/{gov_action_id}/votes
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost GovActionID Proposal Votes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: gov_action_id
+          in: path
+          type: string
+          description: Governance Action Identifier (CIP-0129)
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: governance-proposals-gov_action_id-withdrawals
+      path: /governance/proposals/{gov_action_id}/withdrawals
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost GovActionID Proposal Withdrawals
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: gov_action_id
+          in: path
+          type: string
+          description: Governance Action Identifier (CIP-0129)
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: governance-proposals-tx_hash-cert_index
+      path: /governance/proposals/{tx_hash}/{cert_index}
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Specific Proposal
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: tx_hash
+          in: path
+          type: string
+          description: Transaction hash.
+          required: true
+        - name: cert_index
+          in: path
+          type: integer
+          description: Index of the certificate within the proposal transaction.
+          required: true
+    - name: governance-proposals-tx_hash-cert_index-metadata
+      path: /governance/proposals/{tx_hash}/{cert_index}/metadata
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Specific Proposal Metadata
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: tx_hash
+          in: path
+          type: string
+          description: Transaction hash of the proposal.
+          required: true
+        - name: cert_index
+          in: path
+          type: integer
+          description: Index of the certificate within the proposal transaction.
+          required: true
+    - name: governance-proposals-tx_hash-cert_index-parameters
+      path: /governance/proposals/{tx_hash}/{cert_index}/parameters
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Specific Parameters Proposal
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: tx_hash
+          in: path
+          type: string
+          description: Transaction hash.
+          required: true
+        - name: cert_index
+          in: path
+          type: integer
+          description: Index of the certificate within the proposal transaction.
+          required: true
+    - name: governance-proposals-tx_hash-cert_index-votes
+      path: /governance/proposals/{tx_hash}/{cert_index}/votes
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Proposal Votes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: tx_hash
+          in: path
+          type: string
+          description: Transaction hash.
+          required: true
+        - name: cert_index
+          in: path
+          type: integer
+          description: Index of the certificate within the proposal transaction.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: governance-proposals-tx_hash-cert_index-withdrawals
+      path: /governance/proposals/{tx_hash}/{cert_index}/withdrawals
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Specific Withdrawals Proposal
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: tx_hash
+          in: path
+          type: string
+          description: Transaction hash.
+          required: true
+        - name: cert_index
+          in: path
+          type: integer
+          description: Index of the certificate within the proposal transaction.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    authentication:
+      type: apikey
+      key: project_id
+      value: '{{env.BLOCKFROST_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: blockfrost-cardano-governance-rest
+    port: 8080
+    description: REST adapter for Blockfrost.io ~ API Documentation — Cardano » Governance. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/governance/dreps
+      name: governance-dreps
+      description: REST surface for governance-dreps.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Delegate Representatives (DReps)
+        call: blockfrost-cardano-governance.get
+        with:
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/dreps/{drep-id}
+      name: governance-dreps-drep-id
+      description: REST surface for governance-dreps-drep_id.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Specific DRep
+        call: blockfrost-cardano-governance.get
+        with:
+          drep_id: rest.drep_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/dreps/{drep-id}/delegators
+      name: governance-dreps-drep-id-delegators
+      description: REST surface for governance-dreps-drep_id-delegators.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost DRep Delegators
+        call: blockfrost-cardano-governance.get
+        with:
+          drep_id: rest.drep_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/dreps/{drep-id}/metadata
+      name: governance-dreps-drep-id-metadata
+      description: REST surface for governance-dreps-drep_id-metadata.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost DRep Metadata
+        call: blockfrost-cardano-governance.get
+        with:
+          drep_id: rest.drep_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/dreps/{drep-id}/updates
+      name: governance-dreps-drep-id-updates
+      description: REST surface for governance-dreps-drep_id-updates.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost DRep Updates
+        call: blockfrost-cardano-governance.get
+        with:
+          drep_id: rest.drep_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/dreps/{drep-id}/votes
+      name: governance-dreps-drep-id-votes
+      description: REST surface for governance-dreps-drep_id-votes.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost DRep Votes
+        call: blockfrost-cardano-governance.get
+        with:
+          drep_id: rest.drep_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals
+      name: governance-proposals
+      description: REST surface for governance-proposals.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Proposals
+        call: blockfrost-cardano-governance.get
+        with:
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{gov-action-id}
+      name: governance-proposals-gov-action-id
+      description: REST surface for governance-proposals-gov_action_id.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost GovActionID Proposal
+        call: blockfrost-cardano-governance.get
+        with:
+          gov_action_id: rest.gov_action_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{gov-action-id}/metadata
+      name: governance-proposals-gov-action-id-metadata
+      description: REST surface for governance-proposals-gov_action_id-metadata.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost GovActionID Proposal Metadata
+        call: blockfrost-cardano-governance.get
+        with:
+          gov_action_id: rest.gov_action_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{gov-action-id}/parameters
+      name: governance-proposals-gov-action-id-parameters
+      description: REST surface for governance-proposals-gov_action_id-parameters.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost GovActionID Proposal Parameters
+        call: blockfrost-cardano-governance.get
+        with:
+          gov_action_id: rest.gov_action_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{gov-action-id}/votes
+      name: governance-proposals-gov-action-id-votes
+      description: REST surface for governance-proposals-gov_action_id-votes.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost GovActionID Proposal Votes
+        call: blockfrost-cardano-governance.get
+        with:
+          gov_action_id: rest.gov_action_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{gov-action-id}/withdrawals
+      name: governance-proposals-gov-action-id-withdrawals
+      description: REST surface for governance-proposals-gov_action_id-withdrawals.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost GovActionID Proposal Withdrawals
+        call: blockfrost-cardano-governance.get
+        with:
+          gov_action_id: rest.gov_action_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{tx-hash}/{cert-index}
+      name: governance-proposals-tx-hash-cert-index
+      description: REST surface for governance-proposals-tx_hash-cert_index.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Specific Proposal
+        call: blockfrost-cardano-governance.get
+        with:
+          tx_hash: rest.tx_hash
+          cert_index: rest.cert_index
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{tx-hash}/{cert-index}/metadata
+      name: governance-proposals-tx-hash-cert-index-metadata
+      description: REST surface for governance-proposals-tx_hash-cert_index-metadata.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Specific Proposal Metadata
+        call: blockfrost-cardano-governance.get
+        with:
+          tx_hash: rest.tx_hash
+          cert_index: rest.cert_index
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{tx-hash}/{cert-index}/parameters
+      name: governance-proposals-tx-hash-cert-index-parameters
+      description: REST surface for governance-proposals-tx_hash-cert_index-parameters.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Specific Parameters Proposal
+        call: blockfrost-cardano-governance.get
+        with:
+          tx_hash: rest.tx_hash
+          cert_index: rest.cert_index
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{tx-hash}/{cert-index}/votes
+      name: governance-proposals-tx-hash-cert-index-votes
+      description: REST surface for governance-proposals-tx_hash-cert_index-votes.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Proposal Votes
+        call: blockfrost-cardano-governance.get
+        with:
+          tx_hash: rest.tx_hash
+          cert_index: rest.cert_index
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/governance/proposals/{tx-hash}/{cert-index}/withdrawals
+      name: governance-proposals-tx-hash-cert-index-withdrawals
+      description: REST surface for governance-proposals-tx_hash-cert_index-withdrawals.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Specific Withdrawals Proposal
+        call: blockfrost-cardano-governance.get
+        with:
+          tx_hash: rest.tx_hash
+          cert_index: rest.cert_index
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: blockfrost-cardano-governance-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Blockfrost.io ~ API Documentation — Cardano » Governance. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: blockfrost-delegate-representatives-dreps
+      description: Blockfrost Delegate Representatives (DReps)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-specific-drep
+      description: Blockfrost Specific DRep
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        drep_id: tools.drep_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-drep-delegators
+      description: Blockfrost DRep Delegators
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        drep_id: tools.drep_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-drep-metadata
+      description: Blockfrost DRep Metadata
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        drep_id: tools.drep_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-drep-updates
+      description: Blockfrost DRep Updates
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        drep_id: tools.drep_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-drep-votes
+      description: Blockfrost DRep Votes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        drep_id: tools.drep_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-proposals
+      description: Blockfrost Proposals
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-govactionid-proposal
+      description: Blockfrost GovActionID Proposal
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        gov_action_id: tools.gov_action_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-govactionid-proposal-metadata
+      description: Blockfrost GovActionID Proposal Metadata
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        gov_action_id: tools.gov_action_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-govactionid-proposal-parameters
+      description: Blockfrost GovActionID Proposal Parameters
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        gov_action_id: tools.gov_action_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-govactionid-proposal-votes
+      description: Blockfrost GovActionID Proposal Votes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        gov_action_id: tools.gov_action_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-govactionid-proposal-withdrawals
+      description: Blockfrost GovActionID Proposal Withdrawals
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        gov_action_id: tools.gov_action_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-specific-proposal
+      description: Blockfrost Specific Proposal
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        tx_hash: tools.tx_hash
+        cert_index: tools.cert_index
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-specific-proposal-metadata
+      description: Blockfrost Specific Proposal Metadata
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        tx_hash: tools.tx_hash
+        cert_index: tools.cert_index
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-specific-parameters-proposal
+      description: Blockfrost Specific Parameters Proposal
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        tx_hash: tools.tx_hash
+        cert_index: tools.cert_index
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-proposal-votes
+      description: Blockfrost Proposal Votes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        tx_hash: tools.tx_hash
+        cert_index: tools.cert_index
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-specific-withdrawals-proposal
+      description: Blockfrost Specific Withdrawals Proposal
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-governance.get
+      with:
+        tx_hash: tools.tx_hash
+        cert_index: tools.cert_index
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.

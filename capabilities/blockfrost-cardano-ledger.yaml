@@ -1,0 +1,72 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockfrost.io ~ API Documentation — Cardano » Ledger
+  description: 'Blockfrost.io ~ API Documentation — Cardano » Ledger. 1 operations. Lead operation: Blockfrost Blockchain
+    Genesis. Self-contained Naftiko capability covering one Blockfrost business surface.'
+  tags:
+  - Blockfrost
+  - Cardano » Ledger
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOCKFROST_API_KEY: BLOCKFROST_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: blockfrost-cardano-ledger
+    baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    description: Blockfrost.io ~ API Documentation — Cardano » Ledger business capability. Self-contained, no shared references.
+    resources:
+    - name: genesis
+      path: /genesis
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Blockchain Genesis
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: project_id
+      value: '{{env.BLOCKFROST_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: blockfrost-cardano-ledger-rest
+    port: 8080
+    description: REST adapter for Blockfrost.io ~ API Documentation — Cardano » Ledger. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/genesis
+      name: genesis
+      description: REST surface for genesis.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Blockchain Genesis
+        call: blockfrost-cardano-ledger.get
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: blockfrost-cardano-ledger-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Blockfrost.io ~ API Documentation — Cardano » Ledger. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: blockfrost-blockchain-genesis
+      description: Blockfrost Blockchain Genesis
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-ledger.get
+      outputParameters:
+      - type: object
+        mapping: $.

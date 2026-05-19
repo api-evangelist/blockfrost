@@ -1,0 +1,136 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockfrost.io ~ API Documentation — Health
+  description: 'Blockfrost.io ~ API Documentation — Health. 3 operations. Lead operation: Blockfrost Root Endpoint. Self-contained
+    Naftiko capability covering one Blockfrost business surface.'
+  tags:
+  - Blockfrost
+  - Health
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOCKFROST_API_KEY: BLOCKFROST_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: blockfrost-health
+    baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    description: Blockfrost.io ~ API Documentation — Health business capability. Self-contained, no shared references.
+    resources:
+    - name: root
+      path: /
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Root Endpoint
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: health
+      path: /health
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Backend Health Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: health-clock
+      path: /health/clock
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Current Backend Time
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: project_id
+      value: '{{env.BLOCKFROST_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: blockfrost-health-rest
+    port: 8080
+    description: REST adapter for Blockfrost.io ~ API Documentation — Health. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1
+      name: root
+      description: REST surface for root.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Root Endpoint
+        call: blockfrost-health.get
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/health
+      name: health
+      description: REST surface for health.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Backend Health Status
+        call: blockfrost-health.get
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/health/clock
+      name: health-clock
+      description: REST surface for health-clock.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Current Backend Time
+        call: blockfrost-health.get
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: blockfrost-health-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Blockfrost.io ~ API Documentation — Health. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: blockfrost-root-endpoint
+      description: Blockfrost Root Endpoint
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-health.get
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-backend-health-status
+      description: Blockfrost Backend Health Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-health.get
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-current-backend-time
+      description: Blockfrost Current Backend Time
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-health.get
+      outputParameters:
+      - type: object
+        mapping: $.

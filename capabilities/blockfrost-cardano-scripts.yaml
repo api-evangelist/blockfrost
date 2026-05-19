@@ -1,0 +1,363 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockfrost.io ~ API Documentation — Cardano » Scripts
+  description: 'Blockfrost.io ~ API Documentation — Cardano » Scripts. 7 operations. Lead operation: Blockfrost Scripts. Self-contained
+    Naftiko capability covering one Blockfrost business surface.'
+  tags:
+  - Blockfrost
+  - Cardano » Scripts
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOCKFROST_API_KEY: BLOCKFROST_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: blockfrost-cardano-scripts
+    baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    description: Blockfrost.io ~ API Documentation — Cardano » Scripts business capability. Self-contained, no shared references.
+    resources:
+    - name: scripts
+      path: /scripts
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Scripts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: scripts-datum-datum_hash
+      path: /scripts/datum/{datum_hash}
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Datum Value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: datum_hash
+          in: path
+          type: string
+          description: Hash of the datum
+          required: true
+    - name: scripts-datum-datum_hash-cbor
+      path: /scripts/datum/{datum_hash}/cbor
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Datum CBOR Value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: datum_hash
+          in: path
+          type: string
+          description: Hash of the datum
+          required: true
+    - name: scripts-script_hash
+      path: /scripts/{script_hash}
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Specific Script
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: script_hash
+          in: path
+          type: string
+          description: Hash of the script
+          required: true
+    - name: scripts-script_hash-cbor
+      path: /scripts/{script_hash}/cbor
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Script CBOR
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: script_hash
+          in: path
+          type: string
+          description: Hash of the script
+          required: true
+    - name: scripts-script_hash-json
+      path: /scripts/{script_hash}/json
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Script JSON
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: script_hash
+          in: path
+          type: string
+          description: Hash of the script
+          required: true
+    - name: scripts-script_hash-redeemers
+      path: /scripts/{script_hash}/redeemers
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Redeemers of a Specific Script
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: script_hash
+          in: path
+          type: string
+          description: Hash of the script
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    authentication:
+      type: apikey
+      key: project_id
+      value: '{{env.BLOCKFROST_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: blockfrost-cardano-scripts-rest
+    port: 8080
+    description: REST adapter for Blockfrost.io ~ API Documentation — Cardano » Scripts. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/scripts
+      name: scripts
+      description: REST surface for scripts.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Scripts
+        call: blockfrost-cardano-scripts.get
+        with:
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/scripts/datum/{datum-hash}
+      name: scripts-datum-datum-hash
+      description: REST surface for scripts-datum-datum_hash.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Datum Value
+        call: blockfrost-cardano-scripts.get
+        with:
+          datum_hash: rest.datum_hash
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/scripts/datum/{datum-hash}/cbor
+      name: scripts-datum-datum-hash-cbor
+      description: REST surface for scripts-datum-datum_hash-cbor.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Datum CBOR Value
+        call: blockfrost-cardano-scripts.get
+        with:
+          datum_hash: rest.datum_hash
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/scripts/{script-hash}
+      name: scripts-script-hash
+      description: REST surface for scripts-script_hash.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Specific Script
+        call: blockfrost-cardano-scripts.get
+        with:
+          script_hash: rest.script_hash
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/scripts/{script-hash}/cbor
+      name: scripts-script-hash-cbor
+      description: REST surface for scripts-script_hash-cbor.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Script CBOR
+        call: blockfrost-cardano-scripts.get
+        with:
+          script_hash: rest.script_hash
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/scripts/{script-hash}/json
+      name: scripts-script-hash-json
+      description: REST surface for scripts-script_hash-json.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Script JSON
+        call: blockfrost-cardano-scripts.get
+        with:
+          script_hash: rest.script_hash
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/scripts/{script-hash}/redeemers
+      name: scripts-script-hash-redeemers
+      description: REST surface for scripts-script_hash-redeemers.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Redeemers of a Specific Script
+        call: blockfrost-cardano-scripts.get
+        with:
+          script_hash: rest.script_hash
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: blockfrost-cardano-scripts-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Blockfrost.io ~ API Documentation — Cardano » Scripts. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: blockfrost-scripts
+      description: Blockfrost Scripts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-scripts.get
+      with:
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-datum-value
+      description: Blockfrost Datum Value
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-scripts.get
+      with:
+        datum_hash: tools.datum_hash
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-datum-cbor-value
+      description: Blockfrost Datum CBOR Value
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-scripts.get
+      with:
+        datum_hash: tools.datum_hash
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-specific-script
+      description: Blockfrost Specific Script
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-scripts.get
+      with:
+        script_hash: tools.script_hash
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-script-cbor
+      description: Blockfrost Script CBOR
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-scripts.get
+      with:
+        script_hash: tools.script_hash
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-script-json
+      description: Blockfrost Script JSON
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-scripts.get
+      with:
+        script_hash: tools.script_hash
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-redeemers-specific-script
+      description: Blockfrost Redeemers of a Specific Script
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-scripts.get
+      with:
+        script_hash: tools.script_hash
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.

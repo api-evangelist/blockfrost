@@ -1,0 +1,206 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockfrost.io ~ API Documentation — Cardano » Utilities
+  description: 'Blockfrost.io ~ API Documentation — Cardano » Utilities. 3 operations. Lead operation: Blockfrost Derive an
+    Address. Self-contained Naftiko capability covering one Blockfrost business surface.'
+  tags:
+  - Blockfrost
+  - Cardano » Utilities
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOCKFROST_API_KEY: BLOCKFROST_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: blockfrost-cardano-utilities
+    baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    description: Blockfrost.io ~ API Documentation — Cardano » Utilities business capability. Self-contained, no shared references.
+    resources:
+    - name: utils-addresses-xpub-xpub-role-index
+      path: /utils/addresses/xpub/{xpub}/{role}/{index}
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Derive an Address
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: xpub
+          in: path
+          type: string
+          description: Hex xpub
+          required: true
+        - name: role
+          in: path
+          type: integer
+          description: Account role
+          required: true
+        - name: index
+          in: path
+          type: integer
+          description: Address index
+          required: true
+    - name: utils-txs-evaluate
+      path: /utils/txs/evaluate
+      operations:
+      - name: post
+        method: POST
+        description: Blockfrost Submit a Transaction for Execution Units Evaluation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+        - name: version
+          in: query
+          type: number
+          description: Optional parameter to specify the version of the Ogmios service to use. Default is `5`. Set to `6`
+            to use Ogmios version 6.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: utils-txs-evaluate-utxos
+      path: /utils/txs/evaluate/utxos
+      operations:
+      - name: post
+        method: POST
+        description: Blockfrost Submit a Transaction for Execution Units Evaluation (additional UTXO Set)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+        - name: version
+          in: query
+          type: number
+          description: Optional parameter to specify the version of the Ogmios service to use. Default is `5`. Set to `6`
+            to use Ogmios version 6.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: project_id
+      value: '{{env.BLOCKFROST_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: blockfrost-cardano-utilities-rest
+    port: 8080
+    description: REST adapter for Blockfrost.io ~ API Documentation — Cardano » Utilities. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/utils/addresses/xpub/{xpub}/{role}/{index}
+      name: utils-addresses-xpub-xpub-role-index
+      description: REST surface for utils-addresses-xpub-xpub-role-index.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Derive an Address
+        call: blockfrost-cardano-utilities.get
+        with:
+          xpub: rest.xpub
+          role: rest.role
+          index: rest.index
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/utils/txs/evaluate
+      name: utils-txs-evaluate
+      description: REST surface for utils-txs-evaluate.
+      operations:
+      - method: POST
+        name: post
+        description: Blockfrost Submit a Transaction for Execution Units Evaluation
+        call: blockfrost-cardano-utilities.post
+        with:
+          Content-Type: rest.Content-Type
+          version: rest.version
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/utils/txs/evaluate/utxos
+      name: utils-txs-evaluate-utxos
+      description: REST surface for utils-txs-evaluate-utxos.
+      operations:
+      - method: POST
+        name: post
+        description: Blockfrost Submit a Transaction for Execution Units Evaluation (additional UTXO Set)
+        call: blockfrost-cardano-utilities.post
+        with:
+          Content-Type: rest.Content-Type
+          version: rest.version
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: blockfrost-cardano-utilities-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Blockfrost.io ~ API Documentation — Cardano » Utilities. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: blockfrost-derive-address
+      description: Blockfrost Derive an Address
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-utilities.get
+      with:
+        xpub: tools.xpub
+        role: tools.role
+        index: tools.index
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-submit-transaction-execution-units
+      description: Blockfrost Submit a Transaction for Execution Units Evaluation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: blockfrost-cardano-utilities.post
+      with:
+        Content-Type: tools.Content-Type
+        version: tools.version
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-submit-transaction-execution-units-2
+      description: Blockfrost Submit a Transaction for Execution Units Evaluation (additional UTXO Set)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: blockfrost-cardano-utilities.post
+      with:
+        Content-Type: tools.Content-Type
+        version: tools.version
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

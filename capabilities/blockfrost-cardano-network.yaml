@@ -1,0 +1,104 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockfrost.io ~ API Documentation — Cardano » Network
+  description: 'Blockfrost.io ~ API Documentation — Cardano » Network. 2 operations. Lead operation: Blockfrost Network Information.
+    Self-contained Naftiko capability covering one Blockfrost business surface.'
+  tags:
+  - Blockfrost
+  - Cardano » Network
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOCKFROST_API_KEY: BLOCKFROST_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: blockfrost-cardano-network
+    baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    description: Blockfrost.io ~ API Documentation — Cardano » Network business capability. Self-contained, no shared references.
+    resources:
+    - name: network
+      path: /network
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Network Information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: network-eras
+      path: /network/eras
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Query Summary of Blockchain Eras
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: project_id
+      value: '{{env.BLOCKFROST_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: blockfrost-cardano-network-rest
+    port: 8080
+    description: REST adapter for Blockfrost.io ~ API Documentation — Cardano » Network. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/network
+      name: network
+      description: REST surface for network.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Network Information
+        call: blockfrost-cardano-network.get
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/network/eras
+      name: network-eras
+      description: REST surface for network-eras.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Query Summary of Blockchain Eras
+        call: blockfrost-cardano-network.get
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: blockfrost-cardano-network-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Blockfrost.io ~ API Documentation — Cardano » Network. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: blockfrost-network-information
+      description: Blockfrost Network Information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-network.get
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-query-summary-blockchain-eras
+      description: Blockfrost Query Summary of Blockchain Eras
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-network.get
+      outputParameters:
+      - type: object
+        mapping: $.

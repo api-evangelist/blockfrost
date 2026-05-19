@@ -1,0 +1,81 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockfrost.io ~ API Documentation — IPFS » Gateway
+  description: 'Blockfrost.io ~ API Documentation — IPFS » Gateway. 1 operations. Lead operation: Blockfrost Relay to an IPFS
+    Gateway. Self-contained Naftiko capability covering one Blockfrost business surface.'
+  tags:
+  - Blockfrost
+  - IPFS » Gateway
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOCKFROST_API_KEY: BLOCKFROST_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: blockfrost-ipfs-gateway
+    baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    description: Blockfrost.io ~ API Documentation — IPFS » Gateway business capability. Self-contained, no shared references.
+    resources:
+    - name: ipfs-gateway-IPFS_path
+      path: /ipfs/gateway/{IPFS_path}
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Relay to an IPFS Gateway
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: IPFS_path
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: apikey
+      key: project_id
+      value: '{{env.BLOCKFROST_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: blockfrost-ipfs-gateway-rest
+    port: 8080
+    description: REST adapter for Blockfrost.io ~ API Documentation — IPFS » Gateway. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/ipfs/gateway/{ipfs-path}
+      name: ipfs-gateway-ipfs-path
+      description: REST surface for ipfs-gateway-IPFS_path.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Relay to an IPFS Gateway
+        call: blockfrost-ipfs-gateway.get
+        with:
+          IPFS_path: rest.IPFS_path
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: blockfrost-ipfs-gateway-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Blockfrost.io ~ API Documentation — IPFS » Gateway. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: blockfrost-relay-ipfs-gateway
+      description: Blockfrost Relay to an IPFS Gateway
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-ipfs-gateway.get
+      with:
+        IPFS_path: tools.IPFS_path
+      outputParameters:
+      - type: object
+        mapping: $.

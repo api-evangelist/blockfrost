@@ -1,0 +1,678 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockfrost.io ~ API Documentation — Cardano » Pools
+  description: 'Blockfrost.io ~ API Documentation — Cardano » Pools. 12 operations. Lead operation: Blockfrost List of Stake
+    Pools. Self-contained Naftiko capability covering one Blockfrost business surface.'
+  tags:
+  - Blockfrost
+  - Cardano » Pools
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOCKFROST_API_KEY: BLOCKFROST_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: blockfrost-cardano-pools
+    baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    description: Blockfrost.io ~ API Documentation — Cardano » Pools business capability. Self-contained, no shared references.
+    resources:
+    - name: pools
+      path: /pools
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost List of Stake Pools
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: The number of pools per page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: pools-extended
+      path: /pools/extended
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost List of Stake Pools with Additional Information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: The number of pools per page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: pools-retired
+      path: /pools/retired
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost List of Retired Stake Pools
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: The number of pools per page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: pools-retiring
+      path: /pools/retiring
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost List of Retiring Stake Pools
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: pools-pool_id
+      path: /pools/{pool_id}
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Specific Stake Pool
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: pool_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal pool ID.
+          required: true
+    - name: pools-pool_id-blocks
+      path: /pools/{pool_id}/blocks
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Stake Pool Blocks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: pool_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal pool ID.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: pools-pool_id-delegators
+      path: /pools/{pool_id}/delegators
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Stake Pool Delegators
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: pool_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal pool ID.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: pools-pool_id-history
+      path: /pools/{pool_id}/history
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Stake Pool History
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: pool_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal pool ID.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: pools-pool_id-metadata
+      path: /pools/{pool_id}/metadata
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Stake Pool Metadata
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: pool_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal pool ID.
+          required: true
+    - name: pools-pool_id-relays
+      path: /pools/{pool_id}/relays
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Stake Pool Relays
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: pool_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal pool ID.
+          required: true
+    - name: pools-pool_id-updates
+      path: /pools/{pool_id}/updates
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Stake Pool Updates
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: pool_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal pool ID.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    - name: pools-pool_id-votes
+      path: /pools/{pool_id}/votes
+      operations:
+      - name: get
+        method: GET
+        description: Blockfrost Stake Pool Votes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: pool_id
+          in: path
+          type: string
+          description: Bech32 or hexadecimal pool ID.
+          required: true
+        - name: count
+          in: query
+          type: integer
+          description: The number of results displayed on one page.
+        - name: page
+          in: query
+          type: integer
+          description: The page number for listing the results.
+        - name: order
+          in: query
+          type: string
+          description: The ordering of items from the point of view of the blockchain,
+    authentication:
+      type: apikey
+      key: project_id
+      value: '{{env.BLOCKFROST_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: blockfrost-cardano-pools-rest
+    port: 8080
+    description: REST adapter for Blockfrost.io ~ API Documentation — Cardano » Pools. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/pools
+      name: pools
+      description: REST surface for pools.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost List of Stake Pools
+        call: blockfrost-cardano-pools.get
+        with:
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/extended
+      name: pools-extended
+      description: REST surface for pools-extended.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost List of Stake Pools with Additional Information
+        call: blockfrost-cardano-pools.get
+        with:
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/retired
+      name: pools-retired
+      description: REST surface for pools-retired.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost List of Retired Stake Pools
+        call: blockfrost-cardano-pools.get
+        with:
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/retiring
+      name: pools-retiring
+      description: REST surface for pools-retiring.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost List of Retiring Stake Pools
+        call: blockfrost-cardano-pools.get
+        with:
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/{pool-id}
+      name: pools-pool-id
+      description: REST surface for pools-pool_id.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Specific Stake Pool
+        call: blockfrost-cardano-pools.get
+        with:
+          pool_id: rest.pool_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/{pool-id}/blocks
+      name: pools-pool-id-blocks
+      description: REST surface for pools-pool_id-blocks.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Stake Pool Blocks
+        call: blockfrost-cardano-pools.get
+        with:
+          pool_id: rest.pool_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/{pool-id}/delegators
+      name: pools-pool-id-delegators
+      description: REST surface for pools-pool_id-delegators.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Stake Pool Delegators
+        call: blockfrost-cardano-pools.get
+        with:
+          pool_id: rest.pool_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/{pool-id}/history
+      name: pools-pool-id-history
+      description: REST surface for pools-pool_id-history.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Stake Pool History
+        call: blockfrost-cardano-pools.get
+        with:
+          pool_id: rest.pool_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/{pool-id}/metadata
+      name: pools-pool-id-metadata
+      description: REST surface for pools-pool_id-metadata.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Stake Pool Metadata
+        call: blockfrost-cardano-pools.get
+        with:
+          pool_id: rest.pool_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/{pool-id}/relays
+      name: pools-pool-id-relays
+      description: REST surface for pools-pool_id-relays.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Stake Pool Relays
+        call: blockfrost-cardano-pools.get
+        with:
+          pool_id: rest.pool_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/{pool-id}/updates
+      name: pools-pool-id-updates
+      description: REST surface for pools-pool_id-updates.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Stake Pool Updates
+        call: blockfrost-cardano-pools.get
+        with:
+          pool_id: rest.pool_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pools/{pool-id}/votes
+      name: pools-pool-id-votes
+      description: REST surface for pools-pool_id-votes.
+      operations:
+      - method: GET
+        name: get
+        description: Blockfrost Stake Pool Votes
+        call: blockfrost-cardano-pools.get
+        with:
+          pool_id: rest.pool_id
+          count: rest.count
+          page: rest.page
+          order: rest.order
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: blockfrost-cardano-pools-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Blockfrost.io ~ API Documentation — Cardano » Pools. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: blockfrost-list-stake-pools
+      description: Blockfrost List of Stake Pools
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-list-stake-pools-additional
+      description: Blockfrost List of Stake Pools with Additional Information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-list-retired-stake-pools
+      description: Blockfrost List of Retired Stake Pools
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-list-retiring-stake-pools
+      description: Blockfrost List of Retiring Stake Pools
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-specific-stake-pool
+      description: Blockfrost Specific Stake Pool
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        pool_id: tools.pool_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-stake-pool-blocks
+      description: Blockfrost Stake Pool Blocks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        pool_id: tools.pool_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-stake-pool-delegators
+      description: Blockfrost Stake Pool Delegators
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        pool_id: tools.pool_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-stake-pool-history
+      description: Blockfrost Stake Pool History
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        pool_id: tools.pool_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-stake-pool-metadata
+      description: Blockfrost Stake Pool Metadata
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        pool_id: tools.pool_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-stake-pool-relays
+      description: Blockfrost Stake Pool Relays
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        pool_id: tools.pool_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-stake-pool-updates
+      description: Blockfrost Stake Pool Updates
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        pool_id: tools.pool_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: blockfrost-stake-pool-votes
+      description: Blockfrost Stake Pool Votes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: blockfrost-cardano-pools.get
+      with:
+        pool_id: tools.pool_id
+        count: tools.count
+        page: tools.page
+        order: tools.order
+      outputParameters:
+      - type: object
+        mapping: $.

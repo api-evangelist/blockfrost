@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockfrost.io ~ API Documentation — IPFS » Add
+  description: 'Blockfrost.io ~ API Documentation — IPFS » Add. 1 operations. Lead operation: Blockfrost Add a File to IPFS.
+    Self-contained Naftiko capability covering one Blockfrost business surface.'
+  tags:
+  - Blockfrost
+  - IPFS » Add
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOCKFROST_API_KEY: BLOCKFROST_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: blockfrost-ipfs-add
+    baseUri: https://cardano-mainnet.blockfrost.io/api/v0
+    description: Blockfrost.io ~ API Documentation — IPFS » Add business capability. Self-contained, no shared references.
+    resources:
+    - name: ipfs-add
+      path: /ipfs/add
+      operations:
+      - name: ipfsadd
+        method: POST
+        description: Blockfrost Add a File to IPFS
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: apikey
+      key: project_id
+      value: '{{env.BLOCKFROST_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: blockfrost-ipfs-add-rest
+    port: 8080
+    description: REST adapter for Blockfrost.io ~ API Documentation — IPFS » Add. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/ipfs/add
+      name: ipfs-add
+      description: REST surface for ipfs-add.
+      operations:
+      - method: POST
+        name: ipfsadd
+        description: Blockfrost Add a File to IPFS
+        call: blockfrost-ipfs-add.ipfsadd
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: blockfrost-ipfs-add-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Blockfrost.io ~ API Documentation — IPFS » Add. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: blockfrost-add-file-ipfs
+      description: Blockfrost Add a File to IPFS
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: blockfrost-ipfs-add.ipfsadd
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
