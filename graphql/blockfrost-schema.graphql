@@ -1,0 +1,754 @@
+"""
+Blockfrost GraphQL Schema
+Conceptual GraphQL schema derived from the Blockfrost REST API for the Cardano blockchain.
+Source: https://docs.blockfrost.io/
+"""
+
+# ─── Scalars ───────────────────────────────────────────────────────────────────
+
+scalar BigInt
+scalar DateTime
+scalar JSON
+
+# ─── Enums ─────────────────────────────────────────────────────────────────────
+
+enum TransactionType {
+  PAYMENT
+  STAKE_REGISTRATION
+  STAKE_DEREGISTRATION
+  DELEGATION
+  POOL_REGISTRATION
+  POOL_RETIREMENT
+  METADATA
+  SCRIPT
+  MIR
+  GENESIS
+}
+
+enum PoolStatus {
+  ACTIVE
+  RETIRING
+  RETIRED
+}
+
+enum DRepStatus {
+  ACTIVE
+  INACTIVE
+  EXPIRED
+}
+
+enum ScriptType {
+  TIMELOCK
+  PLUTUS_V1
+  PLUTUS_V2
+  PLUTUS_V3
+}
+
+enum IPFSPinState {
+  QUEUED
+  PINNED
+  UNPINNED
+  FAILED
+  GC
+}
+
+enum NetworkType {
+  MAINNET
+  PREPROD
+  PREVIEW
+  MIDNIGHT
+}
+
+# ─── Network ───────────────────────────────────────────────────────────────────
+
+type Network {
+  type: NetworkType!
+  details: NetworkDetails
+  summary: NetworkSummary
+}
+
+type NetworkDetails {
+  genesisHash: String!
+  networkMagic: Int!
+  startTime: DateTime!
+}
+
+type NetworkSummary {
+  stake: NetworkStakeSummary
+  supply: NetworkSupplySummary
+}
+
+type NetworkStakeSummary {
+  live: BigInt!
+  active: BigInt!
+}
+
+type NetworkSupplySummary {
+  max: BigInt!
+  total: BigInt!
+  circulating: BigInt!
+  locked: BigInt!
+  treasury: BigInt!
+  reserves: BigInt!
+}
+
+# ─── Blocks ────────────────────────────────────────────────────────────────────
+
+"""A Cardano block on the chain."""
+type Block {
+  hash: BlockHash!
+  height: Int!
+  slot: SlotNumber!
+  epoch: Int!
+  epochSlot: SlotInEpoch!
+  time: DateTime!
+  txCount: Int!
+  size: Int!
+  fees: BigInt!
+  output: BigInt
+  details: BlockDetails
+}
+
+type BlockDetails {
+  hash: BlockHash!
+  height: Int!
+  slot: SlotNumber!
+  epoch: Int!
+  epochSlot: SlotInEpoch!
+  time: DateTime!
+  txCount: Int!
+  size: Int!
+  fees: BigInt!
+  output: BigInt
+  previousBlock: String
+  nextBlock: String
+  slotLeader: String!
+  opCert: String
+  opCertCounter: BigInt
+  vrf: String
+  blockVrf: String
+  transactions: [Transaction!]
+}
+
+scalar BlockHash
+scalar SlotNumber
+scalar SlotInEpoch
+
+# ─── Epochs ────────────────────────────────────────────────────────────────────
+
+"""A Cardano epoch."""
+type Epoch {
+  number: Int!
+  details: EpochDetails
+  parameters: EpochParameter
+}
+
+type EpochDetails {
+  epoch: Int!
+  startTime: DateTime!
+  endTime: DateTime!
+  firstBlockTime: DateTime!
+  lastBlockTime: DateTime
+  blockCount: Int!
+  txCount: Int!
+  output: BigInt!
+  fees: BigInt!
+  activeStake: BigInt
+}
+
+type EpochParameter {
+  epoch: Int!
+  minFeeA: BigInt!
+  minFeeB: BigInt!
+  maxBlockSize: Int!
+  maxTxSize: Int!
+  maxBlockHeaderSize: Int!
+  keyDeposit: BigInt!
+  poolDeposit: BigInt!
+  eMax: Int!
+  nOpt: Int!
+  a0: Float!
+  rho: Float!
+  tau: Float!
+  decentralisationParam: Float
+  extraEntropy: JSON
+  protocolMajorVer: Int!
+  protocolMinorVer: Int!
+  minUtxo: BigInt
+  minPoolCost: BigInt!
+  nonce: String!
+  priceMem: Float
+  priceStep: Float
+  maxTxExMem: BigInt
+  maxTxExSteps: BigInt
+  maxBlockExMem: BigInt
+  maxBlockExSteps: BigInt
+  maxValSize: BigInt
+  collateralPercent: Int
+  maxCollateralInputs: Int
+  coinsPerUtxoSize: BigInt
+  coinsPerUtxoWord: BigInt
+}
+
+# ─── Transactions ──────────────────────────────────────────────────────────────
+
+"""A Cardano transaction."""
+type Transaction {
+  hash: String!
+  block: Block
+  blockIndex: Int!
+  slot: SlotNumber!
+  index: Int!
+  outputAmount: [TransactionOutput!]
+  fees: BigInt!
+  deposit: BigInt!
+  size: Int!
+  invalidBefore: BigInt
+  invalidHereafter: BigInt
+  utxoCount: Int!
+  withdrawalCount: Int!
+  mirCertCount: Int!
+  delegationCount: Int!
+  stakeCertCount: Int!
+  poolUpdateCount: Int!
+  poolRetireCount: Int!
+  assetMintOrBurnCount: Int!
+  redeemerCount: Int!
+  validContract: Boolean!
+  details: TransactionDetails
+  type: TransactionType
+  metadata: [TransactionMetadata!]
+  mir: [TransactionMIR!]
+  poolCerts: [TransactionPoolCert!]
+  delegations: [TransactionDelegation!]
+}
+
+type TransactionDetails {
+  hash: String!
+  inputs: [TransactionInput!]!
+  outputs: [TransactionOutput!]!
+  fees: BigInt!
+  deposit: BigInt!
+  size: Int!
+  block: BlockHash!
+  slot: SlotNumber!
+}
+
+type TransactionInput {
+  address: String!
+  amount: [UTxOAmount!]!
+  txHash: String!
+  outputIndex: Int!
+  dataHash: String
+  inlineDatum: String
+  referenceScriptHash: String
+  collateral: Boolean
+  reference: Boolean
+}
+
+type TransactionOutput {
+  address: String!
+  amount: [UTxOAmount!]!
+  outputIndex: Int!
+  dataHash: String
+  inlineDatum: String
+  collateral: Boolean
+  referenceScriptHash: String
+}
+
+type TransactionMetadata {
+  label: String!
+  jsonMetadata: JSON
+  cbor: String
+}
+
+type TransactionMIR {
+  pot: String!
+  certIndex: Int!
+  address: String!
+  amount: BigInt!
+}
+
+type TransactionPoolCert {
+  certIndex: Int!
+  poolId: String!
+  vrfKey: String!
+  pledge: BigInt!
+  marginCost: Float!
+  fixedCost: BigInt!
+  rewardAccount: String!
+  owners: [String!]!
+  metadata: PoolMetadata
+  relays: [JSON!]
+  activeEpoch: Int!
+}
+
+type TransactionDelegation {
+  index: Int!
+  certIndex: Int!
+  address: String!
+  poolId: String!
+  activeEpoch: Int!
+}
+
+# ─── UTxOs ─────────────────────────────────────────────────────────────────────
+
+"""An unspent transaction output."""
+type UTxO {
+  txHash: String!
+  outputIndex: Int!
+  address: String!
+  amount: [UTxOAmount!]!
+  block: BlockHash!
+  dataHash: String
+  inlineDatum: String
+  referenceScriptHash: String
+}
+
+type UTxODetails {
+  txHash: String!
+  outputIndex: Int!
+  address: String!
+  amount: [UTxOAmount!]!
+  block: BlockHash!
+  dataHash: String
+  inlineDatum: String
+  referenceScriptHash: String
+}
+
+type UTxOAmount {
+  unit: String!
+  quantity: BigInt!
+}
+
+# ─── Addresses ─────────────────────────────────────────────────────────────────
+
+"""A Cardano address."""
+type Address {
+  address: String!
+  amount: [AddressAmount!]!
+  stakeAddress: String
+  type: String!
+  script: Boolean!
+  details: AddressDetails
+  utxos: [AddressUTxO!]
+  transactions: [AddressTransaction!]
+}
+
+type AddressDetails {
+  address: String!
+  amount: [AddressAmount!]!
+  stakeAddress: String
+  type: String!
+  script: Boolean!
+  receivedSum: [AddressAmount!]!
+  sentSum: [AddressAmount!]!
+  txCount: Int!
+}
+
+type AddressAmount {
+  unit: String!
+  quantity: BigInt!
+}
+
+type AddressUTxO {
+  txHash: String!
+  txIndex: Int!
+  outputIndex: Int!
+  amount: [UTxOAmount!]!
+  block: BlockHash!
+  dataHash: String
+  inlineDatum: String
+  referenceScriptHash: String
+}
+
+type AddressTransaction {
+  txHash: String!
+  txIndex: Int!
+  blockHeight: Int!
+  blockTime: DateTime!
+}
+
+# ─── Assets ────────────────────────────────────────────────────────────────────
+
+"""A Cardano native asset."""
+type Asset {
+  asset: String!
+  policyId: PolicyId!
+  assetName: String
+  fingerprint: AssetFingerprint!
+  quantity: BigInt!
+  initialMintTxHash: String!
+  mintOrBurnCount: Int!
+  onchainMetadata: AssetOnchainMetadata
+  onchainMetadataStandard: String
+  onchainMetadataExtra: JSON
+  metadata: JSON
+  details: AssetDetails
+  history: [AssetHistory!]
+}
+
+type AssetDetails {
+  asset: String!
+  policyId: PolicyId!
+  assetName: String
+  fingerprint: AssetFingerprint!
+  quantity: BigInt!
+  initialMintTxHash: String!
+  mintOrBurnCount: Int!
+  onchainMetadata: AssetOnchainMetadata
+  onchainMetadataStandard: String
+  metadata: JSON
+}
+
+type AssetPolicy {
+  policyId: PolicyId!
+  assets: [Asset!]!
+}
+
+scalar PolicyId
+scalar AssetFingerprint
+
+type AssetOnchainMetadata {
+  name: String
+  image: String
+  mediaType: String
+  description: String
+  files: [JSON]
+  extra: JSON
+}
+
+type AssetHistory {
+  txHash: String!
+  action: String!
+  amount: BigInt!
+}
+
+# ─── Staking ───────────────────────────────────────────────────────────────────
+
+"""A Cardano stake address."""
+type StakeAddress {
+  stakeAddress: String!
+  active: Boolean!
+  activeEpoch: Int
+  controlledAmount: BigInt!
+  rewardsSum: BigInt!
+  withdrawalsSum: BigInt!
+  reservesSum: BigInt!
+  treasurySum: BigInt!
+  withdrawableAmount: BigInt!
+  poolId: String
+}
+
+"""Stake account details with history."""
+type StakeDetails {
+  stakeAddress: String!
+  active: Boolean!
+  activeEpoch: Int
+  controlledAmount: BigInt!
+  rewardsSum: BigInt!
+  withdrawalsSum: BigInt!
+  reservesSum: BigInt!
+  treasurySum: BigInt!
+  withdrawableAmount: BigInt!
+  poolId: String
+  delegations: [Delegation!]
+  rewards: [Rewards!]
+  history: [StakeDistribution!]
+  addresses: [Address!]
+  assets: [Asset!]
+}
+
+type Stake {
+  stakeAddress: String!
+  amount: BigInt!
+}
+
+type StakeDistribution {
+  epoch: Int!
+  amount: BigInt!
+  poolId: String!
+}
+
+type Delegation {
+  activeEpoch: Int!
+  txHash: String!
+  amount: BigInt!
+  poolId: String!
+}
+
+type Rewards {
+  epoch: Int!
+  amount: BigInt!
+  poolId: String!
+  type: String!
+}
+
+# ─── Stake Pools ───────────────────────────────────────────────────────────────
+
+"""A Cardano stake pool."""
+type StakePool {
+  poolId: String!
+  status: PoolStatus!
+  hex: String!
+  vrf: String!
+  details: PoolDetails
+  metadata: PoolMetadata
+  blocks: [PoolBlock!]
+  delegators: [Stake!]
+  history: [JSON!]
+}
+
+type PoolDetails {
+  poolId: String!
+  hex: String!
+  vrfKey: String!
+  blocksMinted: Int!
+  blocksEpoch: Int!
+  liveStake: BigInt!
+  liveSize: Float!
+  liveSaturation: Float!
+  liveDelegators: Int!
+  activeStake: BigInt!
+  activeSize: Float!
+  declaredPledge: BigInt!
+  livePledge: BigInt!
+  marginCost: Float!
+  fixedCost: BigInt!
+  rewardAccount: String!
+  owners: [String!]!
+  registration: [String!]!
+  retirement: [String!]!
+}
+
+type PoolMetadata {
+  poolId: String!
+  hex: String!
+  url: String
+  hash: String
+  ticker: String
+  name: String
+  description: String
+  homepage: String
+}
+
+type PoolBlock {
+  time: DateTime!
+  height: Int!
+  hash: BlockHash!
+  slot: SlotNumber!
+  epoch: Int!
+  epochSlot: SlotInEpoch!
+}
+
+# ─── Governance ────────────────────────────────────────────────────────────────
+
+"""Cardano on-chain governance (Conway era)."""
+type Governance {
+  dreps: [DRep!]
+  proposals: [Proposal!]
+}
+
+type DRep {
+  drepId: String!
+  hex: String!
+  amount: BigInt!
+  status: DRepStatus!
+  active: Boolean!
+  activeEpoch: Int
+  latestTxHash: String
+  details: DRepDetails
+}
+
+type DRepDetails {
+  drepId: String!
+  hex: String!
+  amount: BigInt!
+  status: DRepStatus!
+  active: Boolean!
+  activeEpoch: Int
+  latestTxHash: String
+  delegates: [String!]
+  votes: [JSON!]
+  updates: [JSON!]
+  metadata: JSON
+}
+
+type Proposal {
+  txHash: String!
+  certIndex: Int!
+  govActionId: String!
+  type: String!
+  description: JSON
+  deposit: BigInt!
+  returnAddress: String!
+  expiryEpoch: Int
+  expiryDate: DateTime
+  ratifiedEpoch: Int
+  enactedEpoch: Int
+  droppedEpoch: Int
+  expiredEpoch: Int
+  metadata: JSON
+  votes: [JSON!]
+}
+
+# ─── Scripts ───────────────────────────────────────────────────────────────────
+
+"""A Cardano on-chain script."""
+type Script {
+  scriptHash: ScriptHash!
+  type: ScriptType!
+  details: ScriptDetails
+}
+
+type ScriptDetails {
+  scriptHash: ScriptHash!
+  type: ScriptType!
+  serialisedSize: Int
+  json: JSON
+  cbor: String
+}
+
+scalar ScriptHash
+
+type DatumDetails {
+  cbor: String!
+  jsonValue: JSON
+}
+
+# ─── Protocol ──────────────────────────────────────────────────────────────────
+
+"""Current Cardano protocol parameters."""
+type Protocol {
+  epoch: Int!
+  parameters: EpochParameter!
+}
+
+# ─── IPFS ──────────────────────────────────────────────────────────────────────
+
+"""An IPFS pin managed by Blockfrost."""
+type IPFSPin {
+  ipfsHash: String!
+  size: Int!
+  state: IPFSPinState!
+  timePinned: DateTime
+  timeModified: DateTime
+}
+
+"""An IPFS object retrieved via Blockfrost gateway."""
+type IPFSObject {
+  ipfsHash: String!
+  contentType: String
+  size: Int!
+}
+
+# ─── Auth / API Keys ───────────────────────────────────────────────────────────
+
+"""A Blockfrost project API key."""
+type APIKey {
+  projectId: String!
+  network: NetworkType!
+  name: String
+}
+
+"""An authentication token."""
+type Token {
+  value: String!
+  expiresAt: DateTime
+}
+
+# ─── Root Types ────────────────────────────────────────────────────────────────
+
+type Query {
+  """Get information about the connected Blockfrost network."""
+  network: Network
+
+  """Fetch a block by its hash or height."""
+  block(hashOrHeight: String!): Block
+
+  """Fetch the latest block."""
+  latestBlock: Block
+
+  """List blocks, optionally paginated."""
+  blocks(count: Int, page: Int, order: String): [Block!]
+
+  """Fetch blocks in a given epoch."""
+  blocksInEpoch(epoch: Int!, count: Int, page: Int): [Block!]
+
+  """Fetch an epoch by number."""
+  epoch(number: Int!): Epoch
+
+  """Fetch the latest epoch."""
+  latestEpoch: Epoch
+
+  """Fetch a transaction by its hash."""
+  transaction(hash: String!): Transaction
+
+  """Fetch a UTxO by transaction hash and output index."""
+  utxo(txHash: String!, outputIndex: Int!): UTxODetails
+
+  """Fetch an address and its details."""
+  address(address: String!): Address
+
+  """List UTxOs for an address."""
+  addressUTxOs(address: String!, count: Int, page: Int): [AddressUTxO!]
+
+  """List transactions for an address."""
+  addressTransactions(address: String!, count: Int, page: Int, from: String, to: String): [AddressTransaction!]
+
+  """Fetch an asset by its concatenated policy ID and hex asset name."""
+  asset(asset: String!): Asset
+
+  """List all assets under a policy."""
+  assetsByPolicy(policyId: PolicyId!, count: Int, page: Int): [Asset!]
+
+  """List all assets on the network."""
+  assets(count: Int, page: Int, order: String): [Asset!]
+
+  """Fetch a stake address."""
+  stakeAddress(stakeAddress: String!): StakeDetails
+
+  """Fetch a stake pool by its ID."""
+  stakePool(poolId: String!): StakePool
+
+  """List all stake pools."""
+  stakePools(count: Int, page: Int, order: String): [StakePool!]
+
+  """Fetch a DRep by its ID."""
+  drep(drepId: String!): DRep
+
+  """List all DReps."""
+  dreps(count: Int, page: Int, order: String): [DRep!]
+
+  """Fetch a governance proposal."""
+  proposal(txHash: String!, certIndex: Int!): Proposal
+
+  """List all governance proposals."""
+  proposals(count: Int, page: Int, order: String): [Proposal!]
+
+  """Fetch a script by its hash."""
+  script(scriptHash: ScriptHash!): Script
+
+  """Fetch a datum by its hash."""
+  datum(datumHash: String!): DatumDetails
+
+  """Fetch current protocol parameters."""
+  protocol: Protocol
+
+  """List IPFS pins."""
+  ipfsPins(count: Int, page: Int): [IPFSPin!]
+
+  """Get an IPFS pin by IPFS hash."""
+  ipfsPin(ipfsHash: String!): IPFSPin
+}
+
+type Mutation {
+  """Submit a signed CBOR-encoded transaction to the Cardano network."""
+  submitTransaction(cbor: String!): String
+
+  """Pin an IPFS object by its hash."""
+  pinIPFS(ipfsHash: String!): IPFSPin
+
+  """Remove an IPFS pin."""
+  unpinIPFS(ipfsHash: String!): Boolean
+}
