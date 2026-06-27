@@ -44,45 +44,45 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-accounts.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-addresses.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-assets.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-blocks.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-epochs.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-governance.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-ledger.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-mempool.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-metadata.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-network.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-pools.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-scripts.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-transactions.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-cardano-utilities.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-health.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-ipfs-add.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-ipfs-gateway.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-ipfs-pins.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-metrics.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/blockfrost-nut-link.yaml
   - url: graphql/blockfrost-graphql.md
     type: GraphQL
@@ -111,7 +111,7 @@ common:
   url: https://blockfrost.io/privacy
 - type: Login
   url: https://blockfrost.io/auth/signin
-- type: SDK
+- type: SDKs
   url: https://blockfrost.dev/sdks
   title: Official SDKs
 - type: SpectralRules
