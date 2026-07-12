@@ -87,6 +87,10 @@ apis:
   - url: graphql/blockfrost-graphql.md
     type: GraphQL
 common:
+- type: DomainSecurity
+  url: security/blockfrost-domain-security.yml
+- type: Authentication
+  url: authentication/blockfrost-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/blockfrost
 - type: Website

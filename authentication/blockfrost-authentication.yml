@@ -1,0 +1,19 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/blockfrost-openapi.yaml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: project_id
+  type: apiKey
+  in: header
+  parameter: project_id
+  description: |-
+    There are multiple token types available based on network you choose
+    when creating a Blockfrost a project, for a list of token types
+    see available networks.
+  sources:
+  - openapi/blockfrost-openapi.yaml
