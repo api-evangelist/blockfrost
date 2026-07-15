@@ -87,6 +87,8 @@ apis:
   - url: graphql/blockfrost-graphql.md
     type: GraphQL
 common:
+- type: AgenticAccess
+  url: agentic-access/blockfrost-agentic-access.yml
 - type: DomainSecurity
   url: security/blockfrost-domain-security.yml
 - type: Authentication
