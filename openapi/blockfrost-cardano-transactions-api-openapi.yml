@@ -1,0 +1,1528 @@
+openapi: 3.0.3
+info:
+  version: 0.1.87
+  title: Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Transactions API
+  x-logo:
+    url: https://staging.blockfrost.io/images/logo.svg
+    altText: Blockfrost
+  contact:
+    name: Blockfrost Team
+    url: https://blockfrost.io
+    email: contact@blockfrost.io
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://blockfrost.io/terms
+  description: "Blockfrost is an API as a service that allows users to interact with the Cardano blockchain, Midnight blockchain, and parts of their ecosystems.\n\n## Tokens\n\nAfter signing up on https://blockfrost.io, a `project_id` token is automatically generated for each project.\nHTTP header of your request MUST include this `project_id` in order to authenticate against Blockfrost servers.\n\n## Available networks\n\nAt the moment, you can use the following networks. Please, note that each network has its own `project_id`.\n\n<table>\n  <tbody>\n    <tr>\n      <td>\n          <b>Network</b>\n      </td>\n      <td>\n          <b>Endpoint</b>\n      </td>\n    </tr>\n    <tr>\n        <td>Cardano mainnet</td>\n        <td>\n            <code>https://cardano-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preprod</td>\n        <td>\n            <code>https://cardano-preprod.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preview</td>\n        <td>\n            <code>https://cardano-preview.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Midnight mainnet</td>\n        <td>\n            <code>https://midnight-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>InterPlanetary File System</td>\n        <td>\n            <code>https://ipfs.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n## Concepts\n\n* All endpoints return either a JSON object or an array.\n* Data is returned in *ascending* (oldest first, newest last) order, if not stated otherwise.\n  * You might use the `?order=desc` query parameter to reverse this order.\n* By default, we return 100 results at a time. You have to use `?page=2` to list through the results.\n* All time and timestamp related fields (except `server_time`) are in seconds of UNIX time.\n* All amounts are returned in Lovelaces, where 1 ADA = 1 000 000 Lovelaces.\n* Addresses, accounts and pool IDs are in Bech32 format.\n* All values are case sensitive.\n* All hex encoded values are lower case.\n* Examples are not based on real data. Any resemblance to actual events is purely coincidental.\n* We allow to upload files up to 100MB of size to IPFS. This might increase in the future.\n* Only pinned IPFS files are counted towards the IPFS quota.\n* Non-pinned IPFS files are subject to regular garbage collection and will be removed unless pinned.\n* We allow maximum of 100 queued pins per IPFS user.\n\n## Errors\n\n### HTTP Status codes\n\nThe following are HTTP status code your application might receive when reaching Blockfrost endpoints and\nit should handle all of these cases.\n\n* HTTP `400` return code is used when the request is not valid.\n* HTTP `402` return code is used when the projects exceed their daily request limit.\n* HTTP `403` return code is used when the request is not authenticated.\n* HTTP `404` return code is used when the resource doesn't exist.\n* HTTP `418` return code is used when the user has been auto-banned for flooding too much after previously receiving error code `402` or `429`.\n* HTTP `425` return code is used in Cardano networks, when the user has submitted a transaction when the mempool is already full, not accepting new txs straight away.\n* HTTP `425` return code is used in IPFS network, when the user has submitted a pin when the pin queue is already full, not accepting new pins straight away.\n* HTTP `429` return code is used when the user has sent too many requests in a given amount of time and therefore has been rate-limited.\n* HTTP `500` return code is used when our endpoints are having a problem.\n\n### Error codes\n\nAn internal error code number is used for better indication of the error in question. It is passed using the following payload.\n\n```json\n{\n  \"status_code\": 403,\n  \"error\": \"Forbidden\",\n  \"message\": \"Invalid project token.\"\n}\n```\n## Limits\n\nThere are two types of limits we are enforcing:\n\nThe first depends on your plan and is the number of request we allow per day. We defined the day from midnight to midnight of UTC time.\n\nThe second is rate limiting. We limit an end user, distinguished by IP address, to 10 requests per second. On top of that, we allow\neach user to send burst of 500 requests, which cools off at rate of 10 requests per second. In essence, a user is allowed to make another\nwhole burst after (currently) 500/10 = 50 seconds. E.g. if a user attempts to make a call 3 seconds after whole burst, 30 requests will be processed.\nWe believe this should be sufficient for most of the use cases. If it is not and you have a specific use case, please get in touch with us, and\nwe will make sure to take it into account as much as we can.\n\n## SDKs\n\nWe support a number of SDKs that will help you in developing your application on top of Blockfrost.\n\n<table>\n  <tbody>\n    <tr>\n        <td><b>Programming language</b></td>\n        <td><b>SDK</b></td>\n    </tr>\n    <tr>\n        <td>JavaScript</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-js\">blockfrost-js</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Haskell</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-haskell\">blockfrost-haskell</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Python</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-python\">blockfrost-python</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Rust</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-rust\">blockfrost-rust</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Golang</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-go\">blockfrost-go</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Ruby</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-ruby\">blockfrost-ruby</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Java</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-java\">blockfrost-java</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Scala</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-scala\">blockfrost-scala</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Swift</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-swift\">blockfrost-swift</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Kotlin</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-kotlin\">blockfrost-kotlin</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Elixir</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-elixir\">blockfrost-elixir</a>\n        </td>\n    </tr>\n    <tr>\n        <td>.NET</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-dotnet\">blockfrost-dotnet</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Arduino</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-arduino\">blockfrost-arduino</a>\n        </td>\n    </tr>\n    <tr>\n        <td>PHP</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-php\">blockfrost-php</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Crystal</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-crystal\">blockfrost-crystal</a>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n\n## Midnight API\n\n\nThe Midnight Indexer API exposes a GraphQL API that enables clients to query and subscribe to blockchain data — blocks, transactions, contracts, and wallet-related events — indexed from the Midnight blockchain.\n\nAvailable networks: `mainnet`, `preprod`, `preview`\n\n| Service | URL | Protocol |\n|---------|-----|----------|\n| **Indexer HTTP API** | `https://midnight-{network}.blockfrost.io/api/v0` | HTTP POST (GraphQL) |\n| **Indexer Subscriptions API** | `wss://midnight-{network}.blockfrost.io/api/v0/ws` | WebSocket |\n| **Node RPC** | `https://rpc.midnight-{network}.blockfrost.io` | JSON-RPC |\n\n\nFor the full documentation — queries, mutations, subscriptions, authentication options, and examples — see the Midnight GraphQL API Reference:\n\n[![Explore the Midnight API →](https://img.shields.io/badge/Explore_the_Midnight_API_→-0033AD?style=for-the-badge)](./midnight/)\n"
+servers:
+- url: https://cardano-mainnet.blockfrost.io/api/v0
+  description: Cardano Mainnet network
+- url: https://cardano-preprod.blockfrost.io/api/v0
+  description: Cardano Preprod network
+- url: https://cardano-preview.blockfrost.io/api/v0
+  description: Cardano Preview network
+- url: https://localhost:3000
+  description: local
+security:
+- project_id: []
+tags:
+- name: Cardano » Transactions
+paths:
+  /txs/{hash}:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Specific Transaction
+      description: Return content of the requested transaction.
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string.
+        description: Hash of the requested transaction
+        example: 6e5f825c42c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Return the contents of the transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/utxos:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction UTXOs
+      description: Return the inputs and UTXOs of the specific transaction.
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string
+        description: Hash of the requested transaction
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Return the contents of the transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_utxo'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/stakes:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction Stake Addresses Certificates
+      description: 'Obtain information about (de)registration of stake addresses within a transaction.
+
+        '
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string.
+        description: Hash of the requested transaction.
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: 'Obtain information about (de)registration of stake addresses within a transaction.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_stake_addr'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/delegations:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction Delegation Certificates
+      description: 'Obtain information about delegation certificates of a specific transaction.
+
+        '
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string
+        description: Hash of the requested transaction.
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Obtain information about delegation certificates of a specific transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_delegations'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/withdrawals:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction Withdrawal
+      description: Obtain information about withdrawals of a specific transaction.
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string
+        description: Hash of the requested transaction.
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Obtain information about withdrawals of a specific transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_withdrawals'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/mirs:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction MIRs
+      description: Obtain information about Move Instantaneous Rewards (MIRs) of a specific transaction.
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string
+        description: Hash of the requested transaction.
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Obtain information about Move Instantaneous Rewards (MIRs) of a specific transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_mirs'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/pool_updates:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction Stake Pool Registration and Update Certificates
+      description: 'Obtain information about stake pool registration and update certificates of a specific transaction.
+
+        '
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string
+        description: Hash of the requested transaction
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Obtain information about stake pool certificates of a specific transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_pool_certs'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/pool_retires:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction Stake Pool Retirement Certificates
+      description: 'Obtain information about stake pool retirements within a specific transaction.
+
+        '
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string.
+        description: Hash of the requested transaction
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: 'Obtain information about stake pool retirements within a specific transaction.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_pool_retires'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/metadata:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction Metadata
+      description: Obtain the transaction metadata.
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string.
+        description: Hash of the requested transaction
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Obtain metadata information associated with a specific transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_metadata'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/metadata/cbor:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction Metadata in CBOR
+      description: Obtain the transaction metadata in CBOR.
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string.
+        description: Hash of the requested transaction
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Obtain metadata information associated with a specific transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_metadata_cbor'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/redeemers:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction Redeemers
+      description: Obtain the transaction redeemers.
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string.
+        description: Hash of the requested transaction
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Obtain information about redeemers within a specific transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_redeemers'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/required_signers:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction Required Signers
+      description: Obtain the extra transaction witnesses.
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string.
+        description: Hash of the transaction
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Query required signers (extra transaction witnesses)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_required_signers'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /txs/{hash}/cbor:
+    get:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Transaction CBOR
+      description: Obtain the CBOR serialized transaction
+      parameters:
+      - in: path
+        name: hash
+        required: true
+        schema:
+          type: string
+          format: 64-character case-sensitive hexadecimal string.
+        description: Hash of the transaction
+        example: 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b
+      responses:
+        '200':
+          description: Query transaction CBOR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_content_cbor'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /tx/submit:
+    post:
+      tags:
+      - Cardano » Transactions
+      summary: Blockfrost Submit a Transaction
+      description: "Submit an already serialized transaction to the network.\n\n<p>\n  <span class=\"hosted\">Hosted</span> Endpoint only available for hosted variant.\n</p>\n"
+      x-codeSamples:
+      - lang: Shell
+        label: cURL
+        source: "# Assuming `data` is a serialized transaction on the file-system.\ncurl \"https://cardano-mainnet.blockfrost.io/api/v0/tx/submit\" \\\n  -X POST \\\n  -H \"Content-Type: application/cbor\" \\\n  -H \"project_id: $PROJECT_ID\" \\\n  --data-binary @./data\n"
+      - lang: Shell
+        label: cardano-cli
+        source: "# Assuming `tx.signed` is signed transaction constructed by cardano-cli\nxxd -r -p <<< $(jq .cborHex tx.signed) > tx.submit-api.raw\ncurl \"https://cardano-mainnet.blockfrost.io/api/v0/tx/submit\" \\\n  -X POST \\\n  -H \"Content-Type: application/cbor\" \\\n  -H \"project_id: $PROJECT_ID\" \\\n  --data-binary @./tx.submit-api.raw\n"
+      requestBody:
+        description: 'The transaction to submit, serialized in CBOR.
+
+          '
+        required: true
+        content:
+          application/cbor:
+            schema:
+              type: string
+              description: 'The transaction to submit, serialized in CBOR.
+
+                '
+            example: '83a400818258208911f640d452c3be4ff3d89db63b41ce048c056951286e2e28bbf8a51588ab44000181825839009493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e32c728d3861e164cab28cb8f006448139c8f1740ffb8e7aa9e5232dc1a10b2531f021a00029519075820cb798b0bce50604eaf2e0dc89367896b18f0a6ef6b32b57e3c9f83f8ee71e608a1008182582073fea80d424276ad0978d4fe5310e8bc2d485f5f6bb3bf87612989f112ad5a7d5840c40425229749a9434763cf01b492057fd56d7091a6372eaa777a1c9b1ca508c914e6a4ee9c0d40fc10952ed668e9ad65378a28b149de6bd4204bd9f095b0a902a11907b0a1667469636b657281a266736f757263656b736f757263655f6e616d656576616c7565736675676961742076656e69616d206d696e7573
+
+              '
+      responses:
+        '200':
+          description: Return the ID of the submitted transaction.
+          content:
+            application/json:
+              schema:
+                type: string
+                format: hex
+                minLength: 64
+                maxLength: 64
+                example: d1662b24fa9fe985fc2dce47455df399cb2e31e1e1819339e885801cc3578908
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '418':
+          $ref: '#/components/responses/418'
+        '425':
+          $ref: '#/components/responses/425'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  responses:
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
+    '418':
+      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 418
+              error:
+                type: string
+                example: Requested Banned
+              message:
+                type: string
+                example: IP has been auto-banned for flooding.
+            required:
+            - error
+            - message
+            - status_code
+    '403':
+      description: Authentication secret is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 403
+              error:
+                type: string
+                example: Forbidden
+              message:
+                type: string
+                example: Invalid project token.
+            required:
+            - error
+            - message
+            - status_code
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
+            required:
+            - error
+            - message
+            - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
+    '425':
+      description: Mempool is already full, not accepting new txs straight away
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 425
+              error:
+                type: string
+                example: Mempool Full
+              message:
+                type: string
+                example: Mempool is full, please try resubmitting again later.
+            required:
+            - error
+            - message
+            - status_code
+    '404':
+      description: Component not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 404
+              error:
+                type: string
+                example: Not Found
+              message:
+                type: string
+                example: The requested component has not been found.
+            required:
+            - error
+            - message
+            - status_code
+  schemas:
+    tx_content_pool_certs:
+      type: array
+      items:
+        type: object
+        properties:
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          pool_id:
+            type: string
+            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+            description: Bech32 encoded pool ID
+          vrf_key:
+            type: string
+            example: 0b5245f9934ec2151116fb8ec00f35fd00e0aa3b075c4ed12cce440f999d8233
+            description: VRF key hash
+          pledge:
+            type: string
+            example: '5000000000'
+            description: Stake pool certificate pledge in Lovelaces
+          margin_cost:
+            type: number
+            example: 0.05
+            description: Margin tax cost of the stake pool
+          fixed_cost:
+            type: string
+            example: '340000000'
+            description: Fixed tax cost of the stake pool in Lovelaces
+          reward_account:
+            type: string
+            example: stake1uxkptsa4lkr55jleztw43t37vgdn88l6ghclfwuxld2eykgpgvg3f
+            description: Bech32 reward account of the stake pool
+          owners:
+            type: array
+            items:
+              type: string
+              description: Bech32 accounts of the pool owners
+            example:
+            - stake1u98nnlkvkk23vtvf9273uq7cph5ww6u2yq2389psuqet90sv4xv9v
+          metadata:
+            type: object
+            nullable: true
+            properties:
+              url:
+                type: string
+                nullable: true
+                example: https://stakenuts.com/mainnet.json
+                description: URL to the stake pool metadata
+              hash:
+                type: string
+                nullable: true
+                example: 47c0c68cb57f4a5b4a87bad896fc274678e7aea98e200fa14a1cb40c0cab1d8c
+                description: Hash of the metadata file
+              ticker:
+                type: string
+                nullable: true
+                example: NUTS
+                description: Ticker of the stake pool
+              name:
+                type: string
+                nullable: true
+                example: Stake Nuts
+                description: Name of the stake pool
+              description:
+                type: string
+                nullable: true
+                example: The best pool ever
+                description: Description of the stake pool
+              homepage:
+                type: string
+                nullable: true
+                example: https://stakentus.com/
+                description: Home page of the stake pool
+            required:
+            - url
+            - hash
+            - ticker
+            - name
+            - description
+            - homepage
+          relays:
+            type: array
+            items:
+              type: object
+              properties:
+                ipv4:
+                  type: string
+                  nullable: true
+                  example: 4.4.4.4
+                  description: IPv4 address of the relay
+                ipv6:
+                  type: string
+                  nullable: true
+                  example: https://stakenuts.com/mainnet.json
+                  description: IPv6 address of the relay
+                dns:
+                  type: string
+                  nullable: true
+                  example: relay1.stakenuts.com
+                  description: DNS name of the relay
+                dns_srv:
+                  type: string
+                  nullable: true
+                  example: _relays._tcp.relays.stakenuts.com
+                  description: DNS SRV entry of the relay
+                port:
+                  type: integer
+                  example: 3001
+                  description: Network port of the relay
+              required:
+              - ipv4
+              - ipv6
+              - dns
+              - dns_srv
+              - port
+          active_epoch:
+            type: integer
+            example: 210
+            description: Epoch in which the update becomes active
+        required:
+        - cert_index
+        - pool_id
+        - vrf_key
+        - pledge
+        - margin_cost
+        - fixed_cost
+        - reward_account
+        - owners
+        - metadata
+        - relays
+        - active_epoch
+    tx_content_metadata:
+      type: array
+      items:
+        type: object
+        properties:
+          label:
+            type: string
+            description: Metadata label
+          json_metadata:
+            oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+            description: Content of the metadata
+        required:
+        - label
+        - json_metadata
+      example:
+      - label: '1967'
+        json_metadata:
+          metadata: https://nut.link/metadata.json
+          hash: 6bf124f217d0e5a0a8adb1dbd8540e1334280d49ab861127868339f43b3948af
+      - label: '1968'
+        json_metadata:
+          ADAUSD:
+          - value: '0.10409800535729975'
+            source: ergoOracles
+    tx_content:
+      type: object
+      properties:
+        hash:
+          type: string
+          example: 1e043f100dce12d107f679685acd2fc0610e10f72a92d412794c9773d11d8477
+          description: Transaction hash
+        block:
+          type: string
+          example: 356b7d7dbb696ccd12775c016941057a9dc70898d87a63fc752271bb46856940
+          description: Block hash
+        block_height:
+          type: integer
+          example: 123456
+          description: Block number
+        block_time:
+          type: integer
+          example: 1635505891
+          description: Block creation time in UNIX time
+        slot:
+          type: integer
+          example: 42000000
+          description: Slot number
+        index:
+          type: integer
+          example: 1
+          description: Transaction index within the block
+        output_amount:
+          type: array
+          items:
+            type: object
+            description: The sum of all the UTXO per asset
+            properties:
+              unit:
+                type: string
+                format: Lovelace or concatenation of asset policy_id and hex-encoded asset_name
+                description: The unit of the value
+              quantity:
+                type: string
+                description: The quantity of the unit
+            required:
+            - unit
+            - quantity
+          example:
+          - unit: lovelace
+            quantity: '42000000'
+          - unit: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
+            quantity: '12'
+        fees:
+          type: string
+          example: '182485'
+          description: Fees of the transaction in Lovelaces
+        deposit:
+          type: string
+          example: '0'
+          description: Deposit within the transaction in Lovelaces
+        size:
+          type: integer
+          example: 433
+          description: Size of the transaction in Bytes
+        invalid_before:
+          type: string
+          nullable: true
+          example: null
+          description: Left (included) endpoint of the timelock validity intervals
+        invalid_hereafter:
+          type: string
+          nullable: true
+          example: '13885913'
+          description: Right (excluded) endpoint of the timelock validity intervals
+        utxo_count:
+          type: integer
+          example: 4
+          description: Count of UTXOs within the transaction
+        withdrawal_count:
+          type: integer
+          example: 0
+          description: Count of the withdrawals within the transaction
+        mir_cert_count:
+          type: integer
+          example: 0
+          description: Count of the MIR certificates within the transaction
+        delegation_count:
+          type: integer
+          example: 0
+          description: Count of the delegations within the transaction
+        stake_cert_count:
+          type: integer
+          example: 0
+          description: Count of the stake keys (de)registration within the transaction
+        pool_update_count:
+          type: integer
+          example: 0
+          description: Count of the stake pool registration and update certificates within the transaction
+        pool_retire_count:
+          type: integer
+          example: 0
+          description: Count of the stake pool retirement certificates within the transaction
+        asset_mint_or_burn_count:
+          type: integer
+          example: 0
+          description: Count of asset mints and burns within the transaction
+        redeemer_count:
+          type: integer
+          example: 0
+          description: Count of redeemers within the transaction
+        valid_contract:
+          type: boolean
+          example: true
+          description: True if contract script passed validation
+        treasury_donation:
+          type: string
+          example: '0'
+          description: Treasury donation in Lovelaces
+      required:
+      - hash
+      - block
+      - block_height
+      - block_time
+      - slot
+      - index
+      - output_amount
+      - fees
+      - deposit
+      - size
+      - invalid_before
+      - invalid_hereafter
+      - utxo_count
+      - withdrawal_count
+      - mir_cert_count
+      - delegation_count
+      - stake_cert_count
+      - pool_update_count
+      - pool_retire_count
+      - asset_mint_or_burn_count
+      - redeemer_count
+      - valid_contract
+      - treasury_donation
+    tx_content_redeemers:
+      type: array
+      items:
+        type: object
+        properties:
+          tx_index:
+            type: integer
+            example: 0
+            description: Index of the redeemer within the transaction
+          purpose:
+            type: string
+            enum:
+            - spend
+            - mint
+            - cert
+            - reward
+            example: spend
+            description: Validation purpose
+          script_hash:
+            type: string
+            example: ec26b89af41bef0f7585353831cb5da42b5b37185e0c8a526143b824
+            description: Script hash
+          redeemer_data_hash:
+            type: string
+            example: 923918e403bf43c34b4ef6b48eb2ee04babed17320d8d1b9ff9ad086e86f44ec
+            description: Redeemer data hash
+          datum_hash:
+            type: string
+            example: 923918e403bf43c34b4ef6b48eb2ee04babed17320d8d1b9ff9ad086e86f44ec
+            deprecated: true
+            description: Datum hash
+          unit_mem:
+            type: string
+            example: '1700'
+            description: The budget in Memory to run a script
+          unit_steps:
+            type: string
+            example: '476468'
+            description: The budget in CPU steps to run a script
+          fee:
+            type: string
+            example: '172033'
+            description: The fee consumed to run the script
+        required:
+        - tx_index
+        - purpose
+        - unit_mem
+        - unit_steps
+        - script_hash
+        - redeemer_data_hash
+        - datum_hash
+        - fee
+    tx_content_cbor:
+      type: object
+      properties:
+        cbor:
+          type: string
+          description: CBOR serialized transaction
+      required:
+      - cbor
+      example:
+        cbor: 84a40081825820203e5b61e0949ffc8fe594727cf7ed73c7396cc2bd212af9a680c9423b5880eb00018282583900f0c60254ecb0addd4c7e40c28fd05b65014ab4c8ecece06c7dcee5a0724bf93336a8225e7ef152b41aea955173be91af19250edea1ddafab1a000f42408258390014beadb876d0a2a593fe2f1b539389e00731290910170e9a1be78e847d2ccdc7af469706878018739bcfde9ae23f009c4ae38aee0a4b4f3a1b0000000253fa0f93021a0002922d031a0303c827a100818258207d3ae39f9a1c916ac7c13f10c7d67c70b870c286a1af71485455c5022a3f391d5840e2f481acd1601a3f39fa976317bba685ddd774621a92611edaaa3df9f48a3b13d8b25ecb2f28b031c1602512418efed3033e463a0dcd22a856c808033cc9e00ff5f6
+    tx_content_pool_retires:
+      type: array
+      items:
+        type: object
+        properties:
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          pool_id:
+            type: string
+            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+            description: Bech32 stake pool ID
+          retiring_epoch:
+            type: integer
+            example: 216
+            description: Epoch in which the pool becomes retired
+        required:
+        - cert_index
+        - pool_id
+        - retiring_epoch
+    tx_content_mirs:
+      type: array
+      items:
+        type: object
+        properties:
+          pot:
+            type: string
+            enum:
+            - reserve
+            - treasury
+            example: reserve
+            description: Source of MIR funds
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          address:
+            type: string
+            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
+            description: Bech32 stake address
+          amount:
+            type: string
+            example: '431833601'
+            description: MIR amount in Lovelaces
+        required:
+        - pot
+        - cert_index
+        - address
+        - amount
+    tx_content_withdrawals:
+      type: array
+      items:
+        type: object
+        properties:
+          address:
+            type: string
+            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
+            description: Bech32 withdrawal address
+          amount:
+            type: string
+            example: '431833601'
+            description: Withdrawal amount in Lovelaces
+        required:
+        - address
+        - amount
+    tx_content_metadata_cbor:
+      type: array
+      items:
+        type: object
+        properties:
+          label:
+            type: string
+            description: Metadata label
+          cbor_metadata:
+            deprecated: true
+            type: string
+            nullable: true
+            description: Content of the CBOR metadata
+          metadata:
+            type: string
+            nullable: true
+            description: Content of the CBOR metadata in hex
+        required:
+        - label
+        - cbor_metadata
+        - metadata
+      example:
+      - label: '1968'
+        cbor_metadata: \xa100a16b436f6d62696e6174696f6e8601010101010c
+        metadata: a100a16b436f6d62696e6174696f6e8601010101010c
+    tx_content_stake_addr:
+      type: array
+      items:
+        type: object
+        properties:
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          address:
+            type: string
+            example: stake1u9t3a0tcwune5xrnfjg4q7cpvjlgx9lcv0cuqf5mhfjwrvcwrulda
+            description: Delegation stake address
+          registration:
+            type: boolean
+            example: true
+            description: Registration boolean, false if deregistration
+        required:
+        - cert_index
+        - address
+        - registration
+    tx_content_delegations:
+      type: array
+      items:
+        type: object
+        properties:
+          index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+            deprecated: true
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          address:
+            type: string
+            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
+            description: Bech32 delegation stake address
+          pool_id:
+            type: string
+            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+            description: Bech32 ID of delegated stake pool
+          active_epoch:
+            type: integer
+            example: 210
+            description: Epoch in which the delegation becomes active
+        required:
+        - index
+        - cert_index
+        - address
+        - pool_id
+        - active_epoch
+    tx_content_required_signers:
+      type: array
+      items:
+        type: object
+        properties:
+          witness_hash:
+            type: string
+            example: d52e11f3e48436dd42dbec6d88c239732e503b8b7a32af58e5f87625
+            description: Hash of the witness
+        required:
+        - witness_hash
+    tx_content_utxo:
+      type: object
+      properties:
+        hash:
+          type: string
+          example: 1e043f100dce12d107f679685acd2fc0610e10f72a92d412794c9773d11d8477
+          description: Transaction hash
+        inputs:
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+                example: addr1q9ld26v2lv8wvrxxmvg90pn8n8n5k6tdst06q2s856rwmvnueldzuuqmnsye359fqrk8hwvenjnqultn7djtrlft7jnq7dy7wv
+                description: Input address
+              amount:
+                type: array
+                items:
+                  type: object
+                  description: The sum of all the UTXO per asset
+                  properties:
+                    unit:
+                      type: string
+                      format: Lovelace or concatenation of asset policy_id and hex-encoded asset_name
+                      description: The unit of the value
+                    quantity:
+                      type: string
+                      description: The quantity of the unit
+                  required:
+                  - unit
+                  - quantity
+                example:
+                - unit: lovelace
+                  quantity: '42000000'
+                - unit: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
+                  quantity: '12'
+              tx_hash:
+                type: string
+                example: 1a0570af966fb355a7160e4f82d5a80b8681b7955f5d44bec0dce628516157f0
+                description: Hash of the UTXO transaction
+              output_index:
+                type: integer
+                example: 0
+                description: UTXO index in the transaction
+              data_hash:
+                type: string
+                nullable: true
+                description: The hash of the transaction output datum
+                example: 9e478573ab81ea7a8e31891ce0648b81229f408d596a3483e6f4f9b92d3cf710
+              inline_datum:
+                type: string
+                nullable: true
+                description: CBOR encoded inline datum
+                example: 19a6aa
+              reference_script_hash:
+                type: string
+                nullable: true
+                description: The hash of the reference script of the input
+                example: 13a3efd825703a352a8f71f4e2758d08c28c564e8dfcce9f77776ad1
+              collateral:
+                type: boolean
+                example: false
+                description: Whether the input is a collateral consumed on script validation failure
+              reference:
+                type: boolean
+                example: false
+                description: Whether the input is a reference transaction input
+            required:
+            - address
+            - amount
+            - tx_hash
+            - output_index
+            - data_hash
+            - inline_datum
+            - reference_script_hash
+            - collateral
+        outputs:
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+                example: addr1q9ld26v2lv8wvrxxmvg90pn8n8n5k6tdst06q2s856rwmvnueldzuuqmnsye359fqrk8hwvenjnqultn7djtrlft7jnq7dy7wv
+                description: Output address
+              amount:
+                type: array
+                items:
+                  type: object
+                  description: The sum of all the UTXO per asset
+                  properties:
+                    unit:
+                      type: string
+                      format: Lovelace or concatenation of asset policy_id and hex-encoded asset_name
+                      description: The unit of the value
+                    quantity:
+                      type: string
+                      description: The quantity of the unit
+                  required:
+                  - unit
+                  - quantity
+                example:
+                - unit: lovelace
+                  quantity: '42000000'
+                - unit: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
+                  quantity: '12'
+              output_index:
+                type: integer
+                example: 0
+                description: UTXO index in the transaction
+              data_hash:
+                type: string
+                nullable: true
+                description: The hash of the transaction output datum
+                example: 9e478573ab81ea7a8e31891ce0648b81229f408d596a3483e6f4f9b92d3cf710
+              inline_datum:
+                type: string
+                nullable: true
+                description: CBOR encoded inline datum
+                example: 19a6aa
+              collateral:
+                type: boolean
+                example: false
+                description: Whether the output is a collateral output
+              reference_script_hash:
+                type: string
+                nullable: true
+                description: The hash of the reference script of the output
+                example: 13a3efd825703a352a8f71f4e2758d08c28c564e8dfcce9f77776ad1
+              consumed_by_tx:
+                type: string
+                nullable: true
+                description: Transaction hash that consumed the UTXO or null for unconsumed UTXOs. Always null for collateral outputs.
+                example: 66c29b56952f6085afac3b0632d781af78d020b080063bcfd6c54b8e2b8fed41
+            required:
+            - address
+            - amount
+            - output_index
+            - data_hash
+            - inline_datum
+            - collateral
+            - reference_script_hash
+      required:
+      - hash
+      - inputs
+      - outputs
+    tx_content_2:
+      type: object
+      properties:
+        hash:
+          type: string
+          example: 1e043f100dce12d107f679685acd2fc0610e10f72a92d412794c9773d11d8477
+          description: Transaction hash
+        block:
+          type: string
+          example: 356b7d7dbb696ccd12775c016941057a9dc70898d87a63fc752271bb46856940
+          description: Block hash
+        block_height:
+          type: integer
+          example: 123456
+          description: Block number
+        block_time:
+          type: integer
+          example: 1635505891
+          description: Block creation time in UNIX time
+        slot:
+          type: integer
+          example: 42000000
+          description: Slot number
+        index:
+          type: integer
+          example: 1
+          description: Transaction index within the block
+        output_amount:
+          type: array
+          items:
+            type: object
+            description: The sum of all the UTXO per asset
+            properties:
+              unit:
+                type: string
+                format: Lovelace or concatenation of asset policy_id and hex-encoded asset_name
+                description: The unit of the value
+              quantity:
+                type: string
+                description: The quantity of the unit
+            required:
+            - unit
+            - quantity
+          example:
+          - unit: lovelace
+            quantity: '42000000'
+          - unit: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
+            quantity: '12'
+        fees:
+          type: string
+          example: '182485'
+          description: Fees of the transaction in Lovelaces
+        deposit:
+          type: string
+          example: '0'
+          description: Deposit within the transaction in Lovelaces
+        size:
+          type: integer
+          example: 433
+          description: Size of the transaction in Bytes
+        invalid_before:
+          type: string
+          nullable: true
+          example: null
+          description: Left (included) endpoint of the timelock validity intervals
+        invalid_hereafter:
+          type: string
+          nullable: true
+          example: '13885913'
+          description: Right (excluded) endpoint of the timelock validity intervals
+        utxo_count:
+          type: integer
+          example: 4
+          description: Count of UTXOs within the transaction
+        withdrawal_count:
+          type: integer
+          example: 0
+          description: Count of the withdrawals within the transaction
+        mir_cert_count:
+          type: integer
+          example: 0
+          description: Count of the MIR certificates within the transaction
+        delegation_count:
+          type: integer
+          example: 0
+          description: Count of the delegations within the transaction
+        stake_cert_count:
+          type: integer
+          example: 0
+          description: Count of the stake keys (de)registration within the transaction
+        pool_update_count:
+          type: integer
+          example: 0
+          description: Count of the stake pool registration and update certificates within the transaction
+        pool_retire_count:
+          type: integer
+          example: 0
+          description: Count of the stake pool retirement certificates within the transaction
+        asset_mint_or_burn_count:
+          type: integer
+          example: 0
+          description: Count of asset mints and burns within the transaction
+        redeemer_count:
+          type: integer
+          example: 0
+          description: Count of redeemers within the transaction
+        valid_contract:
+          type: boolean
+          example: true
+          description: True if contract script passed validation
+      required:
+      - hash
+      - block
+      - block_height
+      - block_time
+      - slot
+      - index
+      - output_amount
+      - fees
+      - deposit
+      - size
+      - invalid_before
+      - invalid_hereafter
+      - utxo_count
+      - withdrawal_count
+      - mir_cert_count
+      - delegation_count
+      - stake_cert_count
+      - pool_update_count
+      - pool_retire_count
+      - asset_mint_or_burn_count
+      - redeemer_count
+      - valid_contract
+  securitySchemes:
+    project_id:
+      type: apiKey
+      in: header
+      name: project_id
+      description: 'There are multiple token types available based on network you choose
+
+        when creating a Blockfrost a project, for a list of token types
+
+        see available networks.
+
+        '
