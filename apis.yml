@@ -15,31 +15,37 @@ tags:
 - NFT
 - Web3
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/blockfrost.png
 access: 3rd-Party
 created: '2024-09-27'
 modified: '2026-05-19'
 position: Consuming
 specificationVersion: '0.19'
 apis:
-- aid: blockfrost:blockfrost
-  name: Blockfrost API
-  description: RESTful API for interacting with the Cardano blockchain and parts of
-    its ecosystem. Provides access to blocks, transactions, accounts, addresses, native
-    assets, epochs, governance data, and IPFS. Requires a project_id obtained from
-    blockfrost.io for authentication. Supports Cardano mainnet, preview testnet, preprod
-    testnet, and Midnight mainnet networks.
+- aid: blockfrost:blockfrost-cardano-accounts-api
+  name: Blockfrost Cardano » Accounts API
+  description: The Cardano » Accounts API from Blockfrost — 12 operation(s) for cardano » accounts.
   humanURL: https://blockfrost.io/
   tags:
-  - Blockchain
-  - Cardano
-  - Cryptocurrency
-  - Web3
+  - Cardano » Accounts
   properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-accounts-api-openapi.yml
   - type: Documentation
     url: https://docs.blockfrost.io/
-  - type: OpenAPI
-    url: openapi/blockfrost-openapi.yaml
   - type: SpectralRules
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
@@ -84,9 +90,1095 @@ apis:
     url: capabilities/blockfrost-metrics.yaml
   - type: X-NaftikoCapability
     url: capabilities/blockfrost-nut-link.yaml
-  - url: graphql/blockfrost-graphql.md
-    type: GraphQL
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-addresses-api
+  name: Blockfrost Cardano » Addresses API
+  description: The Cardano » Addresses API from Blockfrost — 7 operation(s) for cardano » addresses.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Addresses
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-addresses-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-assets-api
+  name: Blockfrost Cardano » Assets API
+  description: The Cardano » Assets API from Blockfrost — 7 operation(s) for cardano » assets.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-assets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-blocks-api
+  name: Blockfrost Cardano » Blocks API
+  description: The Cardano » Blocks API from Blockfrost — 11 operation(s) for cardano » blocks.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Blocks
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-blocks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-epochs-api
+  name: Blockfrost Cardano » Epochs API
+  description: The Cardano » Epochs API from Blockfrost — 10 operation(s) for cardano » epochs.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Epochs
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-epochs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-governance-api
+  name: Blockfrost Cardano » Governance API
+  description: The Cardano » Governance API from Blockfrost — 17 operation(s) for cardano » governance.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Governance
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-governance-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-ledger-api
+  name: Blockfrost Cardano » Ledger API
+  description: The Cardano » Ledger API from Blockfrost — 1 operation(s) for cardano » ledger.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Ledger
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-ledger-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-mempool-api
+  name: Blockfrost Cardano » Mempool API
+  description: The Cardano » Mempool API from Blockfrost — 3 operation(s) for cardano » mempool.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Mempool
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-mempool-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-metadata-api
+  name: Blockfrost Cardano » Metadata API
+  description: The Cardano » Metadata API from Blockfrost — 3 operation(s) for cardano » metadata.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-metadata-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-network-api
+  name: Blockfrost Cardano » Network API
+  description: The Cardano » Network API from Blockfrost — 2 operation(s) for cardano » network.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Network
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-network-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-pools-api
+  name: Blockfrost Cardano » Pools API
+  description: The Cardano » Pools API from Blockfrost — 12 operation(s) for cardano » pools.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Pools
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-pools-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-scripts-api
+  name: Blockfrost Cardano » Scripts API
+  description: The Cardano » Scripts API from Blockfrost — 7 operation(s) for cardano » scripts.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Scripts
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-scripts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-transactions-api
+  name: Blockfrost Cardano » Transactions API
+  description: >-
+    The Cardano » Transactions API from Blockfrost — 14 operation(s) for cardano » transactions.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-cardano-utilities-api
+  name: Blockfrost Cardano » Utilities API
+  description: The Cardano » Utilities API from Blockfrost — 3 operation(s) for cardano » utilities.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Cardano » Utilities
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-cardano-utilities-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-health-api
+  name: Blockfrost Health API
+  description: The Health API from Blockfrost — 3 operation(s) for health.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-health-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-ipfs-add-api
+  name: Blockfrost IPFS » Add API
+  description: The IPFS » Add API from Blockfrost — 1 operation(s) for ipfs » add.
+  humanURL: https://blockfrost.io/
+  tags:
+  - IPFS » Add
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-ipfs-add-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-ipfs-gateway-api
+  name: Blockfrost IPFS » Gateway API
+  description: The IPFS » Gateway API from Blockfrost — 1 operation(s) for ipfs » gateway.
+  humanURL: https://blockfrost.io/
+  tags:
+  - IPFS » Gateway
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-ipfs-gateway-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-ipfs-pins-api
+  name: Blockfrost IPFS » Pins API
+  description: The IPFS » Pins API from Blockfrost — 4 operation(s) for ipfs » pins.
+  humanURL: https://blockfrost.io/
+  tags:
+  - IPFS » Pins
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-ipfs-pins-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-metrics-api
+  name: Blockfrost Metrics API
+  description: The Metrics API from Blockfrost — 2 operation(s) for metrics.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-metrics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
+- aid: blockfrost:blockfrost-nut-link-api
+  name: Blockfrost Nut.link API
+  description: The Nut.link API from Blockfrost — 4 operation(s) for nut.link.
+  humanURL: https://blockfrost.io/
+  tags:
+  - Nut.link
+  properties:
+  - type: OpenAPI
+    url: openapi/blockfrost-nut-link-api-openapi.yml
+  - type: Documentation
+    url: https://docs.blockfrost.io/
+  - type: SpectralRules
+    url: rules/blockfrost-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/blockfrost-vocabulary.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-accounts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-addresses.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-assets.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-blocks.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-epochs.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-governance.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-ledger.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-mempool.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-metadata.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-network.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-pools.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-scripts.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-transactions.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-cardano-utilities.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-health.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-add.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-gateway.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-ipfs-pins.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-metrics.yaml
+  - type: X-NaftikoCapability
+    url: capabilities/blockfrost-nut-link.yaml
+  - type: GraphQL
+    url: graphql/blockfrost-graphql.md
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/blockfrost/overview
 - type: AgenticAccess
   url: agentic-access/blockfrost-agentic-access.yml
 - type: DomainSecurity
