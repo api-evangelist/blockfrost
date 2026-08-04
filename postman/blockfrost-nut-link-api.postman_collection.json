@@ -1,0 +1,2065 @@
+{
+  "info": {
+    "_postman_id": "857a91fc-77df-41c9-9636-2f93f52d1780",
+    "name": "Blockfrost.io ~ API Documentation Cardano \u00bb Accounts Nut.link API",
+    "description": "Blockfrost is an API as a service that allows users to interact with the Cardano blockchain, Midnight blockchain, and parts of their ecosystems.\n\n## Tokens\n\nAfter signing up on https://blockfrost.io, a `project_id` token is automatically generated for each project.\nHTTP header of your request MUST include this `project_id` in order to authenticate against Blockfrost servers.\n\n## Available networks\n\nAt the moment, you can use the following networks. Please, note that each network has its own `project_id`.\n\n<table>\n  <tbody>\n    <tr>\n      <td>\n          <b>Network</b>\n      </td>\n      <td>\n          <b>Endpoint</b>\n      </td>\n    </tr>\n    <tr>\n        <td>Cardano mainnet</td>\n        <td>\n            <code>https://cardano-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preprod</td>\n        <td>\n            <code>https://cardano-preprod.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preview</td>\n        <td>\n            <code>https://cardano-preview.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Midnight mainnet</td>\n        <td>\n            <code>https://midnight-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>InterPlanetary File System</td>\n        <td>\n            <code>https://ipfs.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n## Concepts\n\n* All endpoints return either a JSON object or an array.\n* Data is returned in *ascending* (oldest first, newest last) order, if not stated otherwise.\n  * You might use the `?order=desc` query parameter to reverse this order.\n* By default, we return 100 results at a time. You have to use `?page=2` to list through the results.\n* All time and timestamp related fields (except `server_time`) are in seconds of UNIX time.\n* All amounts are returned in Lovelaces, where 1 ADA = 1 000 000 Lovelaces.\n* Addresses, accounts and pool IDs are in Bech32 format.\n* All values are case sensitive.\n* All hex encoded values are lower case.\n* Examples are not based on real data. Any resemblance to actual events is purely coincidental.\n* We allow to upload files up to 100MB of size to IPFS. This might increase in the future.\n* Only pinned IPFS files are counted towards the IPFS quota.\n* Non-pinned IPFS files are subject to regular garbage collection and will be removed unless pinned.\n* We allow maximum of 100 queued pins per IPFS user.\n\n## Errors\n\n### HTTP Status codes\n\nThe following are HTTP status code your application might receive when reaching Blockfrost endpoints and\nit should handle all of these cases.\n\n* HTTP `400` return code is used when the request is not valid.\n* HTTP `402` return code is used when the projects exceed their daily request limit.\n* HTTP `403` return code is used when the request is not authenticated.\n* HTTP `404` return code is used when the resource doesn't exist.\n* HTTP `418` return code is used when the user has been auto-banned for flooding too much after previously receiving error code `402` or `429`.\n* HTTP `425` return code is used in Cardano networks, when the user has submitted a transaction when the mempool is already full, not accepting new txs straight away.\n* HTTP `425` return code is used in IPFS network, when the user has submitted a pin when the pin queue is already full, not accepting new pins straight away.\n* HTTP `429` return code is used when the user has sent too many requests in a given amount of time and therefore has been rate-limited.\n* HTTP `500` return code is used when our endpoints are having a problem.\n\n### Error codes\n\nAn internal error code number is used for better indication of the error in question. It is passed using the following payload.\n\n```json\n{\n  \"status_code\": 403,\n  \"error\": \"Forbidden\",\n  \"message\": \"Invalid project token.\"\n}\n```\n## Limits\n\nThere are two types of limits we are enforcing:\n\nThe first depends on your plan and is the number of request we allow per day. We defined the day from midnight to midnight of UTC time.\n\nThe second is rate limiting. We limit an end user, distinguished by IP address, to 10 requests per second. On top of that, we allow\neach user to send burst of 500 requests, which cools off at rate of 10 requests per second. In essence, a user is allowed to make another\nwhole burst after (currently) 500/10 = 50 seconds. E.g. if a user attempts to make a call 3 seconds after whole burst, 30 requests will be processed.\nWe believe this should be sufficient for most of the use cases. If it is not and you have a specific use case, please get in touch with us, and\nwe will make sure to take it into account as much as we can.\n\n## SDKs\n\nWe support a number of SDKs that will help you in developing your application on top of Blockfrost.\n\n<table>\n  <tbody>\n    <tr>\n        <td><b>Programming language</b></td>\n        <td><b>SDK</b></td>\n    </tr>\n    <tr>\n        <td>JavaScript</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-js\">blockfrost-js</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Haskell</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-haskell\">blockfrost-haskell</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Python</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-python\">blockfrost-python</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Rust</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-rust\">blockfrost-rust</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Golang</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-go\">blockfrost-go</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Ruby</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-ruby\">blockfrost-ruby</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Java</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-java\">blockfrost-java</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Scala</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-scala\">blockfrost-scala</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Swift</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-swift\">blockfrost-swift</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Kotlin</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-kotlin\">blockfrost-kotlin</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Elixir</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-elixir\">blockfrost-elixir</a>\n        </td>\n    </tr>\n    <tr>\n        <td>.NET</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-dotnet\">blockfrost-dotnet</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Arduino</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-arduino\">blockfrost-arduino</a>\n        </td>\n    </tr>\n    <tr>\n        <td>PHP</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-php\">blockfrost-php</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Crystal</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-crystal\">blockfrost-crystal</a>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n\n## Midnight API\n\n\nThe Midnight Indexer API exposes a GraphQL API that enables clients to query and subscribe to blockchain data \u2014 blocks, transactions, contracts, and wallet-related events \u2014 indexed from the Midnight blockchain.\n\nAvailable networks: `mainnet`, `preprod`, `preview`\n\n| Service | URL | Protocol |\n|---------|-----|----------|\n| **Indexer HTTP API** | `https://midnight-{network}.blockfrost.io/api/v0` | HTTP POST (GraphQL) |\n| **Indexer Subscriptions API** | `wss://midnight-{network}.blockfrost.io/api/v0/ws` | WebSocket |\n| **Node RPC** | `https://rpc.midnight-{network}.blockfrost.io` | JSON-RPC |\n\n\nFor the full documentation \u2014 queries, mutations, subscriptions, authentication options, and examples \u2014 see the Midnight GraphQL API Reference:\n\n[![Explore the Midnight API \u2192](https://img.shields.io/badge/Explore_the_Midnight_API_\u2192-0033AD?style=for-the-badge)](./midnight/)\n\n\nContact Support:\n Name: Blockfrost Team\n Email: contact@blockfrost.io",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:14:41.000Z",
+    "updatedAt": "2026-07-28T01:14:41.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-857a91fc-77df-41c9-9636-2f93f52d1780"
+  },
+  "item": [
+    {
+      "name": "nutlink",
+      "item": [
+        {
+          "name": "{address}",
+          "item": [
+            {
+              "name": "tickers",
+              "item": [
+                {
+                  "name": "{ticker}",
+                  "item": [
+                    {
+                      "name": "Blockfrost Specific Ticker for an Address",
+                      "id": "e0966ad3-7166-4615-8a80-c701d6d0fd6f",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/:address/tickers/:ticker?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            ":address",
+                            "tickers",
+                            ":ticker"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "a2b032f0-db1e-453e-abe9-145f13d4898a",
+                              "key": "address",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            },
+                            {
+                              "id": "e72d2c37-da3e-4d0f-96b2-b34f1fd6a2f9",
+                              "key": "ticker",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "List of records of a specific ticker"
+                      },
+                      "response": [
+                        {
+                          "id": "e04dde72-f3e9-419a-9e3e-2008e31ce479",
+                          "name": "Return the tickers provided by the metadata oracle",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/nutlink/:address/tickers/:ticker?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "nutlink",
+                                ":address",
+                                "tickers",
+                                ":ticker"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "address"
+                                },
+                                {
+                                  "key": "ticker"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "[\n  {\n    \"tx_hash\": \"<string>\",\n    \"tx_index\": \"<integer>\",\n    \"block_height\": \"<integer>\",\n    \"payload\": \"<string>\"\n  },\n  {\n    \"tx_hash\": \"<string>\",\n    \"tx_index\": \"<integer>\",\n    \"block_height\": \"<integer>\",\n    \"payload\": \"<string>\"\n  }\n]",
+                          "createdAt": "2026-07-28T01:14:42.000Z",
+                          "updatedAt": "2026-07-28T01:14:42.000Z",
+                          "uid": "35240-e04dde72-f3e9-419a-9e3e-2008e31ce479"
+                        },
+                        {
+                          "id": "337d848f-4660-4a9d-ab63-5b3cb95b953d",
+                          "name": "Bad request",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/nutlink/:address/tickers/:ticker?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "nutlink",
+                                ":address",
+                                "tickers",
+                                ":ticker"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "address"
+                                },
+                                {
+                                  "key": "ticker"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:42.000Z",
+                          "updatedAt": "2026-07-28T01:14:42.000Z",
+                          "uid": "35240-337d848f-4660-4a9d-ab63-5b3cb95b953d"
+                        },
+                        {
+                          "id": "b1dfe94f-6d59-4197-af76-779e20e5de5a",
+                          "name": "Authentication secret is missing or invalid",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/nutlink/:address/tickers/:ticker?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "nutlink",
+                                ":address",
+                                "tickers",
+                                ":ticker"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "address"
+                                },
+                                {
+                                  "key": "ticker"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:42.000Z",
+                          "updatedAt": "2026-07-28T01:14:42.000Z",
+                          "uid": "35240-b1dfe94f-6d59-4197-af76-779e20e5de5a"
+                        },
+                        {
+                          "id": "258d7bd7-4690-4009-b154-81cb9fbd4803",
+                          "name": "Component not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/nutlink/:address/tickers/:ticker?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "nutlink",
+                                ":address",
+                                "tickers",
+                                ":ticker"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "address"
+                                },
+                                {
+                                  "key": "ticker"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:42.000Z",
+                          "updatedAt": "2026-07-28T01:14:42.000Z",
+                          "uid": "35240-258d7bd7-4690-4009-b154-81cb9fbd4803"
+                        },
+                        {
+                          "id": "d939fc36-49de-468e-9725-94c6dda734a7",
+                          "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/nutlink/:address/tickers/:ticker?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "nutlink",
+                                ":address",
+                                "tickers",
+                                ":ticker"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "address"
+                                },
+                                {
+                                  "key": "ticker"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "I'm a teapot (RFC 2324)",
+                          "code": 418,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:42.000Z",
+                          "updatedAt": "2026-07-28T01:14:42.000Z",
+                          "uid": "35240-d939fc36-49de-468e-9725-94c6dda734a7"
+                        },
+                        {
+                          "id": "205b27f5-5506-467d-880b-a1c52c91201e",
+                          "name": "Usage limit reached",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/nutlink/:address/tickers/:ticker?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "nutlink",
+                                ":address",
+                                "tickers",
+                                ":ticker"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "address"
+                                },
+                                {
+                                  "key": "ticker"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:42.000Z",
+                          "updatedAt": "2026-07-28T01:14:42.000Z",
+                          "uid": "35240-205b27f5-5506-467d-880b-a1c52c91201e"
+                        },
+                        {
+                          "id": "fd6741f2-a6b4-484d-9637-da84760adbcb",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/nutlink/:address/tickers/:ticker?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "nutlink",
+                                ":address",
+                                "tickers",
+                                ":ticker"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "address"
+                                },
+                                {
+                                  "key": "ticker"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:42.000Z",
+                          "updatedAt": "2026-07-28T01:14:42.000Z",
+                          "uid": "35240-fd6741f2-a6b4-484d-9637-da84760adbcb"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-e0966ad3-7166-4615-8a80-c701d6d0fd6f"
+                    }
+                  ],
+                  "id": "1295e512-64b5-4da8-a38f-73b7611fd765",
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-1295e512-64b5-4da8-a38f-73b7611fd765"
+                },
+                {
+                  "name": "Blockfrost List of Tickers of an Oracle",
+                  "id": "cd39f409-024a-41b4-ad71-34fe0ed335bc",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/nutlink/:address/tickers?count=100&page=1&order=asc",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "nutlink",
+                        ":address",
+                        "tickers"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of results displayed on one page.",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "The page number for listing the results.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                          "key": "order",
+                          "value": "asc"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "0892c10b-8ba6-4a9d-b17a-f15cc1616d6c",
+                          "key": "address",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "List of records of a specific oracle"
+                  },
+                  "response": [
+                    {
+                      "id": "695e01d6-9e32-40fa-85af-8b2f8d225878",
+                      "name": "Return the tickers provided by the metadata oracle",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/:address/tickers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            ":address",
+                            "tickers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "address"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"name\": \"<string>\",\n    \"count\": \"<integer>\",\n    \"latest_block\": \"<integer>\"\n  },\n  {\n    \"name\": \"<string>\",\n    \"count\": \"<integer>\",\n    \"latest_block\": \"<integer>\"\n  }\n]",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-695e01d6-9e32-40fa-85af-8b2f8d225878"
+                    },
+                    {
+                      "id": "e12161a2-174f-49db-914c-572c81601226",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/:address/tickers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            ":address",
+                            "tickers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "address"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-e12161a2-174f-49db-914c-572c81601226"
+                    },
+                    {
+                      "id": "d017fdc6-70c6-4a8f-a2de-7722075033be",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/:address/tickers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            ":address",
+                            "tickers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "address"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-d017fdc6-70c6-4a8f-a2de-7722075033be"
+                    },
+                    {
+                      "id": "4eb43d78-f2ad-469b-9143-b7ff0a2b3a2b",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/:address/tickers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            ":address",
+                            "tickers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "address"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-4eb43d78-f2ad-469b-9143-b7ff0a2b3a2b"
+                    },
+                    {
+                      "id": "75a512b9-743c-4c50-9357-dd47c128bacb",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/:address/tickers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            ":address",
+                            "tickers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "address"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-75a512b9-743c-4c50-9357-dd47c128bacb"
+                    },
+                    {
+                      "id": "1ab0f12d-0576-4ff7-8d51-e35b38710346",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/:address/tickers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            ":address",
+                            "tickers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "address"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-1ab0f12d-0576-4ff7-8d51-e35b38710346"
+                    },
+                    {
+                      "id": "370977dd-d546-4632-b567-f55fdb2964c7",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/:address/tickers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            ":address",
+                            "tickers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "address"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-370977dd-d546-4632-b567-f55fdb2964c7"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-cd39f409-024a-41b4-ad71-34fe0ed335bc"
+                }
+              ],
+              "id": "e4f63826-d1dc-4434-9407-e4c09e6733d5",
+              "createdAt": "2026-07-28T01:14:42.000Z",
+              "updatedAt": "2026-07-28T01:14:42.000Z",
+              "uid": "35240-e4f63826-d1dc-4434-9407-e4c09e6733d5"
+            },
+            {
+              "name": "Blockfrost Specific Nut.link Address",
+              "id": "97566729-996e-4b87-83d7-5d4d334a6b36",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/nutlink/:address",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "nutlink",
+                    ":address"
+                  ],
+                  "variable": [
+                    {
+                      "id": "e5a430d8-a7f1-4ce4-9187-7d6f2da37720",
+                      "key": "address",
+                      "value": "<string>",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "description": "List metadata about specific address"
+              },
+              "response": [
+                {
+                  "id": "1e4c2aa5-d73a-4528-8180-6e121d7f2a74",
+                  "name": "Return the metadata about metadata oracle",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/nutlink/:address",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "nutlink",
+                        ":address"
+                      ],
+                      "variable": [
+                        {
+                          "key": "address"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"address\": \"<string>\",\n  \"metadata_url\": \"<string>\",\n  \"metadata_hash\": \"<string>\",\n  \"metadata\": {\n    \"ad0\": 56855617,\n    \"fugiat_b83\": -62791801\n  }\n}",
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-1e4c2aa5-d73a-4528-8180-6e121d7f2a74"
+                },
+                {
+                  "id": "4955d73e-857e-4aa9-aec4-60a3450d2a6f",
+                  "name": "Bad request",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/nutlink/:address",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "nutlink",
+                        ":address"
+                      ],
+                      "variable": [
+                        {
+                          "key": "address"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-4955d73e-857e-4aa9-aec4-60a3450d2a6f"
+                },
+                {
+                  "id": "1283d6c1-e262-4858-8622-1f152bfc39aa",
+                  "name": "Authentication secret is missing or invalid",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/nutlink/:address",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "nutlink",
+                        ":address"
+                      ],
+                      "variable": [
+                        {
+                          "key": "address"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-1283d6c1-e262-4858-8622-1f152bfc39aa"
+                },
+                {
+                  "id": "473240ea-4bf2-4e1e-9d42-4416f43c2a77",
+                  "name": "Component not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/nutlink/:address",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "nutlink",
+                        ":address"
+                      ],
+                      "variable": [
+                        {
+                          "key": "address"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-473240ea-4bf2-4e1e-9d42-4416f43c2a77"
+                },
+                {
+                  "id": "55812d1d-0be7-4983-9791-0f8ef9cdcf4a",
+                  "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/nutlink/:address",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "nutlink",
+                        ":address"
+                      ],
+                      "variable": [
+                        {
+                          "key": "address"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "I'm a teapot (RFC 2324)",
+                  "code": 418,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-55812d1d-0be7-4983-9791-0f8ef9cdcf4a"
+                },
+                {
+                  "id": "f6cd7b98-c35b-4b87-9041-b11659aceac5",
+                  "name": "Usage limit reached",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/nutlink/:address",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "nutlink",
+                        ":address"
+                      ],
+                      "variable": [
+                        {
+                          "key": "address"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-f6cd7b98-c35b-4b87-9041-b11659aceac5"
+                },
+                {
+                  "id": "55211e61-2ba8-4de8-b368-3b289e745e92",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/nutlink/:address",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "nutlink",
+                        ":address"
+                      ],
+                      "variable": [
+                        {
+                          "key": "address"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-55211e61-2ba8-4de8-b368-3b289e745e92"
+                }
+              ],
+              "createdAt": "2026-07-28T01:14:42.000Z",
+              "updatedAt": "2026-07-28T01:14:42.000Z",
+              "uid": "35240-97566729-996e-4b87-83d7-5d4d334a6b36"
+            }
+          ],
+          "id": "313b8583-eb10-4443-aa33-657a4ef1701d",
+          "createdAt": "2026-07-28T01:14:42.000Z",
+          "updatedAt": "2026-07-28T01:14:42.000Z",
+          "uid": "35240-313b8583-eb10-4443-aa33-657a4ef1701d"
+        },
+        {
+          "name": "tickers",
+          "item": [
+            {
+              "name": "{ticker}",
+              "item": [
+                {
+                  "name": "Blockfrost Specific Ticker",
+                  "id": "634c7845-e1ec-4d90-b18c-e7e84e89c1c7",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/nutlink/tickers/:ticker?count=100&page=1&order=asc",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "nutlink",
+                        "tickers",
+                        ":ticker"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of results displayed on one page.",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "The page number for listing the results.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                          "key": "order",
+                          "value": "asc"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "1954f9d1-13d3-4a15-9735-28a997ecfe7a",
+                          "key": "ticker",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "List of records of a specific ticker"
+                  },
+                  "response": [
+                    {
+                      "id": "cb0fdc05-2c40-4814-8785-9814343e6ea0",
+                      "name": "Return the tickers provided by the metadata oracle",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/tickers/:ticker?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            "tickers",
+                            ":ticker"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "ticker"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"address\": \"<string>\",\n    \"tx_hash\": \"<string>\",\n    \"block_height\": \"<integer>\",\n    \"tx_index\": \"<integer>\",\n    \"payload\": \"<string>\"\n  },\n  {\n    \"address\": \"<string>\",\n    \"tx_hash\": \"<string>\",\n    \"block_height\": \"<integer>\",\n    \"tx_index\": \"<integer>\",\n    \"payload\": \"<string>\"\n  }\n]",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-cb0fdc05-2c40-4814-8785-9814343e6ea0"
+                    },
+                    {
+                      "id": "223c2782-0469-48b1-9937-3cbaed2778b5",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/tickers/:ticker?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            "tickers",
+                            ":ticker"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "ticker"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-223c2782-0469-48b1-9937-3cbaed2778b5"
+                    },
+                    {
+                      "id": "8f62b059-cceb-41da-8250-e73855c32ca8",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/tickers/:ticker?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            "tickers",
+                            ":ticker"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "ticker"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-8f62b059-cceb-41da-8250-e73855c32ca8"
+                    },
+                    {
+                      "id": "6dbc0a75-6057-40ca-aa6d-89581dc3aac4",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/tickers/:ticker?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            "tickers",
+                            ":ticker"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "ticker"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-6dbc0a75-6057-40ca-aa6d-89581dc3aac4"
+                    },
+                    {
+                      "id": "000e6195-7fae-4b10-9b49-d5bb9fc52fe6",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/tickers/:ticker?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            "tickers",
+                            ":ticker"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "ticker"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-000e6195-7fae-4b10-9b49-d5bb9fc52fe6"
+                    },
+                    {
+                      "id": "606853ba-0adb-4557-ba32-b954dcee820a",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/tickers/:ticker?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            "tickers",
+                            ":ticker"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "ticker"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-606853ba-0adb-4557-ba32-b954dcee820a"
+                    },
+                    {
+                      "id": "0d71879c-20de-4c71-96d9-22577e0a4c57",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/nutlink/tickers/:ticker?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "nutlink",
+                            "tickers",
+                            ":ticker"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "ticker"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:42.000Z",
+                      "updatedAt": "2026-07-28T01:14:42.000Z",
+                      "uid": "35240-0d71879c-20de-4c71-96d9-22577e0a4c57"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:14:42.000Z",
+                  "updatedAt": "2026-07-28T01:14:42.000Z",
+                  "uid": "35240-634c7845-e1ec-4d90-b18c-e7e84e89c1c7"
+                }
+              ],
+              "id": "1b3a1584-1f02-453e-b098-07d874ef2c53",
+              "createdAt": "2026-07-28T01:14:42.000Z",
+              "updatedAt": "2026-07-28T01:14:42.000Z",
+              "uid": "35240-1b3a1584-1f02-453e-b098-07d874ef2c53"
+            }
+          ],
+          "id": "4d1ee9ff-8e15-46b2-9912-7f48fab5bd9e",
+          "createdAt": "2026-07-28T01:14:42.000Z",
+          "updatedAt": "2026-07-28T01:14:42.000Z",
+          "uid": "35240-4d1ee9ff-8e15-46b2-9912-7f48fab5bd9e"
+        }
+      ],
+      "id": "21f4adb8-26b3-4e83-b03f-654e17a12169",
+      "createdAt": "2026-07-28T01:14:42.000Z",
+      "updatedAt": "2026-07-28T01:14:42.000Z",
+      "uid": "35240-21f4adb8-26b3-4e83-b03f-654e17a12169"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "project_id",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://cardano-mainnet.blockfrost.io/api/v0"
+    }
+  ]
+}

@@ -1,0 +1,923 @@
+{
+  "info": {
+    "_postman_id": "6374e8a6-d457-499f-8e95-1cc60811bdad",
+    "name": "Blockfrost.io ~ API Documentation Cardano \u00bb Accounts Health API",
+    "description": "Blockfrost is an API as a service that allows users to interact with the Cardano blockchain, Midnight blockchain, and parts of their ecosystems.\n\n## Tokens\n\nAfter signing up on https://blockfrost.io, a `project_id` token is automatically generated for each project.\nHTTP header of your request MUST include this `project_id` in order to authenticate against Blockfrost servers.\n\n## Available networks\n\nAt the moment, you can use the following networks. Please, note that each network has its own `project_id`.\n\n<table>\n  <tbody>\n    <tr>\n      <td>\n          <b>Network</b>\n      </td>\n      <td>\n          <b>Endpoint</b>\n      </td>\n    </tr>\n    <tr>\n        <td>Cardano mainnet</td>\n        <td>\n            <code>https://cardano-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preprod</td>\n        <td>\n            <code>https://cardano-preprod.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preview</td>\n        <td>\n            <code>https://cardano-preview.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Midnight mainnet</td>\n        <td>\n            <code>https://midnight-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>InterPlanetary File System</td>\n        <td>\n            <code>https://ipfs.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n## Concepts\n\n* All endpoints return either a JSON object or an array.\n* Data is returned in *ascending* (oldest first, newest last) order, if not stated otherwise.\n  * You might use the `?order=desc` query parameter to reverse this order.\n* By default, we return 100 results at a time. You have to use `?page=2` to list through the results.\n* All time and timestamp related fields (except `server_time`) are in seconds of UNIX time.\n* All amounts are returned in Lovelaces, where 1 ADA = 1 000 000 Lovelaces.\n* Addresses, accounts and pool IDs are in Bech32 format.\n* All values are case sensitive.\n* All hex encoded values are lower case.\n* Examples are not based on real data. Any resemblance to actual events is purely coincidental.\n* We allow to upload files up to 100MB of size to IPFS. This might increase in the future.\n* Only pinned IPFS files are counted towards the IPFS quota.\n* Non-pinned IPFS files are subject to regular garbage collection and will be removed unless pinned.\n* We allow maximum of 100 queued pins per IPFS user.\n\n## Errors\n\n### HTTP Status codes\n\nThe following are HTTP status code your application might receive when reaching Blockfrost endpoints and\nit should handle all of these cases.\n\n* HTTP `400` return code is used when the request is not valid.\n* HTTP `402` return code is used when the projects exceed their daily request limit.\n* HTTP `403` return code is used when the request is not authenticated.\n* HTTP `404` return code is used when the resource doesn't exist.\n* HTTP `418` return code is used when the user has been auto-banned for flooding too much after previously receiving error code `402` or `429`.\n* HTTP `425` return code is used in Cardano networks, when the user has submitted a transaction when the mempool is already full, not accepting new txs straight away.\n* HTTP `425` return code is used in IPFS network, when the user has submitted a pin when the pin queue is already full, not accepting new pins straight away.\n* HTTP `429` return code is used when the user has sent too many requests in a given amount of time and therefore has been rate-limited.\n* HTTP `500` return code is used when our endpoints are having a problem.\n\n### Error codes\n\nAn internal error code number is used for better indication of the error in question. It is passed using the following payload.\n\n```json\n{\n  \"status_code\": 403,\n  \"error\": \"Forbidden\",\n  \"message\": \"Invalid project token.\"\n}\n```\n## Limits\n\nThere are two types of limits we are enforcing:\n\nThe first depends on your plan and is the number of request we allow per day. We defined the day from midnight to midnight of UTC time.\n\nThe second is rate limiting. We limit an end user, distinguished by IP address, to 10 requests per second. On top of that, we allow\neach user to send burst of 500 requests, which cools off at rate of 10 requests per second. In essence, a user is allowed to make another\nwhole burst after (currently) 500/10 = 50 seconds. E.g. if a user attempts to make a call 3 seconds after whole burst, 30 requests will be processed.\nWe believe this should be sufficient for most of the use cases. If it is not and you have a specific use case, please get in touch with us, and\nwe will make sure to take it into account as much as we can.\n\n## SDKs\n\nWe support a number of SDKs that will help you in developing your application on top of Blockfrost.\n\n<table>\n  <tbody>\n    <tr>\n        <td><b>Programming language</b></td>\n        <td><b>SDK</b></td>\n    </tr>\n    <tr>\n        <td>JavaScript</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-js\">blockfrost-js</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Haskell</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-haskell\">blockfrost-haskell</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Python</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-python\">blockfrost-python</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Rust</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-rust\">blockfrost-rust</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Golang</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-go\">blockfrost-go</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Ruby</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-ruby\">blockfrost-ruby</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Java</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-java\">blockfrost-java</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Scala</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-scala\">blockfrost-scala</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Swift</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-swift\">blockfrost-swift</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Kotlin</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-kotlin\">blockfrost-kotlin</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Elixir</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-elixir\">blockfrost-elixir</a>\n        </td>\n    </tr>\n    <tr>\n        <td>.NET</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-dotnet\">blockfrost-dotnet</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Arduino</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-arduino\">blockfrost-arduino</a>\n        </td>\n    </tr>\n    <tr>\n        <td>PHP</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-php\">blockfrost-php</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Crystal</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-crystal\">blockfrost-crystal</a>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n\n## Midnight API\n\n\nThe Midnight Indexer API exposes a GraphQL API that enables clients to query and subscribe to blockchain data \u2014 blocks, transactions, contracts, and wallet-related events \u2014 indexed from the Midnight blockchain.\n\nAvailable networks: `mainnet`, `preprod`, `preview`\n\n| Service | URL | Protocol |\n|---------|-----|----------|\n| **Indexer HTTP API** | `https://midnight-{network}.blockfrost.io/api/v0` | HTTP POST (GraphQL) |\n| **Indexer Subscriptions API** | `wss://midnight-{network}.blockfrost.io/api/v0/ws` | WebSocket |\n| **Node RPC** | `https://rpc.midnight-{network}.blockfrost.io` | JSON-RPC |\n\n\nFor the full documentation \u2014 queries, mutations, subscriptions, authentication options, and examples \u2014 see the Midnight GraphQL API Reference:\n\n[![Explore the Midnight API \u2192](https://img.shields.io/badge/Explore_the_Midnight_API_\u2192-0033AD?style=for-the-badge)](./midnight/)\n\n\nContact Support:\n Name: Blockfrost Team\n Email: contact@blockfrost.io",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:14:33.000Z",
+    "updatedAt": "2026-07-28T01:14:33.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-6374e8a6-d457-499f-8e95-1cc60811bdad"
+  },
+  "item": [
+    {
+      "name": "/",
+      "item": [
+        {
+          "name": "Blockfrost Root Endpoint",
+          "id": "fe134869-e23b-41f2-a338-5b651ada4c4c",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "Root endpoint has no other function than to point end users to documentation.\n"
+          },
+          "response": [
+            {
+              "id": "4629a2d9-51e4-49d6-8e40-8027c0fd62a2",
+              "name": "Information pointing to the documentation.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"url\": \"<string>\",\n  \"version\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-4629a2d9-51e4-49d6-8e40-8027c0fd62a2"
+            },
+            {
+              "id": "da0acdd0-43c7-4cba-90d0-483576719c73",
+              "name": "Bad request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-da0acdd0-43c7-4cba-90d0-483576719c73"
+            },
+            {
+              "id": "f2af30b0-0a0e-41ec-bbca-a0eb4e91010c",
+              "name": "Authentication secret is missing or invalid",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-f2af30b0-0a0e-41ec-bbca-a0eb4e91010c"
+            },
+            {
+              "id": "223798bb-9674-414a-8e47-2a128f8c8048",
+              "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "status": "I'm a teapot (RFC 2324)",
+              "code": 418,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-223798bb-9674-414a-8e47-2a128f8c8048"
+            },
+            {
+              "id": "88a83c54-f181-4424-a190-3b3f55269237",
+              "name": "Usage limit reached",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-88a83c54-f181-4424-a190-3b3f55269237"
+            },
+            {
+              "id": "eea12eec-2690-4162-a77c-46225fb21790",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    ""
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-eea12eec-2690-4162-a77c-46225fb21790"
+            }
+          ],
+          "createdAt": "2026-07-28T01:14:33.000Z",
+          "updatedAt": "2026-07-28T01:14:33.000Z",
+          "uid": "35240-fe134869-e23b-41f2-a338-5b651ada4c4c"
+        }
+      ],
+      "id": "3b9253f0-285e-4b8d-8c60-308faf86ff51",
+      "createdAt": "2026-07-28T01:14:33.000Z",
+      "updatedAt": "2026-07-28T01:14:33.000Z",
+      "uid": "35240-3b9253f0-285e-4b8d-8c60-308faf86ff51"
+    },
+    {
+      "name": "health",
+      "item": [
+        {
+          "name": "clock",
+          "item": [
+            {
+              "name": "Blockfrost Current Backend Time",
+              "id": "519c228a-5eec-4c11-8876-8118c3ddee03",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/health/clock",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health",
+                    "clock"
+                  ]
+                },
+                "description": "This endpoint provides the current UNIX time. Your application might\nuse this to verify if the client clock is not out of sync.\n"
+              },
+              "response": [
+                {
+                  "id": "3eb9b7a8-adfb-480b-a75b-62caa2856f0c",
+                  "name": "Return the current UNIX time in milliseconds.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/health/clock",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "health",
+                        "clock"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"server_time\": \"<long>\"\n}",
+                  "createdAt": "2026-07-28T01:14:33.000Z",
+                  "updatedAt": "2026-07-28T01:14:33.000Z",
+                  "uid": "35240-3eb9b7a8-adfb-480b-a75b-62caa2856f0c"
+                },
+                {
+                  "id": "38eb16cd-53e7-428e-9982-be28949fc39f",
+                  "name": "Bad request",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/health/clock",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "health",
+                        "clock"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:33.000Z",
+                  "updatedAt": "2026-07-28T01:14:33.000Z",
+                  "uid": "35240-38eb16cd-53e7-428e-9982-be28949fc39f"
+                },
+                {
+                  "id": "4327e2f8-18d7-47d6-9f7d-e27994bd2fd3",
+                  "name": "Authentication secret is missing or invalid",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/health/clock",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "health",
+                        "clock"
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:33.000Z",
+                  "updatedAt": "2026-07-28T01:14:33.000Z",
+                  "uid": "35240-4327e2f8-18d7-47d6-9f7d-e27994bd2fd3"
+                },
+                {
+                  "id": "f061ce63-b3b3-44fa-944e-2fe9d4202eed",
+                  "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/health/clock",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "health",
+                        "clock"
+                      ]
+                    }
+                  },
+                  "status": "I'm a teapot (RFC 2324)",
+                  "code": 418,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:33.000Z",
+                  "updatedAt": "2026-07-28T01:14:33.000Z",
+                  "uid": "35240-f061ce63-b3b3-44fa-944e-2fe9d4202eed"
+                },
+                {
+                  "id": "accac6f0-b710-413f-b601-1fdb3d74d569",
+                  "name": "Usage limit reached",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/health/clock",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "health",
+                        "clock"
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:33.000Z",
+                  "updatedAt": "2026-07-28T01:14:33.000Z",
+                  "uid": "35240-accac6f0-b710-413f-b601-1fdb3d74d569"
+                },
+                {
+                  "id": "8cbeca66-c338-47bf-85c8-4251f3017553",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/health/clock",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "health",
+                        "clock"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:33.000Z",
+                  "updatedAt": "2026-07-28T01:14:33.000Z",
+                  "uid": "35240-8cbeca66-c338-47bf-85c8-4251f3017553"
+                }
+              ],
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-519c228a-5eec-4c11-8876-8118c3ddee03"
+            }
+          ],
+          "id": "25de08f5-4e31-481c-8b5c-a68527820bbc",
+          "createdAt": "2026-07-28T01:14:33.000Z",
+          "updatedAt": "2026-07-28T01:14:33.000Z",
+          "uid": "35240-25de08f5-4e31-481c-8b5c-a68527820bbc"
+        },
+        {
+          "name": "Blockfrost Backend Health Status",
+          "id": "2722b6b2-5e57-4cc6-bb22-31b5925c97c0",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Return backend status as a boolean. Your application should handle situations when backend for the given chain is unavailable.\n"
+          },
+          "response": [
+            {
+              "id": "dcc81cf1-f0d5-4da9-8b99-81bab413ca62",
+              "name": "Return the boolean indicating the health of the backend.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"is_healthy\": \"<boolean>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-dcc81cf1-f0d5-4da9-8b99-81bab413ca62"
+            },
+            {
+              "id": "d45f6773-ea63-4ab5-8099-24ee12777103",
+              "name": "Bad request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-d45f6773-ea63-4ab5-8099-24ee12777103"
+            },
+            {
+              "id": "50226f8b-abb8-465e-8dd6-9b9ba11944b6",
+              "name": "Authentication secret is missing or invalid",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-50226f8b-abb8-465e-8dd6-9b9ba11944b6"
+            },
+            {
+              "id": "b4041a62-c1c2-426d-b8c6-0c1aee89ad1d",
+              "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "status": "I'm a teapot (RFC 2324)",
+              "code": 418,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-b4041a62-c1c2-426d-b8c6-0c1aee89ad1d"
+            },
+            {
+              "id": "4f15fbfb-29e3-4bb3-908a-4706d6bc1253",
+              "name": "Usage limit reached",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-4f15fbfb-29e3-4bb3-908a-4706d6bc1253"
+            },
+            {
+              "id": "d7b767b3-6b33-4930-be66-23d005bdcdc0",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:33.000Z",
+              "updatedAt": "2026-07-28T01:14:33.000Z",
+              "uid": "35240-d7b767b3-6b33-4930-be66-23d005bdcdc0"
+            }
+          ],
+          "createdAt": "2026-07-28T01:14:33.000Z",
+          "updatedAt": "2026-07-28T01:14:33.000Z",
+          "uid": "35240-2722b6b2-5e57-4cc6-bb22-31b5925c97c0"
+        }
+      ],
+      "id": "70b19d4b-66e9-480d-a9af-5decf898bd07",
+      "createdAt": "2026-07-28T01:14:33.000Z",
+      "updatedAt": "2026-07-28T01:14:33.000Z",
+      "uid": "35240-70b19d4b-66e9-480d-a9af-5decf898bd07"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "project_id",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://cardano-mainnet.blockfrost.io/api/v0"
+    }
+  ]
+}

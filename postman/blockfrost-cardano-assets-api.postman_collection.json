@@ -1,0 +1,3549 @@
+{
+  "info": {
+    "_postman_id": "f694b4bb-cce8-448e-a908-144d099ef4eb",
+    "name": "Blockfrost.io ~ API Documentation Cardano \u00bb Accounts Cardano \u00bb Assets API",
+    "description": "Blockfrost is an API as a service that allows users to interact with the Cardano blockchain, Midnight blockchain, and parts of their ecosystems.\n\n## Tokens\n\nAfter signing up on https://blockfrost.io, a `project_id` token is automatically generated for each project.\nHTTP header of your request MUST include this `project_id` in order to authenticate against Blockfrost servers.\n\n## Available networks\n\nAt the moment, you can use the following networks. Please, note that each network has its own `project_id`.\n\n<table>\n  <tbody>\n    <tr>\n      <td>\n          <b>Network</b>\n      </td>\n      <td>\n          <b>Endpoint</b>\n      </td>\n    </tr>\n    <tr>\n        <td>Cardano mainnet</td>\n        <td>\n            <code>https://cardano-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preprod</td>\n        <td>\n            <code>https://cardano-preprod.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preview</td>\n        <td>\n            <code>https://cardano-preview.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Midnight mainnet</td>\n        <td>\n            <code>https://midnight-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>InterPlanetary File System</td>\n        <td>\n            <code>https://ipfs.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n## Concepts\n\n* All endpoints return either a JSON object or an array.\n* Data is returned in *ascending* (oldest first, newest last) order, if not stated otherwise.\n  * You might use the `?order=desc` query parameter to reverse this order.\n* By default, we return 100 results at a time. You have to use `?page=2` to list through the results.\n* All time and timestamp related fields (except `server_time`) are in seconds of UNIX time.\n* All amounts are returned in Lovelaces, where 1 ADA = 1 000 000 Lovelaces.\n* Addresses, accounts and pool IDs are in Bech32 format.\n* All values are case sensitive.\n* All hex encoded values are lower case.\n* Examples are not based on real data. Any resemblance to actual events is purely coincidental.\n* We allow to upload files up to 100MB of size to IPFS. This might increase in the future.\n* Only pinned IPFS files are counted towards the IPFS quota.\n* Non-pinned IPFS files are subject to regular garbage collection and will be removed unless pinned.\n* We allow maximum of 100 queued pins per IPFS user.\n\n## Errors\n\n### HTTP Status codes\n\nThe following are HTTP status code your application might receive when reaching Blockfrost endpoints and\nit should handle all of these cases.\n\n* HTTP `400` return code is used when the request is not valid.\n* HTTP `402` return code is used when the projects exceed their daily request limit.\n* HTTP `403` return code is used when the request is not authenticated.\n* HTTP `404` return code is used when the resource doesn't exist.\n* HTTP `418` return code is used when the user has been auto-banned for flooding too much after previously receiving error code `402` or `429`.\n* HTTP `425` return code is used in Cardano networks, when the user has submitted a transaction when the mempool is already full, not accepting new txs straight away.\n* HTTP `425` return code is used in IPFS network, when the user has submitted a pin when the pin queue is already full, not accepting new pins straight away.\n* HTTP `429` return code is used when the user has sent too many requests in a given amount of time and therefore has been rate-limited.\n* HTTP `500` return code is used when our endpoints are having a problem.\n\n### Error codes\n\nAn internal error code number is used for better indication of the error in question. It is passed using the following payload.\n\n```json\n{\n  \"status_code\": 403,\n  \"error\": \"Forbidden\",\n  \"message\": \"Invalid project token.\"\n}\n```\n## Limits\n\nThere are two types of limits we are enforcing:\n\nThe first depends on your plan and is the number of request we allow per day. We defined the day from midnight to midnight of UTC time.\n\nThe second is rate limiting. We limit an end user, distinguished by IP address, to 10 requests per second. On top of that, we allow\neach user to send burst of 500 requests, which cools off at rate of 10 requests per second. In essence, a user is allowed to make another\nwhole burst after (currently) 500/10 = 50 seconds. E.g. if a user attempts to make a call 3 seconds after whole burst, 30 requests will be processed.\nWe believe this should be sufficient for most of the use cases. If it is not and you have a specific use case, please get in touch with us, and\nwe will make sure to take it into account as much as we can.\n\n## SDKs\n\nWe support a number of SDKs that will help you in developing your application on top of Blockfrost.\n\n<table>\n  <tbody>\n    <tr>\n        <td><b>Programming language</b></td>\n        <td><b>SDK</b></td>\n    </tr>\n    <tr>\n        <td>JavaScript</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-js\">blockfrost-js</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Haskell</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-haskell\">blockfrost-haskell</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Python</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-python\">blockfrost-python</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Rust</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-rust\">blockfrost-rust</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Golang</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-go\">blockfrost-go</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Ruby</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-ruby\">blockfrost-ruby</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Java</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-java\">blockfrost-java</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Scala</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-scala\">blockfrost-scala</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Swift</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-swift\">blockfrost-swift</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Kotlin</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-kotlin\">blockfrost-kotlin</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Elixir</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-elixir\">blockfrost-elixir</a>\n        </td>\n    </tr>\n    <tr>\n        <td>.NET</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-dotnet\">blockfrost-dotnet</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Arduino</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-arduino\">blockfrost-arduino</a>\n        </td>\n    </tr>\n    <tr>\n        <td>PHP</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-php\">blockfrost-php</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Crystal</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-crystal\">blockfrost-crystal</a>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n\n## Midnight API\n\n\nThe Midnight Indexer API exposes a GraphQL API that enables clients to query and subscribe to blockchain data \u2014 blocks, transactions, contracts, and wallet-related events \u2014 indexed from the Midnight blockchain.\n\nAvailable networks: `mainnet`, `preprod`, `preview`\n\n| Service | URL | Protocol |\n|---------|-----|----------|\n| **Indexer HTTP API** | `https://midnight-{network}.blockfrost.io/api/v0` | HTTP POST (GraphQL) |\n| **Indexer Subscriptions API** | `wss://midnight-{network}.blockfrost.io/api/v0/ws` | WebSocket |\n| **Node RPC** | `https://rpc.midnight-{network}.blockfrost.io` | JSON-RPC |\n\n\nFor the full documentation \u2014 queries, mutations, subscriptions, authentication options, and examples \u2014 see the Midnight GraphQL API Reference:\n\n[![Explore the Midnight API \u2192](https://img.shields.io/badge/Explore_the_Midnight_API_\u2192-0033AD?style=for-the-badge)](./midnight/)\n\n\nContact Support:\n Name: Blockfrost Team\n Email: contact@blockfrost.io",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:13:47.000Z",
+    "updatedAt": "2026-07-28T01:13:47.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-f694b4bb-cce8-448e-a908-144d099ef4eb"
+  },
+  "item": [
+    {
+      "name": "assets",
+      "item": [
+        {
+          "name": "{asset}",
+          "item": [
+            {
+              "name": "history",
+              "item": [
+                {
+                  "name": "Blockfrost Asset History",
+                  "id": "12c92681-0d32-42c6-92e6-8fefc68f1bd1",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset/history?count=100&page=1&order=asc",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset",
+                        "history"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of results displayed on one page.",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "The page number for listing the results.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                          "key": "order",
+                          "value": "asc"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "b0e034f2-9f4c-4b77-aff4-a7556c5f91b1",
+                          "key": "asset",
+                          "value": "<string>",
+                          "description": "(Required) Concatenation of the policy_id and hex-encoded asset_name"
+                        }
+                      ]
+                    },
+                    "description": "History of a specific asset"
+                  },
+                  "response": [
+                    {
+                      "id": "ee8504e5-e387-4dee-9d83-7ba67f4b8d0d",
+                      "name": "Return the information about the history of a specific asset",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/history?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "history"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"tx_hash\": \"<string>\",\n    \"action\": \"minted\",\n    \"amount\": \"<string>\"\n  },\n  {\n    \"tx_hash\": \"<string>\",\n    \"action\": \"minted\",\n    \"amount\": \"<string>\"\n  }\n]",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-ee8504e5-e387-4dee-9d83-7ba67f4b8d0d"
+                    },
+                    {
+                      "id": "925ecc35-1b4d-4f65-9740-fa7131c2a81d",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/history?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "history"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-925ecc35-1b4d-4f65-9740-fa7131c2a81d"
+                    },
+                    {
+                      "id": "ba977bcd-47ee-4dcc-a9e9-713732bc2c5c",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/history?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "history"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-ba977bcd-47ee-4dcc-a9e9-713732bc2c5c"
+                    },
+                    {
+                      "id": "c9d0202e-93d3-4372-971a-e8bd665db7af",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/history?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "history"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-c9d0202e-93d3-4372-971a-e8bd665db7af"
+                    },
+                    {
+                      "id": "935daf41-cbed-4999-9d88-118ce0a66311",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/history?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "history"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-935daf41-cbed-4999-9d88-118ce0a66311"
+                    },
+                    {
+                      "id": "65eb41fa-10da-43c0-a95b-603c373dcd30",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/history?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "history"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-65eb41fa-10da-43c0-a95b-603c373dcd30"
+                    },
+                    {
+                      "id": "4d958c05-d8e7-4ff8-94c1-b0375701a545",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/history?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "history"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-4d958c05-d8e7-4ff8-94c1-b0375701a545"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-12c92681-0d32-42c6-92e6-8fefc68f1bd1"
+                }
+              ],
+              "id": "d44c387f-40fc-4370-b515-9f9c65b914fb",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-d44c387f-40fc-4370-b515-9f9c65b914fb"
+            },
+            {
+              "name": "txs",
+              "item": [
+                {
+                  "name": "Blockfrost Asset Txs",
+                  "id": "adcb7833-52c4-4937-ba36-c49e59737478",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset/txs?count=100&page=1&order=asc",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset",
+                        "txs"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of results displayed on one page.",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "The page number for listing the results.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                          "key": "order",
+                          "value": "asc"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "eaf59e99-d331-46aa-b202-7ccd7d9d9d25",
+                          "key": "asset",
+                          "value": "<string>",
+                          "description": "(Required) Concatenation of the policy_id and hex-encoded asset_name"
+                        }
+                      ]
+                    },
+                    "description": "List of a specific asset transactions"
+                  },
+                  "response": [
+                    {
+                      "id": "027aa00e-dfb6-4cd3-bf1e-3f3a870edfea",
+                      "name": "Return the information about the history of a specific asset",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/txs?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "txs"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  \"<string>\",\n  \"<string>\"\n]",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-027aa00e-dfb6-4cd3-bf1e-3f3a870edfea"
+                    },
+                    {
+                      "id": "34c82b97-8844-40ab-830d-f0a52f23bddc",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/txs?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "txs"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-34c82b97-8844-40ab-830d-f0a52f23bddc"
+                    },
+                    {
+                      "id": "a5304c5b-78b7-4ace-a079-c8a65cf02e4a",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/txs?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "txs"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-a5304c5b-78b7-4ace-a079-c8a65cf02e4a"
+                    },
+                    {
+                      "id": "043eaf30-d544-4214-9a1f-c28fc3303bf4",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/txs?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "txs"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-043eaf30-d544-4214-9a1f-c28fc3303bf4"
+                    },
+                    {
+                      "id": "d016c4cc-f18d-44e3-843b-703e1c5f523e",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/txs?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "txs"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-d016c4cc-f18d-44e3-843b-703e1c5f523e"
+                    },
+                    {
+                      "id": "f8dfd171-4ea6-4eb3-954d-1337735fa702",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/txs?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "txs"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-f8dfd171-4ea6-4eb3-954d-1337735fa702"
+                    },
+                    {
+                      "id": "453b4223-5dc8-49c3-b0d7-4c7655b33363",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/txs?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "txs"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-453b4223-5dc8-49c3-b0d7-4c7655b33363"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-adcb7833-52c4-4937-ba36-c49e59737478"
+                }
+              ],
+              "id": "d7f6ffc6-635b-4422-9044-0c72f901512f",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-d7f6ffc6-635b-4422-9044-0c72f901512f"
+            },
+            {
+              "name": "transactions",
+              "item": [
+                {
+                  "name": "Blockfrost Asset Transactions",
+                  "id": "db68b0b0-a654-4e78-b25d-a2795c8c0531",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset/transactions?count=100&page=1&order=asc",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset",
+                        "transactions"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of results displayed on one page.",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "The page number for listing the results.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                          "key": "order",
+                          "value": "asc"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "70c70790-2129-4ffd-a1d6-a1d8278078b3",
+                          "key": "asset",
+                          "value": "<string>",
+                          "description": "(Required) Concatenation of the policy_id and hex-encoded asset_name"
+                        }
+                      ]
+                    },
+                    "description": "List of a specific asset transactions"
+                  },
+                  "response": [
+                    {
+                      "id": "c3953459-b0c4-4310-a985-c3719d146526",
+                      "name": "Return the information about the history of a specific asset",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/transactions?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"tx_hash\": \"<string>\",\n    \"tx_index\": \"<integer>\",\n    \"block_height\": \"<integer>\",\n    \"block_time\": \"<integer>\"\n  },\n  {\n    \"tx_hash\": \"<string>\",\n    \"tx_index\": \"<integer>\",\n    \"block_height\": \"<integer>\",\n    \"block_time\": \"<integer>\"\n  }\n]",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-c3953459-b0c4-4310-a985-c3719d146526"
+                    },
+                    {
+                      "id": "201518e8-463e-4810-a97a-e7f9d9948460",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/transactions?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-201518e8-463e-4810-a97a-e7f9d9948460"
+                    },
+                    {
+                      "id": "1cc1b155-a02d-42ce-a52b-8b180938c852",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/transactions?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-1cc1b155-a02d-42ce-a52b-8b180938c852"
+                    },
+                    {
+                      "id": "0fcd7976-7bde-4c2a-b6ad-199718388535",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/transactions?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-0fcd7976-7bde-4c2a-b6ad-199718388535"
+                    },
+                    {
+                      "id": "ce7cd8bc-3e02-4d3b-9032-a81db94ac2ce",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/transactions?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-ce7cd8bc-3e02-4d3b-9032-a81db94ac2ce"
+                    },
+                    {
+                      "id": "e7cecf31-e2e4-468f-9aed-8ceeee43fd75",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/transactions?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-e7cecf31-e2e4-468f-9aed-8ceeee43fd75"
+                    },
+                    {
+                      "id": "26ee624a-2514-48b2-9e81-dd01d982fafa",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/transactions?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-26ee624a-2514-48b2-9e81-dd01d982fafa"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-db68b0b0-a654-4e78-b25d-a2795c8c0531"
+                }
+              ],
+              "id": "862970cc-9c45-436c-aeec-961e03516af3",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-862970cc-9c45-436c-aeec-961e03516af3"
+            },
+            {
+              "name": "addresses",
+              "item": [
+                {
+                  "name": "Blockfrost Asset Addresses",
+                  "id": "72899b88-44b9-4e3a-9544-b920bb098cfc",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset/addresses?count=100&page=1&order=asc",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset",
+                        "addresses"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of results displayed on one page.",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "The page number for listing the results.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                          "key": "order",
+                          "value": "asc"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "951acadc-a0d2-4972-99b5-36906facc7ff",
+                          "key": "asset",
+                          "value": "<string>",
+                          "description": "(Required) Concatenation of the policy_id and hex-encoded asset_name"
+                        }
+                      ]
+                    },
+                    "description": "List of a addresses containing a specific asset"
+                  },
+                  "response": [
+                    {
+                      "id": "16f11545-fe5c-4449-b87a-be8947b30203",
+                      "name": "Return the information about the history of a specific asset",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/addresses?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "addresses"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"address\": \"<string>\",\n    \"quantity\": \"<string>\"\n  },\n  {\n    \"address\": \"<string>\",\n    \"quantity\": \"<string>\"\n  }\n]",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-16f11545-fe5c-4449-b87a-be8947b30203"
+                    },
+                    {
+                      "id": "27788727-eb0c-44dc-98be-a2d566efc2af",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/addresses?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "addresses"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-27788727-eb0c-44dc-98be-a2d566efc2af"
+                    },
+                    {
+                      "id": "15c094e4-97e6-4ef9-8006-d81d6a810b56",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/addresses?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "addresses"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-15c094e4-97e6-4ef9-8006-d81d6a810b56"
+                    },
+                    {
+                      "id": "e97c0ef1-8197-451b-80b0-ec271123566d",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/addresses?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "addresses"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-e97c0ef1-8197-451b-80b0-ec271123566d"
+                    },
+                    {
+                      "id": "2ff438a8-99db-42d5-b02f-593ac6e2050e",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/addresses?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "addresses"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-2ff438a8-99db-42d5-b02f-593ac6e2050e"
+                    },
+                    {
+                      "id": "b28f52da-2140-441c-9f10-85c11a1293cf",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/addresses?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "addresses"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-b28f52da-2140-441c-9f10-85c11a1293cf"
+                    },
+                    {
+                      "id": "a7dc07a4-828c-4bd3-b48f-410ecf4c2a54",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/:asset/addresses?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            ":asset",
+                            "addresses"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "asset"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-a7dc07a4-828c-4bd3-b48f-410ecf4c2a54"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-72899b88-44b9-4e3a-9544-b920bb098cfc"
+                }
+              ],
+              "id": "c3f32204-bf64-443b-a060-d4779b92122d",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-c3f32204-bf64-443b-a060-d4779b92122d"
+            },
+            {
+              "name": "Blockfrost Specific Asset",
+              "id": "d1ee01c3-7242-43c5-8841-c004832839c2",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/assets/:asset",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "assets",
+                    ":asset"
+                  ],
+                  "variable": [
+                    {
+                      "id": "4e92f0a0-f9e1-4c5f-aaaa-fac5b8e8ef4e",
+                      "key": "asset",
+                      "value": "<string>",
+                      "description": "(Required) Concatenation of the policy_id and hex-encoded asset_name"
+                    }
+                  ]
+                },
+                "description": "Information about a specific asset"
+              },
+              "response": [
+                {
+                  "id": "8fe76171-6ae9-4d0b-bba9-7d1fe0848551",
+                  "name": "Return the information about a specific asset",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset"
+                      ],
+                      "variable": [
+                        {
+                          "key": "asset"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"asset\": \"<string>\",\n  \"policy_id\": \"<string>\",\n  \"asset_name\": \"<string>\",\n  \"fingerprint\": \"<string>\",\n  \"quantity\": \"<string>\",\n  \"initial_mint_tx_hash\": \"<string>\",\n  \"mint_or_burn_count\": \"<integer>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"description\": \"<string>\",\n    \"ticker\": \"<string>\",\n    \"url\": \"<string>\",\n    \"logo\": \"<string>\",\n    \"decimals\": \"<integer>\"\n  },\n  \"onchain_metadata\": {\n    \"fugiata7d\": false,\n    \"ex0\": \"irure Ut pariatur\",\n    \"quis7f\": 40604316,\n    \"nostrud_c\": true\n  },\n  \"onchain_metadata_standard\": \"CIP68v2\",\n  \"onchain_metadata_extra\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-8fe76171-6ae9-4d0b-bba9-7d1fe0848551"
+                },
+                {
+                  "id": "55ba2fd3-a698-4ebf-ab1f-95399084b1ff",
+                  "name": "Bad request",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset"
+                      ],
+                      "variable": [
+                        {
+                          "key": "asset"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-55ba2fd3-a698-4ebf-ab1f-95399084b1ff"
+                },
+                {
+                  "id": "1791ea7b-c56f-48cb-b57b-45c1dde8a426",
+                  "name": "Authentication secret is missing or invalid",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset"
+                      ],
+                      "variable": [
+                        {
+                          "key": "asset"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-1791ea7b-c56f-48cb-b57b-45c1dde8a426"
+                },
+                {
+                  "id": "e30764c4-df5c-4b15-b126-5639b678222b",
+                  "name": "Component not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset"
+                      ],
+                      "variable": [
+                        {
+                          "key": "asset"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-e30764c4-df5c-4b15-b126-5639b678222b"
+                },
+                {
+                  "id": "29defad4-2c23-43b0-a033-6f8ee3ff9f52",
+                  "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset"
+                      ],
+                      "variable": [
+                        {
+                          "key": "asset"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "I'm a teapot (RFC 2324)",
+                  "code": 418,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-29defad4-2c23-43b0-a033-6f8ee3ff9f52"
+                },
+                {
+                  "id": "9ddf2cb1-18b2-4b30-a610-69348a24b575",
+                  "name": "Usage limit reached",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset"
+                      ],
+                      "variable": [
+                        {
+                          "key": "asset"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-9ddf2cb1-18b2-4b30-a610-69348a24b575"
+                },
+                {
+                  "id": "6250f49b-56ce-4359-acf7-4bde326a7745",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/:asset",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        ":asset"
+                      ],
+                      "variable": [
+                        {
+                          "key": "asset"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-6250f49b-56ce-4359-acf7-4bde326a7745"
+                }
+              ],
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-d1ee01c3-7242-43c5-8841-c004832839c2"
+            }
+          ],
+          "id": "6f4d330b-d598-4fdd-8ab0-19486c675b15",
+          "createdAt": "2026-07-28T01:13:48.000Z",
+          "updatedAt": "2026-07-28T01:13:48.000Z",
+          "uid": "35240-6f4d330b-d598-4fdd-8ab0-19486c675b15"
+        },
+        {
+          "name": "policy",
+          "item": [
+            {
+              "name": "{policy_id}",
+              "item": [
+                {
+                  "name": "Blockfrost Assets of a Specific Policy",
+                  "id": "5d89575a-618c-4a08-abea-7a0e54ceea4f",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/assets/policy/:policy_id?count=100&page=1&order=asc",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "assets",
+                        "policy",
+                        ":policy_id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of results displayed on one page.",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "The page number for listing the results.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                          "key": "order",
+                          "value": "asc"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "d9ce5a14-5e21-4b9a-acbf-8e463cc12052",
+                          "key": "policy_id",
+                          "value": "<string>",
+                          "description": "(Required) Specific policy_id"
+                        }
+                      ]
+                    },
+                    "description": "List of asset minted under a specific policy"
+                  },
+                  "response": [
+                    {
+                      "id": "37e7042a-4e72-46d0-9236-02b563d85c94",
+                      "name": "Return the information about a specific asset",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/policy/:policy_id?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            "policy",
+                            ":policy_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "policy_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"asset\": \"<string>\",\n    \"quantity\": \"<string>\"\n  },\n  {\n    \"asset\": \"<string>\",\n    \"quantity\": \"<string>\"\n  }\n]",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-37e7042a-4e72-46d0-9236-02b563d85c94"
+                    },
+                    {
+                      "id": "bb67a816-dc08-4cb3-bc99-0bd5d86f18ae",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/policy/:policy_id?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            "policy",
+                            ":policy_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "policy_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-bb67a816-dc08-4cb3-bc99-0bd5d86f18ae"
+                    },
+                    {
+                      "id": "b81e7c08-6bfb-43c9-b243-441318062235",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/policy/:policy_id?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            "policy",
+                            ":policy_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "policy_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-b81e7c08-6bfb-43c9-b243-441318062235"
+                    },
+                    {
+                      "id": "feac48d8-9742-49e4-8fb6-dbc83e46f0de",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/policy/:policy_id?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            "policy",
+                            ":policy_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "policy_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-feac48d8-9742-49e4-8fb6-dbc83e46f0de"
+                    },
+                    {
+                      "id": "5b43695a-3eca-4e66-b633-f2b7e079fd8d",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/policy/:policy_id?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            "policy",
+                            ":policy_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "policy_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-5b43695a-3eca-4e66-b633-f2b7e079fd8d"
+                    },
+                    {
+                      "id": "ee3d3367-e21c-4dff-b5f9-a80edeaf176b",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/policy/:policy_id?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            "policy",
+                            ":policy_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "policy_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-ee3d3367-e21c-4dff-b5f9-a80edeaf176b"
+                    },
+                    {
+                      "id": "d7e4fc67-685e-47d6-b11e-a6128b50229c",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/assets/policy/:policy_id?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "assets",
+                            "policy",
+                            ":policy_id"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "policy_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:13:48.000Z",
+                      "updatedAt": "2026-07-28T01:13:48.000Z",
+                      "uid": "35240-d7e4fc67-685e-47d6-b11e-a6128b50229c"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:13:48.000Z",
+                  "updatedAt": "2026-07-28T01:13:48.000Z",
+                  "uid": "35240-5d89575a-618c-4a08-abea-7a0e54ceea4f"
+                }
+              ],
+              "id": "1f8a7e79-9d10-4f77-8930-e4c780207ba4",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-1f8a7e79-9d10-4f77-8930-e4c780207ba4"
+            }
+          ],
+          "id": "f33421cb-7c1e-45e8-aef6-7c2ed2fb91c4",
+          "createdAt": "2026-07-28T01:13:48.000Z",
+          "updatedAt": "2026-07-28T01:13:48.000Z",
+          "uid": "35240-f33421cb-7c1e-45e8-aef6-7c2ed2fb91c4"
+        },
+        {
+          "name": "Blockfrost Assets",
+          "id": "9cd39405-f3c0-46c5-ae08-1eff5a105e5d",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/assets?count=100&page=1&order=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "assets"
+              ],
+              "query": [
+                {
+                  "description": "The number of results displayed on one page.",
+                  "key": "count",
+                  "value": "100"
+                },
+                {
+                  "description": "The page number for listing the results.",
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n",
+                  "key": "order",
+                  "value": "asc"
+                }
+              ]
+            },
+            "description": "List of assets. If an asset is completely burned,\nit will stay on the list with quantity 0 (order of assets is immutable).\n"
+          },
+          "response": [
+            {
+              "id": "62f83a66-29d0-400a-9d1f-bc3755a1818d",
+              "name": "Return list of assets",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/assets?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "assets"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\n  {\n    \"asset\": \"<string>\",\n    \"quantity\": \"<string>\"\n  },\n  {\n    \"asset\": \"<string>\",\n    \"quantity\": \"<string>\"\n  }\n]",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-62f83a66-29d0-400a-9d1f-bc3755a1818d"
+            },
+            {
+              "id": "1b2d82a4-662e-4055-ab79-72e711d85092",
+              "name": "Bad request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/assets?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "assets"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-1b2d82a4-662e-4055-ab79-72e711d85092"
+            },
+            {
+              "id": "fbe7a8b2-d8c3-408c-a69d-e711d2627794",
+              "name": "Authentication secret is missing or invalid",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/assets?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "assets"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-fbe7a8b2-d8c3-408c-a69d-e711d2627794"
+            },
+            {
+              "id": "3d124edc-65c3-4e26-98be-6a43698d38c2",
+              "name": "Component not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/assets?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "assets"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-3d124edc-65c3-4e26-98be-6a43698d38c2"
+            },
+            {
+              "id": "a70236ef-9c15-4fce-b2e0-f20227ce0475",
+              "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/assets?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "assets"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "I'm a teapot (RFC 2324)",
+              "code": 418,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-a70236ef-9c15-4fce-b2e0-f20227ce0475"
+            },
+            {
+              "id": "0a60da21-c348-40e5-a4dc-010f42c904ae",
+              "name": "Usage limit reached",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/assets?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "assets"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-0a60da21-c348-40e5-a4dc-010f42c904ae"
+            },
+            {
+              "id": "a1d66c04-58a4-4ede-aab0-d6028f724fdc",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/assets?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "assets"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:13:48.000Z",
+              "updatedAt": "2026-07-28T01:13:48.000Z",
+              "uid": "35240-a1d66c04-58a4-4ede-aab0-d6028f724fdc"
+            }
+          ],
+          "createdAt": "2026-07-28T01:13:48.000Z",
+          "updatedAt": "2026-07-28T01:13:48.000Z",
+          "uid": "35240-9cd39405-f3c0-46c5-ae08-1eff5a105e5d"
+        }
+      ],
+      "id": "3e236065-6326-4b52-aed1-913e13beb490",
+      "createdAt": "2026-07-28T01:13:48.000Z",
+      "updatedAt": "2026-07-28T01:13:48.000Z",
+      "uid": "35240-3e236065-6326-4b52-aed1-913e13beb490"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "project_id",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://cardano-mainnet.blockfrost.io/api/v0"
+    }
+  ]
+}

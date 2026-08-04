@@ -1,0 +1,3013 @@
+{
+  "info": {
+    "_postman_id": "0a55700c-ebf9-4ec0-b863-208761fa38eb",
+    "name": "Blockfrost.io ~ API Documentation Cardano \u00bb Accounts Cardano \u00bb Scripts API",
+    "description": "Blockfrost is an API as a service that allows users to interact with the Cardano blockchain, Midnight blockchain, and parts of their ecosystems.\n\n## Tokens\n\nAfter signing up on https://blockfrost.io, a `project_id` token is automatically generated for each project.\nHTTP header of your request MUST include this `project_id` in order to authenticate against Blockfrost servers.\n\n## Available networks\n\nAt the moment, you can use the following networks. Please, note that each network has its own `project_id`.\n\n<table>\n  <tbody>\n    <tr>\n      <td>\n          <b>Network</b>\n      </td>\n      <td>\n          <b>Endpoint</b>\n      </td>\n    </tr>\n    <tr>\n        <td>Cardano mainnet</td>\n        <td>\n            <code>https://cardano-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preprod</td>\n        <td>\n            <code>https://cardano-preprod.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preview</td>\n        <td>\n            <code>https://cardano-preview.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Midnight mainnet</td>\n        <td>\n            <code>https://midnight-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>InterPlanetary File System</td>\n        <td>\n            <code>https://ipfs.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n## Concepts\n\n* All endpoints return either a JSON object or an array.\n* Data is returned in *ascending* (oldest first, newest last) order, if not stated otherwise.\n  * You might use the `?order=desc` query parameter to reverse this order.\n* By default, we return 100 results at a time. You have to use `?page=2` to list through the results.\n* All time and timestamp related fields (except `server_time`) are in seconds of UNIX time.\n* All amounts are returned in Lovelaces, where 1 ADA = 1 000 000 Lovelaces.\n* Addresses, accounts and pool IDs are in Bech32 format.\n* All values are case sensitive.\n* All hex encoded values are lower case.\n* Examples are not based on real data. Any resemblance to actual events is purely coincidental.\n* We allow to upload files up to 100MB of size to IPFS. This might increase in the future.\n* Only pinned IPFS files are counted towards the IPFS quota.\n* Non-pinned IPFS files are subject to regular garbage collection and will be removed unless pinned.\n* We allow maximum of 100 queued pins per IPFS user.\n\n## Errors\n\n### HTTP Status codes\n\nThe following are HTTP status code your application might receive when reaching Blockfrost endpoints and\nit should handle all of these cases.\n\n* HTTP `400` return code is used when the request is not valid.\n* HTTP `402` return code is used when the projects exceed their daily request limit.\n* HTTP `403` return code is used when the request is not authenticated.\n* HTTP `404` return code is used when the resource doesn't exist.\n* HTTP `418` return code is used when the user has been auto-banned for flooding too much after previously receiving error code `402` or `429`.\n* HTTP `425` return code is used in Cardano networks, when the user has submitted a transaction when the mempool is already full, not accepting new txs straight away.\n* HTTP `425` return code is used in IPFS network, when the user has submitted a pin when the pin queue is already full, not accepting new pins straight away.\n* HTTP `429` return code is used when the user has sent too many requests in a given amount of time and therefore has been rate-limited.\n* HTTP `500` return code is used when our endpoints are having a problem.\n\n### Error codes\n\nAn internal error code number is used for better indication of the error in question. It is passed using the following payload.\n\n```json\n{\n  \"status_code\": 403,\n  \"error\": \"Forbidden\",\n  \"message\": \"Invalid project token.\"\n}\n```\n## Limits\n\nThere are two types of limits we are enforcing:\n\nThe first depends on your plan and is the number of request we allow per day. We defined the day from midnight to midnight of UTC time.\n\nThe second is rate limiting. We limit an end user, distinguished by IP address, to 10 requests per second. On top of that, we allow\neach user to send burst of 500 requests, which cools off at rate of 10 requests per second. In essence, a user is allowed to make another\nwhole burst after (currently) 500/10 = 50 seconds. E.g. if a user attempts to make a call 3 seconds after whole burst, 30 requests will be processed.\nWe believe this should be sufficient for most of the use cases. If it is not and you have a specific use case, please get in touch with us, and\nwe will make sure to take it into account as much as we can.\n\n## SDKs\n\nWe support a number of SDKs that will help you in developing your application on top of Blockfrost.\n\n<table>\n  <tbody>\n    <tr>\n        <td><b>Programming language</b></td>\n        <td><b>SDK</b></td>\n    </tr>\n    <tr>\n        <td>JavaScript</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-js\">blockfrost-js</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Haskell</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-haskell\">blockfrost-haskell</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Python</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-python\">blockfrost-python</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Rust</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-rust\">blockfrost-rust</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Golang</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-go\">blockfrost-go</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Ruby</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-ruby\">blockfrost-ruby</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Java</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-java\">blockfrost-java</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Scala</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-scala\">blockfrost-scala</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Swift</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-swift\">blockfrost-swift</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Kotlin</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-kotlin\">blockfrost-kotlin</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Elixir</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-elixir\">blockfrost-elixir</a>\n        </td>\n    </tr>\n    <tr>\n        <td>.NET</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-dotnet\">blockfrost-dotnet</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Arduino</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-arduino\">blockfrost-arduino</a>\n        </td>\n    </tr>\n    <tr>\n        <td>PHP</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-php\">blockfrost-php</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Crystal</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-crystal\">blockfrost-crystal</a>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n\n## Midnight API\n\n\nThe Midnight Indexer API exposes a GraphQL API that enables clients to query and subscribe to blockchain data \u2014 blocks, transactions, contracts, and wallet-related events \u2014 indexed from the Midnight blockchain.\n\nAvailable networks: `mainnet`, `preprod`, `preview`\n\n| Service | URL | Protocol |\n|---------|-----|----------|\n| **Indexer HTTP API** | `https://midnight-{network}.blockfrost.io/api/v0` | HTTP POST (GraphQL) |\n| **Indexer Subscriptions API** | `wss://midnight-{network}.blockfrost.io/api/v0/ws` | WebSocket |\n| **Node RPC** | `https://rpc.midnight-{network}.blockfrost.io` | JSON-RPC |\n\n\nFor the full documentation \u2014 queries, mutations, subscriptions, authentication options, and examples \u2014 see the Midnight GraphQL API Reference:\n\n[![Explore the Midnight API \u2192](https://img.shields.io/badge/Explore_the_Midnight_API_\u2192-0033AD?style=for-the-badge)](./midnight/)\n\n\nContact Support:\n Name: Blockfrost Team\n Email: contact@blockfrost.io",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:14:29.000Z",
+    "updatedAt": "2026-07-28T01:14:30.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-0a55700c-ebf9-4ec0-b863-208761fa38eb"
+  },
+  "item": [
+    {
+      "name": "scripts",
+      "item": [
+        {
+          "name": "{script_hash}",
+          "item": [
+            {
+              "name": "json",
+              "item": [
+                {
+                  "name": "Blockfrost Script JSON",
+                  "id": "c55c6094-77b3-4096-85fa-b6217a51dfa9",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash/json",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash",
+                        "json"
+                      ],
+                      "variable": [
+                        {
+                          "id": "ce4ff538-f135-4c13-922c-3d4250500b77",
+                          "key": "script_hash",
+                          "value": "<string>",
+                          "description": "(Required) Hash of the script"
+                        }
+                      ]
+                    },
+                    "description": "JSON representation of a `timelock` script"
+                  },
+                  "response": [
+                    {
+                      "id": "29417e9b-77af-4062-abe5-a09faa50de11",
+                      "name": "Return the JSON representation of a `timelock` script",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/json",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "json"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"json\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-29417e9b-77af-4062-abe5-a09faa50de11"
+                    },
+                    {
+                      "id": "5ac2ddbd-7019-4f79-bd23-b1aaca4206b6",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/json",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "json"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-5ac2ddbd-7019-4f79-bd23-b1aaca4206b6"
+                    },
+                    {
+                      "id": "eebfe6a3-3d02-44a8-b43a-ff0e58f7ee6b",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/json",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "json"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-eebfe6a3-3d02-44a8-b43a-ff0e58f7ee6b"
+                    },
+                    {
+                      "id": "447ab82e-e60f-49cd-994b-8856f8cffcd9",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/json",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "json"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-447ab82e-e60f-49cd-994b-8856f8cffcd9"
+                    },
+                    {
+                      "id": "0aa5f79c-c36d-47b8-bccb-df359c32b2e0",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/json",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "json"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-0aa5f79c-c36d-47b8-bccb-df359c32b2e0"
+                    },
+                    {
+                      "id": "75170673-0fb9-4458-97c0-827cff4e3cd2",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/json",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "json"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-75170673-0fb9-4458-97c0-827cff4e3cd2"
+                    },
+                    {
+                      "id": "642bf5d8-25ec-48c6-94bc-fb153868ed0f",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/json",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "json"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-642bf5d8-25ec-48c6-94bc-fb153868ed0f"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-c55c6094-77b3-4096-85fa-b6217a51dfa9"
+                }
+              ],
+              "id": "5ae35696-346e-4e61-a016-8bf6a76d1453",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-5ae35696-346e-4e61-a016-8bf6a76d1453"
+            },
+            {
+              "name": "cbor",
+              "item": [
+                {
+                  "name": "Blockfrost Script CBOR",
+                  "id": "89acc2df-e530-4165-8f26-aaa25b1a5656",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash/cbor",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash",
+                        "cbor"
+                      ],
+                      "variable": [
+                        {
+                          "id": "6ce1fbc2-0931-424b-a09d-d65f08f14c80",
+                          "key": "script_hash",
+                          "value": "<string>",
+                          "description": "(Required) Hash of the script"
+                        }
+                      ]
+                    },
+                    "description": "CBOR representation of a `plutus` script"
+                  },
+                  "response": [
+                    {
+                      "id": "5bae289a-5bd1-4a97-a7d7-355dfa03f2ee",
+                      "name": "Return the CBOR representation of a `plutus` script",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/cbor",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "cbor"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"cbor\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-5bae289a-5bd1-4a97-a7d7-355dfa03f2ee"
+                    },
+                    {
+                      "id": "de14cd1a-c277-4d6e-a42b-e7fa04684fdc",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/cbor",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "cbor"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-de14cd1a-c277-4d6e-a42b-e7fa04684fdc"
+                    },
+                    {
+                      "id": "0d4c190b-7139-4dc9-8c44-ae28f12adec2",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/cbor",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "cbor"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-0d4c190b-7139-4dc9-8c44-ae28f12adec2"
+                    },
+                    {
+                      "id": "e6d5a6ca-4c0b-4ffc-89af-cfadb7d6f390",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/cbor",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "cbor"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-e6d5a6ca-4c0b-4ffc-89af-cfadb7d6f390"
+                    },
+                    {
+                      "id": "c05d7f96-8fac-465e-bbac-9ab6fe159b41",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/cbor",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "cbor"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-c05d7f96-8fac-465e-bbac-9ab6fe159b41"
+                    },
+                    {
+                      "id": "1039bf64-9aa9-464b-97a7-c106791f2281",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/cbor",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "cbor"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-1039bf64-9aa9-464b-97a7-c106791f2281"
+                    },
+                    {
+                      "id": "44e01bea-bd4a-49a6-9695-466820bfb9ab",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/cbor",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "cbor"
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-44e01bea-bd4a-49a6-9695-466820bfb9ab"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-89acc2df-e530-4165-8f26-aaa25b1a5656"
+                }
+              ],
+              "id": "4e513440-caa8-434f-9ee3-7f28534a551a",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-4e513440-caa8-434f-9ee3-7f28534a551a"
+            },
+            {
+              "name": "redeemers",
+              "item": [
+                {
+                  "name": "Blockfrost Redeemers of a Specific Script",
+                  "id": "d4f38c44-d619-4659-b89e-711166bcec0b",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash/redeemers?count=100&page=1&order=asc",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash",
+                        "redeemers"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of results displayed on one page.",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "The page number for listing the results.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                          "key": "order",
+                          "value": "asc"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "943f0e15-7438-4382-9c03-198f3363a694",
+                          "key": "script_hash",
+                          "value": "<string>",
+                          "description": "(Required) Hash of the script"
+                        }
+                      ]
+                    },
+                    "description": "List of redeemers of a specific script"
+                  },
+                  "response": [
+                    {
+                      "id": "e34ec17e-5c89-45e2-ad85-f3e19f431988",
+                      "name": "Return the information about redeemers of a specific script",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/redeemers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "redeemers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"tx_hash\": \"<string>\",\n    \"tx_index\": \"<integer>\",\n    \"purpose\": \"reward\",\n    \"redeemer_data_hash\": \"<string>\",\n    \"datum_hash\": \"<string>\",\n    \"unit_mem\": \"<string>\",\n    \"unit_steps\": \"<string>\",\n    \"fee\": \"<string>\"\n  },\n  {\n    \"tx_hash\": \"<string>\",\n    \"tx_index\": \"<integer>\",\n    \"purpose\": \"cert\",\n    \"redeemer_data_hash\": \"<string>\",\n    \"datum_hash\": \"<string>\",\n    \"unit_mem\": \"<string>\",\n    \"unit_steps\": \"<string>\",\n    \"fee\": \"<string>\"\n  }\n]",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-e34ec17e-5c89-45e2-ad85-f3e19f431988"
+                    },
+                    {
+                      "id": "6ea1d2bf-448e-4a7e-9b5e-2af2b6f1ca0d",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/redeemers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "redeemers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-6ea1d2bf-448e-4a7e-9b5e-2af2b6f1ca0d"
+                    },
+                    {
+                      "id": "a2a91842-8981-4476-a09a-f60e085eb5b5",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/redeemers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "redeemers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-a2a91842-8981-4476-a09a-f60e085eb5b5"
+                    },
+                    {
+                      "id": "8bb9b75f-3489-4d81-aa04-e1a12048afc4",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/redeemers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "redeemers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-8bb9b75f-3489-4d81-aa04-e1a12048afc4"
+                    },
+                    {
+                      "id": "131b7019-9856-4df9-8d66-ecfbcf76e0b0",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/redeemers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "redeemers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-131b7019-9856-4df9-8d66-ecfbcf76e0b0"
+                    },
+                    {
+                      "id": "d33daf46-c487-42bb-bb8d-68204f3b0488",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/redeemers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "redeemers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-d33daf46-c487-42bb-bb8d-68204f3b0488"
+                    },
+                    {
+                      "id": "896a6364-731c-4a06-a684-d6c87fbe1e10",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/:script_hash/redeemers?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            ":script_hash",
+                            "redeemers"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "script_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-896a6364-731c-4a06-a684-d6c87fbe1e10"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-d4f38c44-d619-4659-b89e-711166bcec0b"
+                }
+              ],
+              "id": "ff4c4aab-823a-4e68-ac3a-5271674dfce5",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-ff4c4aab-823a-4e68-ac3a-5271674dfce5"
+            },
+            {
+              "name": "Blockfrost Specific Script",
+              "id": "616c4fba-6bea-4b77-8bc7-7230fedae57e",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/scripts/:script_hash",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "scripts",
+                    ":script_hash"
+                  ],
+                  "variable": [
+                    {
+                      "id": "20b19048-d2d8-42c6-8860-a56d2e0b304f",
+                      "key": "script_hash",
+                      "value": "<string>",
+                      "description": "(Required) Hash of the script"
+                    }
+                  ]
+                },
+                "description": "Information about a specific script"
+              },
+              "response": [
+                {
+                  "id": "6897b139-3d69-4018-b152-0ec03b0d734c",
+                  "name": "Return the information about a specific script",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash"
+                      ],
+                      "variable": [
+                        {
+                          "key": "script_hash"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"script_hash\": \"<string>\",\n  \"type\": \"timelock\",\n  \"serialised_size\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-6897b139-3d69-4018-b152-0ec03b0d734c"
+                },
+                {
+                  "id": "9a66968d-b725-4faf-a9c9-0a99643a9afb",
+                  "name": "Bad request",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash"
+                      ],
+                      "variable": [
+                        {
+                          "key": "script_hash"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-9a66968d-b725-4faf-a9c9-0a99643a9afb"
+                },
+                {
+                  "id": "548618d4-d34a-4178-9a74-722bc2193b25",
+                  "name": "Authentication secret is missing or invalid",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash"
+                      ],
+                      "variable": [
+                        {
+                          "key": "script_hash"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-548618d4-d34a-4178-9a74-722bc2193b25"
+                },
+                {
+                  "id": "64463b56-be8f-4b75-a26e-77ce62ba92b3",
+                  "name": "Component not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash"
+                      ],
+                      "variable": [
+                        {
+                          "key": "script_hash"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-64463b56-be8f-4b75-a26e-77ce62ba92b3"
+                },
+                {
+                  "id": "7fbb6b31-91dd-4a2d-883a-8b2bf0771df4",
+                  "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash"
+                      ],
+                      "variable": [
+                        {
+                          "key": "script_hash"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "I'm a teapot (RFC 2324)",
+                  "code": 418,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-7fbb6b31-91dd-4a2d-883a-8b2bf0771df4"
+                },
+                {
+                  "id": "f32bdb41-9012-4b81-95c9-fcb165015a30",
+                  "name": "Usage limit reached",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash"
+                      ],
+                      "variable": [
+                        {
+                          "key": "script_hash"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-f32bdb41-9012-4b81-95c9-fcb165015a30"
+                },
+                {
+                  "id": "f06666dd-4831-4e11-a639-5c0e362305f3",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "project_id",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/:script_hash",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        ":script_hash"
+                      ],
+                      "variable": [
+                        {
+                          "key": "script_hash"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-f06666dd-4831-4e11-a639-5c0e362305f3"
+                }
+              ],
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-616c4fba-6bea-4b77-8bc7-7230fedae57e"
+            }
+          ],
+          "id": "b9065e12-07b7-4fea-b33f-ec2c43ab55e8",
+          "createdAt": "2026-07-28T01:14:30.000Z",
+          "updatedAt": "2026-07-28T01:14:30.000Z",
+          "uid": "35240-b9065e12-07b7-4fea-b33f-ec2c43ab55e8"
+        },
+        {
+          "name": "datum",
+          "item": [
+            {
+              "name": "{datum_hash}",
+              "item": [
+                {
+                  "name": "cbor",
+                  "item": [
+                    {
+                      "name": "Blockfrost Datum CBOR Value",
+                      "id": "0b6d2204-529f-4b09-b618-73dfc2d5c10e",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/datum/:datum_hash/cbor",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            "datum",
+                            ":datum_hash",
+                            "cbor"
+                          ],
+                          "variable": [
+                            {
+                              "id": "5cc6adab-bc20-457a-9947-9d6eed47c9cb",
+                              "key": "datum_hash",
+                              "value": "<string>",
+                              "description": "(Required) Hash of the datum"
+                            }
+                          ]
+                        },
+                        "description": "Query CBOR serialised datum by its hash"
+                      },
+                      "response": [
+                        {
+                          "id": "56417108-34b9-4caf-8bf1-c814341b7a37",
+                          "name": "Return the CBOR serialised datum value",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scripts/datum/:datum_hash/cbor",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scripts",
+                                "datum",
+                                ":datum_hash",
+                                "cbor"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "datum_hash"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"cbor\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:14:30.000Z",
+                          "updatedAt": "2026-07-28T01:14:30.000Z",
+                          "uid": "35240-56417108-34b9-4caf-8bf1-c814341b7a37"
+                        },
+                        {
+                          "id": "d28b2807-ce9d-4ee9-b912-efb49798908d",
+                          "name": "Bad request",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scripts/datum/:datum_hash/cbor",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scripts",
+                                "datum",
+                                ":datum_hash",
+                                "cbor"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "datum_hash"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:30.000Z",
+                          "updatedAt": "2026-07-28T01:14:30.000Z",
+                          "uid": "35240-d28b2807-ce9d-4ee9-b912-efb49798908d"
+                        },
+                        {
+                          "id": "134c9f0e-0a4a-4c0b-9224-f578a624b92b",
+                          "name": "Authentication secret is missing or invalid",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scripts/datum/:datum_hash/cbor",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scripts",
+                                "datum",
+                                ":datum_hash",
+                                "cbor"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "datum_hash"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:30.000Z",
+                          "updatedAt": "2026-07-28T01:14:30.000Z",
+                          "uid": "35240-134c9f0e-0a4a-4c0b-9224-f578a624b92b"
+                        },
+                        {
+                          "id": "3a7774b8-e316-4441-a28b-90b84c20d383",
+                          "name": "Component not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scripts/datum/:datum_hash/cbor",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scripts",
+                                "datum",
+                                ":datum_hash",
+                                "cbor"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "datum_hash"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:30.000Z",
+                          "updatedAt": "2026-07-28T01:14:30.000Z",
+                          "uid": "35240-3a7774b8-e316-4441-a28b-90b84c20d383"
+                        },
+                        {
+                          "id": "c27024dd-9bac-48b2-a34b-c79ee8a29023",
+                          "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scripts/datum/:datum_hash/cbor",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scripts",
+                                "datum",
+                                ":datum_hash",
+                                "cbor"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "datum_hash"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "I'm a teapot (RFC 2324)",
+                          "code": 418,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:30.000Z",
+                          "updatedAt": "2026-07-28T01:14:30.000Z",
+                          "uid": "35240-c27024dd-9bac-48b2-a34b-c79ee8a29023"
+                        },
+                        {
+                          "id": "e8ae2ea2-48e2-4099-92d5-e0d1410fabb9",
+                          "name": "Usage limit reached",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scripts/datum/:datum_hash/cbor",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scripts",
+                                "datum",
+                                ":datum_hash",
+                                "cbor"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "datum_hash"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:30.000Z",
+                          "updatedAt": "2026-07-28T01:14:30.000Z",
+                          "uid": "35240-e8ae2ea2-48e2-4099-92d5-e0d1410fabb9"
+                        },
+                        {
+                          "id": "fde2598e-2b9e-4f25-81f9-eea9d059d3d3",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scripts/datum/:datum_hash/cbor",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scripts",
+                                "datum",
+                                ":datum_hash",
+                                "cbor"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "datum_hash"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:30.000Z",
+                          "updatedAt": "2026-07-28T01:14:30.000Z",
+                          "uid": "35240-fde2598e-2b9e-4f25-81f9-eea9d059d3d3"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-0b6d2204-529f-4b09-b618-73dfc2d5c10e"
+                    }
+                  ],
+                  "id": "ad97a184-7f41-426f-ab7c-11bd3892592b",
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-ad97a184-7f41-426f-ab7c-11bd3892592b"
+                },
+                {
+                  "name": "Blockfrost Datum Value",
+                  "id": "2472bf4a-f886-449b-bf2d-4e828451a7e2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scripts/datum/:datum_hash",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scripts",
+                        "datum",
+                        ":datum_hash"
+                      ],
+                      "variable": [
+                        {
+                          "id": "b21e029f-6218-4933-b4ae-3d334a8c9a46",
+                          "key": "datum_hash",
+                          "value": "<string>",
+                          "description": "(Required) Hash of the datum"
+                        }
+                      ]
+                    },
+                    "description": "Query JSON value of a datum by its hash"
+                  },
+                  "response": [
+                    {
+                      "id": "7c148106-c42f-4525-af48-5dbf7337ed70",
+                      "name": "Return the datum value",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/datum/:datum_hash",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            "datum",
+                            ":datum_hash"
+                          ],
+                          "variable": [
+                            {
+                              "key": "datum_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"json_value\": {\n    \"ullamco9b2\": true,\n    \"eu_69\": \"consequat dolor laborum aute\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-7c148106-c42f-4525-af48-5dbf7337ed70"
+                    },
+                    {
+                      "id": "74578d8a-70f2-42f1-877b-231eed9fb30b",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/datum/:datum_hash",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            "datum",
+                            ":datum_hash"
+                          ],
+                          "variable": [
+                            {
+                              "key": "datum_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-74578d8a-70f2-42f1-877b-231eed9fb30b"
+                    },
+                    {
+                      "id": "e7672c17-206a-470e-bbaa-55c12e0f5225",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/datum/:datum_hash",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            "datum",
+                            ":datum_hash"
+                          ],
+                          "variable": [
+                            {
+                              "key": "datum_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-e7672c17-206a-470e-bbaa-55c12e0f5225"
+                    },
+                    {
+                      "id": "b43571dc-487c-40f1-bf4d-8ac511a04929",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/datum/:datum_hash",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            "datum",
+                            ":datum_hash"
+                          ],
+                          "variable": [
+                            {
+                              "key": "datum_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-b43571dc-487c-40f1-bf4d-8ac511a04929"
+                    },
+                    {
+                      "id": "d375d818-2891-4ceb-8741-3bafc08beda0",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/datum/:datum_hash",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            "datum",
+                            ":datum_hash"
+                          ],
+                          "variable": [
+                            {
+                              "key": "datum_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-d375d818-2891-4ceb-8741-3bafc08beda0"
+                    },
+                    {
+                      "id": "6aaa6123-f486-4abc-84d0-191511fd9834",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/datum/:datum_hash",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            "datum",
+                            ":datum_hash"
+                          ],
+                          "variable": [
+                            {
+                              "key": "datum_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-6aaa6123-f486-4abc-84d0-191511fd9834"
+                    },
+                    {
+                      "id": "81122fa7-ee43-4925-b4ea-2522358b3ced",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scripts/datum/:datum_hash",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scripts",
+                            "datum",
+                            ":datum_hash"
+                          ],
+                          "variable": [
+                            {
+                              "key": "datum_hash"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:30.000Z",
+                      "updatedAt": "2026-07-28T01:14:30.000Z",
+                      "uid": "35240-81122fa7-ee43-4925-b4ea-2522358b3ced"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:14:30.000Z",
+                  "updatedAt": "2026-07-28T01:14:30.000Z",
+                  "uid": "35240-2472bf4a-f886-449b-bf2d-4e828451a7e2"
+                }
+              ],
+              "id": "a19b502e-1998-4491-b26d-7c827315dcb8",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-a19b502e-1998-4491-b26d-7c827315dcb8"
+            }
+          ],
+          "id": "b4faf3ec-5fc9-4491-9c39-c092b88a38aa",
+          "createdAt": "2026-07-28T01:14:30.000Z",
+          "updatedAt": "2026-07-28T01:14:30.000Z",
+          "uid": "35240-b4faf3ec-5fc9-4491-9c39-c092b88a38aa"
+        },
+        {
+          "name": "Blockfrost Scripts",
+          "id": "f946dd3e-67c3-4fa4-8943-03dc58525ec0",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/scripts?count=100&page=1&order=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "scripts"
+              ],
+              "query": [
+                {
+                  "description": "The number of results displayed on one page.",
+                  "key": "count",
+                  "value": "100"
+                },
+                {
+                  "description": "The page number for listing the results.",
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                  "key": "order",
+                  "value": "asc"
+                }
+              ]
+            },
+            "description": "List of scripts."
+          },
+          "response": [
+            {
+              "id": "84641024-2876-4274-8877-1faa2a92f816",
+              "name": "Return list of scripts",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/scripts?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "scripts"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\n  {\n    \"script_hash\": \"<string>\"\n  },\n  {\n    \"script_hash\": \"<string>\"\n  }\n]",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-84641024-2876-4274-8877-1faa2a92f816"
+            },
+            {
+              "id": "adf3f499-3bc8-4b09-a305-969d47034ba3",
+              "name": "Bad request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/scripts?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "scripts"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-adf3f499-3bc8-4b09-a305-969d47034ba3"
+            },
+            {
+              "id": "20283656-49b1-4e15-b686-61c56d70cbfc",
+              "name": "Authentication secret is missing or invalid",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/scripts?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "scripts"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-20283656-49b1-4e15-b686-61c56d70cbfc"
+            },
+            {
+              "id": "d52a593c-9f6c-4e1c-a645-91be5fcbc4b9",
+              "name": "Component not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/scripts?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "scripts"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-d52a593c-9f6c-4e1c-a645-91be5fcbc4b9"
+            },
+            {
+              "id": "3c2193fd-5569-4b15-b903-e0b16349cbec",
+              "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/scripts?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "scripts"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "I'm a teapot (RFC 2324)",
+              "code": 418,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-3c2193fd-5569-4b15-b903-e0b16349cbec"
+            },
+            {
+              "id": "9e4f3cba-d42d-4395-b767-f88802076b1e",
+              "name": "Usage limit reached",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/scripts?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "scripts"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-9e4f3cba-d42d-4395-b767-f88802076b1e"
+            },
+            {
+              "id": "1f0d2cbd-a219-4fbb-b1ce-9bda5140ab5d",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "project_id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/scripts?count=100&page=1&order=asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "scripts"
+                  ],
+                  "query": [
+                    {
+                      "description": "The number of results displayed on one page.",
+                      "key": "count",
+                      "value": "100"
+                    },
+                    {
+                      "description": "The page number for listing the results.",
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                      "key": "order",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T01:14:30.000Z",
+              "updatedAt": "2026-07-28T01:14:30.000Z",
+              "uid": "35240-1f0d2cbd-a219-4fbb-b1ce-9bda5140ab5d"
+            }
+          ],
+          "createdAt": "2026-07-28T01:14:30.000Z",
+          "updatedAt": "2026-07-28T01:14:30.000Z",
+          "uid": "35240-f946dd3e-67c3-4fa4-8943-03dc58525ec0"
+        }
+      ],
+      "id": "235052be-b38c-41a7-a4f3-764fe666b03d",
+      "createdAt": "2026-07-28T01:14:30.000Z",
+      "updatedAt": "2026-07-28T01:14:30.000Z",
+      "uid": "35240-235052be-b38c-41a7-a4f3-764fe666b03d"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "project_id",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://cardano-mainnet.blockfrost.io/api/v0"
+    }
+  ]
+}

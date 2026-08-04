@@ -1,0 +1,1626 @@
+{
+  "info": {
+    "_postman_id": "84fa4568-291e-48d6-b5b6-7668ec6cd9c7",
+    "name": "Blockfrost.io ~ API Documentation Cardano \u00bb Accounts Cardano \u00bb Metadata API",
+    "description": "Blockfrost is an API as a service that allows users to interact with the Cardano blockchain, Midnight blockchain, and parts of their ecosystems.\n\n## Tokens\n\nAfter signing up on https://blockfrost.io, a `project_id` token is automatically generated for each project.\nHTTP header of your request MUST include this `project_id` in order to authenticate against Blockfrost servers.\n\n## Available networks\n\nAt the moment, you can use the following networks. Please, note that each network has its own `project_id`.\n\n<table>\n  <tbody>\n    <tr>\n      <td>\n          <b>Network</b>\n      </td>\n      <td>\n          <b>Endpoint</b>\n      </td>\n    </tr>\n    <tr>\n        <td>Cardano mainnet</td>\n        <td>\n            <code>https://cardano-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preprod</td>\n        <td>\n            <code>https://cardano-preprod.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Cardano preview</td>\n        <td>\n            <code>https://cardano-preview.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>Midnight mainnet</td>\n        <td>\n            <code>https://midnight-mainnet.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n    <tr>\n        <td>InterPlanetary File System</td>\n        <td>\n            <code>https://ipfs.blockfrost.io/api/v0</code>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n## Concepts\n\n* All endpoints return either a JSON object or an array.\n* Data is returned in *ascending* (oldest first, newest last) order, if not stated otherwise.\n  * You might use the `?order=desc` query parameter to reverse this order.\n* By default, we return 100 results at a time. You have to use `?page=2` to list through the results.\n* All time and timestamp related fields (except `server_time`) are in seconds of UNIX time.\n* All amounts are returned in Lovelaces, where 1 ADA = 1 000 000 Lovelaces.\n* Addresses, accounts and pool IDs are in Bech32 format.\n* All values are case sensitive.\n* All hex encoded values are lower case.\n* Examples are not based on real data. Any resemblance to actual events is purely coincidental.\n* We allow to upload files up to 100MB of size to IPFS. This might increase in the future.\n* Only pinned IPFS files are counted towards the IPFS quota.\n* Non-pinned IPFS files are subject to regular garbage collection and will be removed unless pinned.\n* We allow maximum of 100 queued pins per IPFS user.\n\n## Errors\n\n### HTTP Status codes\n\nThe following are HTTP status code your application might receive when reaching Blockfrost endpoints and\nit should handle all of these cases.\n\n* HTTP `400` return code is used when the request is not valid.\n* HTTP `402` return code is used when the projects exceed their daily request limit.\n* HTTP `403` return code is used when the request is not authenticated.\n* HTTP `404` return code is used when the resource doesn't exist.\n* HTTP `418` return code is used when the user has been auto-banned for flooding too much after previously receiving error code `402` or `429`.\n* HTTP `425` return code is used in Cardano networks, when the user has submitted a transaction when the mempool is already full, not accepting new txs straight away.\n* HTTP `425` return code is used in IPFS network, when the user has submitted a pin when the pin queue is already full, not accepting new pins straight away.\n* HTTP `429` return code is used when the user has sent too many requests in a given amount of time and therefore has been rate-limited.\n* HTTP `500` return code is used when our endpoints are having a problem.\n\n### Error codes\n\nAn internal error code number is used for better indication of the error in question. It is passed using the following payload.\n\n```json\n{\n  \"status_code\": 403,\n  \"error\": \"Forbidden\",\n  \"message\": \"Invalid project token.\"\n}\n```\n## Limits\n\nThere are two types of limits we are enforcing:\n\nThe first depends on your plan and is the number of request we allow per day. We defined the day from midnight to midnight of UTC time.\n\nThe second is rate limiting. We limit an end user, distinguished by IP address, to 10 requests per second. On top of that, we allow\neach user to send burst of 500 requests, which cools off at rate of 10 requests per second. In essence, a user is allowed to make another\nwhole burst after (currently) 500/10 = 50 seconds. E.g. if a user attempts to make a call 3 seconds after whole burst, 30 requests will be processed.\nWe believe this should be sufficient for most of the use cases. If it is not and you have a specific use case, please get in touch with us, and\nwe will make sure to take it into account as much as we can.\n\n## SDKs\n\nWe support a number of SDKs that will help you in developing your application on top of Blockfrost.\n\n<table>\n  <tbody>\n    <tr>\n        <td><b>Programming language</b></td>\n        <td><b>SDK</b></td>\n    </tr>\n    <tr>\n        <td>JavaScript</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-js\">blockfrost-js</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Haskell</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-haskell\">blockfrost-haskell</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Python</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-python\">blockfrost-python</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Rust</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-rust\">blockfrost-rust</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Golang</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-go\">blockfrost-go</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Ruby</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-ruby\">blockfrost-ruby</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Java</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-java\">blockfrost-java</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Scala</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-scala\">blockfrost-scala</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Swift</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-swift\">blockfrost-swift</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Kotlin</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-kotlin\">blockfrost-kotlin</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Elixir</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-elixir\">blockfrost-elixir</a>\n        </td>\n    </tr>\n    <tr>\n        <td>.NET</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-dotnet\">blockfrost-dotnet</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Arduino</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-arduino\">blockfrost-arduino</a>\n        </td>\n    </tr>\n    <tr>\n        <td>PHP</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-php\">blockfrost-php</a>\n        </td>\n    </tr>\n    <tr>\n        <td>Crystal</td>\n        <td>\n            <a href=\"https://github.com/blockfrost/blockfrost-crystal\">blockfrost-crystal</a>\n        </td>\n    </tr>\n  </tbody>\n</table>\n\n\n## Midnight API\n\n\nThe Midnight Indexer API exposes a GraphQL API that enables clients to query and subscribe to blockchain data \u2014 blocks, transactions, contracts, and wallet-related events \u2014 indexed from the Midnight blockchain.\n\nAvailable networks: `mainnet`, `preprod`, `preview`\n\n| Service | URL | Protocol |\n|---------|-----|----------|\n| **Indexer HTTP API** | `https://midnight-{network}.blockfrost.io/api/v0` | HTTP POST (GraphQL) |\n| **Indexer Subscriptions API** | `wss://midnight-{network}.blockfrost.io/api/v0/ws` | WebSocket |\n| **Node RPC** | `https://rpc.midnight-{network}.blockfrost.io` | JSON-RPC |\n\n\nFor the full documentation \u2014 queries, mutations, subscriptions, authentication options, and examples \u2014 see the Midnight GraphQL API Reference:\n\n[![Explore the Midnight API \u2192](https://img.shields.io/badge/Explore_the_Midnight_API_\u2192-0033AD?style=for-the-badge)](./midnight/)\n\n\nContact Support:\n Name: Blockfrost Team\n Email: contact@blockfrost.io",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:14:16.000Z",
+    "updatedAt": "2026-07-28T01:14:16.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-84fa4568-291e-48d6-b5b6-7668ec6cd9c7"
+  },
+  "item": [
+    {
+      "name": "metadata",
+      "item": [
+        {
+          "name": "txs",
+          "item": [
+            {
+              "name": "labels",
+              "item": [
+                {
+                  "name": "{label}",
+                  "item": [
+                    {
+                      "name": "cbor",
+                      "item": [
+                        {
+                          "name": "Blockfrost Transaction Metadata Content in CBOR",
+                          "id": "ad4f1972-6d79-4482-bb40-df7ecc936869",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/metadata/txs/labels/:label/cbor?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "metadata",
+                                "txs",
+                                "labels",
+                                ":label",
+                                "cbor"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "id": "7f4b0481-07bb-4a94-85c2-991b31375952",
+                                  "key": "label",
+                                  "value": "<string>",
+                                  "description": "(Required) Metadata label"
+                                }
+                              ]
+                            },
+                            "description": "Transaction metadata per label."
+                          },
+                          "response": [
+                            {
+                              "id": "a7403643-91d4-4eaa-bf4e-04f8345bb23b",
+                              "name": "Return the account metadata content in CBOR",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "project_id",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/metadata/txs/labels/:label/cbor?count=100&page=1&order=asc",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "metadata",
+                                    "txs",
+                                    "labels",
+                                    ":label",
+                                    "cbor"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "The number of results displayed on one page.",
+                                      "key": "count",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "The page number for listing the results.",
+                                      "key": "page",
+                                      "value": "1"
+                                    },
+                                    {
+                                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                      "key": "order",
+                                      "value": "asc"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "label"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "[\n  {\n    \"tx_hash\": \"<string>\",\n    \"cbor_metadata\": \"<string>\",\n    \"metadata\": \"<string>\"\n  },\n  {\n    \"tx_hash\": \"<string>\",\n    \"cbor_metadata\": \"<string>\",\n    \"metadata\": \"<string>\"\n  }\n]",
+                              "createdAt": "2026-07-28T01:14:17.000Z",
+                              "updatedAt": "2026-07-28T01:14:17.000Z",
+                              "uid": "35240-a7403643-91d4-4eaa-bf4e-04f8345bb23b"
+                            },
+                            {
+                              "id": "34696c06-7411-4e8a-b987-488296657ade",
+                              "name": "Bad request",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "project_id",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/metadata/txs/labels/:label/cbor?count=100&page=1&order=asc",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "metadata",
+                                    "txs",
+                                    "labels",
+                                    ":label",
+                                    "cbor"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "The number of results displayed on one page.",
+                                      "key": "count",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "The page number for listing the results.",
+                                      "key": "page",
+                                      "value": "1"
+                                    },
+                                    {
+                                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                      "key": "order",
+                                      "value": "asc"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "label"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                              "createdAt": "2026-07-28T01:14:17.000Z",
+                              "updatedAt": "2026-07-28T01:14:17.000Z",
+                              "uid": "35240-34696c06-7411-4e8a-b987-488296657ade"
+                            },
+                            {
+                              "id": "35d562f6-c00b-491d-a562-6f650553823f",
+                              "name": "Authentication secret is missing or invalid",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "project_id",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/metadata/txs/labels/:label/cbor?count=100&page=1&order=asc",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "metadata",
+                                    "txs",
+                                    "labels",
+                                    ":label",
+                                    "cbor"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "The number of results displayed on one page.",
+                                      "key": "count",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "The page number for listing the results.",
+                                      "key": "page",
+                                      "value": "1"
+                                    },
+                                    {
+                                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                      "key": "order",
+                                      "value": "asc"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "label"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                              "createdAt": "2026-07-28T01:14:17.000Z",
+                              "updatedAt": "2026-07-28T01:14:17.000Z",
+                              "uid": "35240-35d562f6-c00b-491d-a562-6f650553823f"
+                            },
+                            {
+                              "id": "f1cb7da5-af28-4650-b3e8-0963cb1e772e",
+                              "name": "Component not found",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "project_id",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/metadata/txs/labels/:label/cbor?count=100&page=1&order=asc",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "metadata",
+                                    "txs",
+                                    "labels",
+                                    ":label",
+                                    "cbor"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "The number of results displayed on one page.",
+                                      "key": "count",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "The page number for listing the results.",
+                                      "key": "page",
+                                      "value": "1"
+                                    },
+                                    {
+                                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                      "key": "order",
+                                      "value": "asc"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "label"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                              "createdAt": "2026-07-28T01:14:17.000Z",
+                              "updatedAt": "2026-07-28T01:14:17.000Z",
+                              "uid": "35240-f1cb7da5-af28-4650-b3e8-0963cb1e772e"
+                            },
+                            {
+                              "id": "4ccf8cdf-c6d2-425b-a72e-cea2437d8fea",
+                              "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "project_id",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/metadata/txs/labels/:label/cbor?count=100&page=1&order=asc",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "metadata",
+                                    "txs",
+                                    "labels",
+                                    ":label",
+                                    "cbor"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "The number of results displayed on one page.",
+                                      "key": "count",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "The page number for listing the results.",
+                                      "key": "page",
+                                      "value": "1"
+                                    },
+                                    {
+                                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                      "key": "order",
+                                      "value": "asc"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "label"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "I'm a teapot (RFC 2324)",
+                              "code": 418,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                              "createdAt": "2026-07-28T01:14:17.000Z",
+                              "updatedAt": "2026-07-28T01:14:17.000Z",
+                              "uid": "35240-4ccf8cdf-c6d2-425b-a72e-cea2437d8fea"
+                            },
+                            {
+                              "id": "ff6d74f9-2e7b-4e3d-8f8a-66b945e3807c",
+                              "name": "Usage limit reached",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "project_id",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/metadata/txs/labels/:label/cbor?count=100&page=1&order=asc",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "metadata",
+                                    "txs",
+                                    "labels",
+                                    ":label",
+                                    "cbor"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "The number of results displayed on one page.",
+                                      "key": "count",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "The page number for listing the results.",
+                                      "key": "page",
+                                      "value": "1"
+                                    },
+                                    {
+                                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                      "key": "order",
+                                      "value": "asc"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "label"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                              "createdAt": "2026-07-28T01:14:17.000Z",
+                              "updatedAt": "2026-07-28T01:14:17.000Z",
+                              "uid": "35240-ff6d74f9-2e7b-4e3d-8f8a-66b945e3807c"
+                            },
+                            {
+                              "id": "8851e423-8763-4575-b5d5-265b0cf70ae4",
+                              "name": "Internal Server Error",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "project_id",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/metadata/txs/labels/:label/cbor?count=100&page=1&order=asc",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "metadata",
+                                    "txs",
+                                    "labels",
+                                    ":label",
+                                    "cbor"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "The number of results displayed on one page.",
+                                      "key": "count",
+                                      "value": "100"
+                                    },
+                                    {
+                                      "description": "The page number for listing the results.",
+                                      "key": "page",
+                                      "value": "1"
+                                    },
+                                    {
+                                      "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                      "key": "order",
+                                      "value": "asc"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "label"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                              "createdAt": "2026-07-28T01:14:17.000Z",
+                              "updatedAt": "2026-07-28T01:14:17.000Z",
+                              "uid": "35240-8851e423-8763-4575-b5d5-265b0cf70ae4"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T01:14:17.000Z",
+                          "updatedAt": "2026-07-28T01:14:17.000Z",
+                          "uid": "35240-ad4f1972-6d79-4482-bb40-df7ecc936869"
+                        }
+                      ],
+                      "id": "68cef7ec-e094-45fd-b9d5-1cbcd23f5026",
+                      "createdAt": "2026-07-28T01:14:17.000Z",
+                      "updatedAt": "2026-07-28T01:14:17.000Z",
+                      "uid": "35240-68cef7ec-e094-45fd-b9d5-1cbcd23f5026"
+                    },
+                    {
+                      "name": "Blockfrost Transaction Metadata Content in JSON",
+                      "id": "8d06c471-fa45-4bdf-89ff-298bd2907d3f",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/metadata/txs/labels/:label?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "metadata",
+                            "txs",
+                            "labels",
+                            ":label"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "ddab6289-a407-488d-9eda-22faf7a8bbf0",
+                              "key": "label",
+                              "value": "<string>",
+                              "description": "(Required) Metadata label"
+                            }
+                          ]
+                        },
+                        "description": "Transaction metadata per label."
+                      },
+                      "response": [
+                        {
+                          "id": "e9325636-23d3-4f02-963d-83c4cd49afef",
+                          "name": "Return the account metadata content",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/metadata/txs/labels/:label?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "metadata",
+                                "txs",
+                                "labels",
+                                ":label"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "label"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "[\n  {\n    \"tx_hash\": \"<string>\",\n    \"json_metadata\": \"<string>\"\n  },\n  {\n    \"tx_hash\": \"<string>\",\n    \"json_metadata\": \"<string>\"\n  }\n]",
+                          "createdAt": "2026-07-28T01:14:17.000Z",
+                          "updatedAt": "2026-07-28T01:14:17.000Z",
+                          "uid": "35240-e9325636-23d3-4f02-963d-83c4cd49afef"
+                        },
+                        {
+                          "id": "cb1531ab-ed2a-44bf-ae21-8490f4d6c326",
+                          "name": "Bad request",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/metadata/txs/labels/:label?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "metadata",
+                                "txs",
+                                "labels",
+                                ":label"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "label"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:17.000Z",
+                          "updatedAt": "2026-07-28T01:14:17.000Z",
+                          "uid": "35240-cb1531ab-ed2a-44bf-ae21-8490f4d6c326"
+                        },
+                        {
+                          "id": "a1099f64-de9d-4b65-af22-b864d4f3f283",
+                          "name": "Authentication secret is missing or invalid",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/metadata/txs/labels/:label?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "metadata",
+                                "txs",
+                                "labels",
+                                ":label"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "label"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:17.000Z",
+                          "updatedAt": "2026-07-28T01:14:17.000Z",
+                          "uid": "35240-a1099f64-de9d-4b65-af22-b864d4f3f283"
+                        },
+                        {
+                          "id": "6d1be7c5-ead1-436c-8885-77344e90f078",
+                          "name": "Component not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/metadata/txs/labels/:label?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "metadata",
+                                "txs",
+                                "labels",
+                                ":label"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "label"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:17.000Z",
+                          "updatedAt": "2026-07-28T01:14:17.000Z",
+                          "uid": "35240-6d1be7c5-ead1-436c-8885-77344e90f078"
+                        },
+                        {
+                          "id": "efa58522-8c7a-47ad-97f7-bc38a69da9ec",
+                          "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/metadata/txs/labels/:label?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "metadata",
+                                "txs",
+                                "labels",
+                                ":label"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "label"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "I'm a teapot (RFC 2324)",
+                          "code": 418,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:17.000Z",
+                          "updatedAt": "2026-07-28T01:14:17.000Z",
+                          "uid": "35240-efa58522-8c7a-47ad-97f7-bc38a69da9ec"
+                        },
+                        {
+                          "id": "db0ec0a1-2f7f-4564-afc7-1b71f2f9bfa5",
+                          "name": "Usage limit reached",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/metadata/txs/labels/:label?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "metadata",
+                                "txs",
+                                "labels",
+                                ":label"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "label"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:17.000Z",
+                          "updatedAt": "2026-07-28T01:14:17.000Z",
+                          "uid": "35240-db0ec0a1-2f7f-4564-afc7-1b71f2f9bfa5"
+                        },
+                        {
+                          "id": "abd03168-3775-49fa-9483-fb0ea080e55e",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "project_id",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/metadata/txs/labels/:label?count=100&page=1&order=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "metadata",
+                                "txs",
+                                "labels",
+                                ":label"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results displayed on one page.",
+                                  "key": "count",
+                                  "value": "100"
+                                },
+                                {
+                                  "description": "The page number for listing the results.",
+                                  "key": "page",
+                                  "value": "1"
+                                },
+                                {
+                                  "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                                  "key": "order",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "label"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:14:17.000Z",
+                          "updatedAt": "2026-07-28T01:14:17.000Z",
+                          "uid": "35240-abd03168-3775-49fa-9483-fb0ea080e55e"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:14:17.000Z",
+                      "updatedAt": "2026-07-28T01:14:17.000Z",
+                      "uid": "35240-8d06c471-fa45-4bdf-89ff-298bd2907d3f"
+                    }
+                  ],
+                  "id": "ee2ae199-4ab4-47d4-94cd-21a7d9322787",
+                  "createdAt": "2026-07-28T01:14:17.000Z",
+                  "updatedAt": "2026-07-28T01:14:17.000Z",
+                  "uid": "35240-ee2ae199-4ab4-47d4-94cd-21a7d9322787"
+                },
+                {
+                  "name": "Blockfrost Transaction Metadata Labels",
+                  "id": "24e2d109-5110-443b-ac61-ae1d3755e8b2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/metadata/txs/labels?count=100&page=1&order=asc",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "metadata",
+                        "txs",
+                        "labels"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of results displayed on one page.",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "The page number for listing the results.",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                          "key": "order",
+                          "value": "asc"
+                        }
+                      ]
+                    },
+                    "description": "List of all used transaction metadata labels.\n"
+                  },
+                  "response": [
+                    {
+                      "id": "c4edcad0-de04-4a3f-b513-9d284dfd58e9",
+                      "name": "Return the account metadata content in CBOR",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/metadata/txs/labels?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "metadata",
+                            "txs",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"label\": \"<string>\",\n    \"cip10\": \"<string>\",\n    \"count\": \"<string>\"\n  },\n  {\n    \"label\": \"<string>\",\n    \"cip10\": \"<string>\",\n    \"count\": \"<string>\"\n  }\n]",
+                      "createdAt": "2026-07-28T01:14:17.000Z",
+                      "updatedAt": "2026-07-28T01:14:17.000Z",
+                      "uid": "35240-c4edcad0-de04-4a3f-b513-9d284dfd58e9"
+                    },
+                    {
+                      "id": "ba5c5741-b575-42da-b188-167c7abf40d2",
+                      "name": "Bad request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/metadata/txs/labels?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "metadata",
+                            "txs",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:17.000Z",
+                      "updatedAt": "2026-07-28T01:14:17.000Z",
+                      "uid": "35240-ba5c5741-b575-42da-b188-167c7abf40d2"
+                    },
+                    {
+                      "id": "ccaf64b8-ae41-464a-831b-181c0e82b0a6",
+                      "name": "Authentication secret is missing or invalid",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/metadata/txs/labels?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "metadata",
+                            "txs",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:17.000Z",
+                      "updatedAt": "2026-07-28T01:14:17.000Z",
+                      "uid": "35240-ccaf64b8-ae41-464a-831b-181c0e82b0a6"
+                    },
+                    {
+                      "id": "14735c5c-10b7-47a8-9171-6174d558b9e7",
+                      "name": "Component not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/metadata/txs/labels?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "metadata",
+                            "txs",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:17.000Z",
+                      "updatedAt": "2026-07-28T01:14:17.000Z",
+                      "uid": "35240-14735c5c-10b7-47a8-9171-6174d558b9e7"
+                    },
+                    {
+                      "id": "eddf7030-864d-4f5c-a7ae-3838b2770dbd",
+                      "name": "IP has been auto-banned for extensive sending of requests after usage limit has been reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/metadata/txs/labels?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "metadata",
+                            "txs",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "I'm a teapot (RFC 2324)",
+                      "code": 418,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:17.000Z",
+                      "updatedAt": "2026-07-28T01:14:17.000Z",
+                      "uid": "35240-eddf7030-864d-4f5c-a7ae-3838b2770dbd"
+                    },
+                    {
+                      "id": "11ff9656-61d2-45b8-ac76-00223fe444df",
+                      "name": "Usage limit reached",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/metadata/txs/labels?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "metadata",
+                            "txs",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:17.000Z",
+                      "updatedAt": "2026-07-28T01:14:17.000Z",
+                      "uid": "35240-11ff9656-61d2-45b8-ac76-00223fe444df"
+                    },
+                    {
+                      "id": "7ce9a951-d1ae-4175-97f8-df143697f75f",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "project_id",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/metadata/txs/labels?count=100&page=1&order=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "metadata",
+                            "txs",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results displayed on one page.",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "The page number for listing the results.",
+                              "key": "page",
+                              "value": "1"
+                            },
+                            {
+                              "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n",
+                              "key": "order",
+                              "value": "asc"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"status_code\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:14:17.000Z",
+                      "updatedAt": "2026-07-28T01:14:17.000Z",
+                      "uid": "35240-7ce9a951-d1ae-4175-97f8-df143697f75f"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:14:17.000Z",
+                  "updatedAt": "2026-07-28T01:14:17.000Z",
+                  "uid": "35240-24e2d109-5110-443b-ac61-ae1d3755e8b2"
+                }
+              ],
+              "id": "71dbb5d8-7fac-47e3-9b18-f79c787e29fc",
+              "createdAt": "2026-07-28T01:14:17.000Z",
+              "updatedAt": "2026-07-28T01:14:17.000Z",
+              "uid": "35240-71dbb5d8-7fac-47e3-9b18-f79c787e29fc"
+            }
+          ],
+          "id": "885f9190-1ab2-41cc-8239-cb4f39dc82f1",
+          "createdAt": "2026-07-28T01:14:17.000Z",
+          "updatedAt": "2026-07-28T01:14:17.000Z",
+          "uid": "35240-885f9190-1ab2-41cc-8239-cb4f39dc82f1"
+        }
+      ],
+      "id": "a24c4c23-a828-43fc-a3b5-f759c0e6cae7",
+      "createdAt": "2026-07-28T01:14:17.000Z",
+      "updatedAt": "2026-07-28T01:14:17.000Z",
+      "uid": "35240-a24c4c23-a828-43fc-a3b5-f759c0e6cae7"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "project_id",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://cardano-mainnet.blockfrost.io/api/v0"
+    }
+  ]
+}

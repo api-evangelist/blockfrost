@@ -1,0 +1,57 @@
+{
+  "provider": "blockfrost",
+  "sources": [
+    "blockfrost-cardano-accounts-api-openapi.yml",
+    "blockfrost-cardano-addresses-api-openapi.yml",
+    "blockfrost-cardano-assets-api-openapi.yml",
+    "blockfrost-cardano-blocks-api-openapi.yml",
+    "blockfrost-cardano-epochs-api-openapi.yml",
+    "blockfrost-cardano-governance-api-openapi.yml",
+    "blockfrost-cardano-ledger-api-openapi.yml",
+    "blockfrost-cardano-mempool-api-openapi.yml",
+    "blockfrost-cardano-metadata-api-openapi.yml",
+    "blockfrost-cardano-network-api-openapi.yml",
+    "blockfrost-cardano-pools-api-openapi.yml",
+    "blockfrost-cardano-scripts-api-openapi.yml",
+    "blockfrost-cardano-transactions-api-openapi.yml",
+    "blockfrost-cardano-utilities-api-openapi.yml",
+    "blockfrost-health-api-openapi.yml",
+    "blockfrost-ipfs-add-api-openapi.yml",
+    "blockfrost-ipfs-gateway-api-openapi.yml",
+    "blockfrost-ipfs-pins-api-openapi.yml",
+    "blockfrost-metrics-api-openapi.yml",
+    "blockfrost-nut-link-api-openapi.yml",
+    "openapi.yml"
+  ],
+  "outputs": [
+    "blockfrost-cardano-accounts-api-openapi.yml",
+    "blockfrost-cardano-addresses-api-openapi.yml",
+    "blockfrost-cardano-assets-api-openapi.yml",
+    "blockfrost-cardano-blocks-api-openapi.yml",
+    "blockfrost-cardano-epochs-api-openapi.yml",
+    "blockfrost-cardano-governance-api-openapi.yml",
+    "blockfrost-cardano-ledger-api-openapi.yml",
+    "blockfrost-cardano-mempool-api-openapi.yml",
+    "blockfrost-cardano-metadata-api-openapi.yml",
+    "blockfrost-cardano-network-api-openapi.yml",
+    "blockfrost-cardano-pools-api-openapi.yml",
+    "blockfrost-cardano-scripts-api-openapi.yml",
+    "blockfrost-cardano-transactions-api-openapi.yml",
+    "blockfrost-cardano-utilities-api-openapi.yml",
+    "blockfrost-health-api-openapi.yml",
+    "blockfrost-ipfs-add-api-openapi.yml",
+    "blockfrost-ipfs-gateway-api-openapi.yml",
+    "blockfrost-ipfs-pins-api-openapi.yml",
+    "blockfrost-metrics-api-openapi.yml",
+    "blockfrost-nut-link-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "discovered stray spec: openapi.yml"
+  ],
+  "skipped": []
+}
