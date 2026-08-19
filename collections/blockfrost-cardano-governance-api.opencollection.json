@@ -1,0 +1,529 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Governance API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cardano » Governance",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Delegate Representatives (DReps)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/dreps",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n"
+              }
+            ]
+          },
+          "docs": "Return the information about Delegate Representatives (DReps)"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Specific DRep",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/dreps/:drep_id",
+            "params": [
+              {
+                "name": "drep_id",
+                "value": "drep15cfxz9exyn5rx0807zvxfrvslrjqfchrd4d47kv9e0f46uedqtc",
+                "type": "path",
+                "description": "Bech32 or hexadecimal DRep ID."
+              }
+            ]
+          },
+          "docs": "DRep information."
+        },
+        {
+          "info": {
+            "name": "Blockfrost DRep Delegators",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/dreps/:drep_id/delegators",
+            "params": [
+              {
+                "name": "drep_id",
+                "value": "drep1mvdu8slennngja7w4un6knwezufra70887zuxpprd64jxfveahn",
+                "type": "path",
+                "description": "Bech32 or hexadecimal drep ID."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of Drep delegators."
+        },
+        {
+          "info": {
+            "name": "Blockfrost DRep Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/dreps/:drep_id/metadata",
+            "params": [
+              {
+                "name": "drep_id",
+                "value": "drep15cfxz9exyn5rx0807zvxfrvslrjqfchrd4d47kv9e0f46uedqtc",
+                "type": "path",
+                "description": "Bech32 or hexadecimal DRep ID."
+              }
+            ]
+          },
+          "docs": "DRep metadata information."
+        },
+        {
+          "info": {
+            "name": "Blockfrost DRep Updates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/dreps/:drep_id/updates",
+            "params": [
+              {
+                "name": "drep_id",
+                "value": "drep15cfxz9exyn5rx0807zvxfrvslrjqfchrd4d47kv9e0f46uedqtc",
+                "type": "path",
+                "description": "Bech32 or hexadecimal DRep ID."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of certificate updates to the DRep."
+        },
+        {
+          "info": {
+            "name": "Blockfrost DRep Votes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/dreps/:drep_id/votes",
+            "params": [
+              {
+                "name": "drep_id",
+                "value": "drep1mvdu8slennngja7w4un6knwezufra70887zuxpprd64jxfveahn",
+                "type": "path",
+                "description": "Bech32 or hexadecimal drep ID."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "History of Drep votes."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Proposals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\nOrdering in this case is based on the time of the first mint transaction.\n"
+              }
+            ]
+          },
+          "docs": "Return the information about Proposals"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Specific Proposal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:tx_hash/:cert_index",
+            "params": [
+              {
+                "name": "tx_hash",
+                "value": "2dd15e0ef6e6a17841cb9541c27724072ce4d4b79b91e58432fbaa32d9572531",
+                "type": "path",
+                "description": "Transaction hash."
+              },
+              {
+                "name": "cert_index",
+                "value": "1",
+                "type": "path",
+                "description": "Index of the certificate within the proposal transaction."
+              }
+            ]
+          },
+          "docs": "Proposal information."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Specific Parameters Proposal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:tx_hash/:cert_index/parameters",
+            "params": [
+              {
+                "name": "tx_hash",
+                "value": "2dd15e0ef6e6a17841cb9541c27724072ce4d4b79b91e58432fbaa32d9572531",
+                "type": "path",
+                "description": "Transaction hash."
+              },
+              {
+                "name": "cert_index",
+                "value": "1",
+                "type": "path",
+                "description": "Index of the certificate within the proposal transaction."
+              }
+            ]
+          },
+          "docs": "Parameters proposal details."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Specific Withdrawals Proposal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:tx_hash/:cert_index/withdrawals",
+            "params": [
+              {
+                "name": "tx_hash",
+                "value": "2dd15e0ef6e6a17841cb9541c27724072ce4d4b79b91e58432fbaa32d9572531",
+                "type": "path",
+                "description": "Transaction hash."
+              },
+              {
+                "name": "cert_index",
+                "value": "1",
+                "type": "path",
+                "description": "Index of the certificate within the proposal transaction."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Withdrawal proposal details."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Proposal Votes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:tx_hash/:cert_index/votes",
+            "params": [
+              {
+                "name": "tx_hash",
+                "value": "2dd15e0ef6e6a17841cb9541c27724072ce4d4b79b91e58432fbaa32d9572531",
+                "type": "path",
+                "description": "Transaction hash."
+              },
+              {
+                "name": "cert_index",
+                "value": "1",
+                "type": "path",
+                "description": "Index of the certificate within the proposal transaction."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "History of Proposal votes."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Specific Proposal Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:tx_hash/:cert_index/metadata",
+            "params": [
+              {
+                "name": "tx_hash",
+                "value": "2403339d2f344202fb3583353e11a693a82860e59e65939dcb0e2ac72336d631",
+                "type": "path",
+                "description": "Transaction hash of the proposal."
+              },
+              {
+                "name": "cert_index",
+                "value": "0",
+                "type": "path",
+                "description": "Index of the certificate within the proposal transaction."
+              }
+            ]
+          },
+          "docs": "Proposal metadata information."
+        },
+        {
+          "info": {
+            "name": "Blockfrost GovActionID Proposal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:gov_action_id",
+            "params": [
+              {
+                "name": "gov_action_id",
+                "value": "gov_action1zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygsq6dmejn",
+                "type": "path",
+                "description": "Governance Action Identifier (CIP-0129)"
+              }
+            ]
+          },
+          "docs": "Proposal information."
+        },
+        {
+          "info": {
+            "name": "Blockfrost GovActionID Proposal Parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:gov_action_id/parameters",
+            "params": [
+              {
+                "name": "gov_action_id",
+                "value": "gov_action1zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygsq6dmejn",
+                "type": "path",
+                "description": "Governance Action Identifier (CIP-0129)"
+              }
+            ]
+          },
+          "docs": "Parameters proposal details."
+        },
+        {
+          "info": {
+            "name": "Blockfrost GovActionID Proposal Withdrawals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:gov_action_id/withdrawals",
+            "params": [
+              {
+                "name": "gov_action_id",
+                "value": "gov_action1zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygsq6dmejn",
+                "type": "path",
+                "description": "Governance Action Identifier (CIP-0129)"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Withdrawal proposal details."
+        },
+        {
+          "info": {
+            "name": "Blockfrost GovActionID Proposal Votes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:gov_action_id/votes",
+            "params": [
+              {
+                "name": "gov_action_id",
+                "value": "gov_action1zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygsq6dmejn",
+                "type": "path",
+                "description": "Governance Action Identifier (CIP-0129)"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "History of Proposal votes."
+        },
+        {
+          "info": {
+            "name": "Blockfrost GovActionID Proposal Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/governance/proposals/:gov_action_id/metadata",
+            "params": [
+              {
+                "name": "gov_action_id",
+                "value": "gov_action1zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygsq6dmejn",
+                "type": "path",
+                "description": "Governance Action Identifier (CIP-0129)"
+              }
+            ]
+          },
+          "docs": "Proposal metadata information."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

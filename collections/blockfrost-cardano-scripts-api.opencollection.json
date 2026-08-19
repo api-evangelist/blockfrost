@@ -1,0 +1,189 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Scripts API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cardano » Scripts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Scripts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/scripts",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of scripts."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Specific Script",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/scripts/:script_hash",
+            "params": [
+              {
+                "name": "script_hash",
+                "value": "e1457a0c47dfb7a2f6b8fbb059bdceab163c05d34f195b87b9f2b30e",
+                "type": "path",
+                "description": "Hash of the script"
+              }
+            ]
+          },
+          "docs": "Information about a specific script"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Script JSON",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/scripts/:script_hash/json",
+            "params": [
+              {
+                "name": "script_hash",
+                "value": "e1457a0c47dfb7a2f6b8fbb059bdceab163c05d34f195b87b9f2b30e",
+                "type": "path",
+                "description": "Hash of the script"
+              }
+            ]
+          },
+          "docs": "JSON representation of a `timelock` script"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Script CBOR",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/scripts/:script_hash/cbor",
+            "params": [
+              {
+                "name": "script_hash",
+                "value": "e1457a0c47dfb7a2f6b8fbb059bdceab163c05d34f195b87b9f2b30e",
+                "type": "path",
+                "description": "Hash of the script"
+              }
+            ]
+          },
+          "docs": "CBOR representation of a `plutus` script"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Redeemers of a Specific Script",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/scripts/:script_hash/redeemers",
+            "params": [
+              {
+                "name": "script_hash",
+                "value": "e1457a0c47dfb7a2f6b8fbb059bdceab163c05d34f195b87b9f2b30e",
+                "type": "path",
+                "description": "Hash of the script"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of redeemers of a specific script"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Datum Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/scripts/datum/:datum_hash",
+            "params": [
+              {
+                "name": "datum_hash",
+                "value": "db583ad85881a96c73fbb26ab9e24d1120bb38f45385664bb9c797a2ea8d9a2d",
+                "type": "path",
+                "description": "Hash of the datum"
+              }
+            ]
+          },
+          "docs": "Query JSON value of a datum by its hash"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Datum CBOR Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/scripts/datum/:datum_hash/cbor",
+            "params": [
+              {
+                "name": "datum_hash",
+                "value": "db583ad85881a96c73fbb26ab9e24d1120bb38f45385664bb9c797a2ea8d9a2d",
+                "type": "path",
+                "description": "Hash of the datum"
+              }
+            ]
+          },
+          "docs": "Query CBOR serialised datum by its hash"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

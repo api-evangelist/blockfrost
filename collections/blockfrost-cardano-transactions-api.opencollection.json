@@ -1,0 +1,284 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Transactions API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cardano » Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Specific Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c42c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction"
+              }
+            ]
+          },
+          "docs": "Return content of the requested transaction."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction UTXOs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/utxos",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction"
+              }
+            ]
+          },
+          "docs": "Return the inputs and UTXOs of the specific transaction."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction Stake Addresses Certificates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/stakes",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction."
+              }
+            ]
+          },
+          "docs": "Obtain information about (de)registration of stake addresses within a transaction.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction Delegation Certificates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/delegations",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction."
+              }
+            ]
+          },
+          "docs": "Obtain information about delegation certificates of a specific transaction.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction Withdrawal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/withdrawals",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction."
+              }
+            ]
+          },
+          "docs": "Obtain information about withdrawals of a specific transaction."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction MIRs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/mirs",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction."
+              }
+            ]
+          },
+          "docs": "Obtain information about Move Instantaneous Rewards (MIRs) of a specific transaction."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction Stake Pool Registration and Update Certificates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/pool_updates",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction"
+              }
+            ]
+          },
+          "docs": "Obtain information about stake pool registration and update certificates of a specific transaction.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction Stake Pool Retirement Certificates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/pool_retires",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction"
+              }
+            ]
+          },
+          "docs": "Obtain information about stake pool retirements within a specific transaction.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/metadata",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction"
+              }
+            ]
+          },
+          "docs": "Obtain the transaction metadata."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction Metadata in CBOR",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/metadata/cbor",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction"
+              }
+            ]
+          },
+          "docs": "Obtain the transaction metadata in CBOR."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction Redeemers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/redeemers",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the requested transaction"
+              }
+            ]
+          },
+          "docs": "Obtain the transaction redeemers."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction Required Signers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/required_signers",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the transaction"
+              }
+            ]
+          },
+          "docs": "Obtain the extra transaction witnesses."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Transaction CBOR",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/txs/:hash/cbor",
+            "params": [
+              {
+                "name": "hash",
+                "value": "6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
+                "type": "path",
+                "description": "Hash of the transaction"
+              }
+            ]
+          },
+          "docs": "Obtain the CBOR serialized transaction"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Submit a Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/tx/submit"
+          },
+          "docs": "Submit an already serialized transaction to the network.\n\n<p>\n  <span class=\"hosted\">Hosted</span> Endpoint only available for hosted variant.\n</p>\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

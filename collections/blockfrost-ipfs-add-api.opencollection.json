@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts IPFS » Add API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "IPFS » Add",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Add a File to IPFS",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/ipfs/add",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "You need to `/ipfs/pin/add` an object to avoid it being garbage collected. This usage\nis being counted in your user account quota.\n\n<p>\n  <span class=\"hosted\">Hosted</span> Endpoint only available for hosted variant.\n</p>\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,296 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Epochs API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cardano » Epochs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Latest Epoch",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/latest"
+          },
+          "docs": "Return the information about the latest, therefore current, epoch."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Latest Epoch Protocol Parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/latest/parameters"
+          },
+          "docs": "Return the protocol parameters for the latest epoch."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Specific Epoch",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/:number",
+            "params": [
+              {
+                "name": "number",
+                "value": "225",
+                "type": "path",
+                "description": "Number of the epoch"
+              }
+            ]
+          },
+          "docs": "Return the content of the requested epoch."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Listing of Next Epochs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/:number/next",
+            "params": [
+              {
+                "name": "number",
+                "value": "225",
+                "type": "path",
+                "description": "Number of the requested epoch."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              }
+            ]
+          },
+          "docs": "Return the list of epochs following a specific epoch."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Listing of Previous Epochs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/:number/previous",
+            "params": [
+              {
+                "name": "number",
+                "value": "225",
+                "type": "path",
+                "description": "Number of the epoch"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results"
+              }
+            ]
+          },
+          "docs": "Return the list of epochs preceding a specific epoch."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Stake Distribution",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/:number/stakes",
+            "params": [
+              {
+                "name": "number",
+                "value": "225",
+                "type": "path",
+                "description": "Number of the epoch"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              }
+            ]
+          },
+          "docs": "Return the active stake distribution for the specified epoch."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Stake Distribution by Pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/:number/stakes/:pool_id",
+            "params": [
+              {
+                "name": "number",
+                "value": "225",
+                "type": "path",
+                "description": "Number of the epoch"
+              },
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Stake pool ID to filter"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              }
+            ]
+          },
+          "docs": "Return the active stake distribution for the epoch specified by stake pool."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Block Distribution",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/:number/blocks",
+            "params": [
+              {
+                "name": "number",
+                "value": "225",
+                "type": "path",
+                "description": "Number of the epoch"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Return the blocks minted for the epoch specified."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Block Distribution by Pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/:number/blocks/:pool_id",
+            "params": [
+              {
+                "name": "number",
+                "value": "225",
+                "type": "path",
+                "description": "Number of the epoch"
+              },
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Stake pool ID to filter"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Return the block minted for the epoch specified by stake pool."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Protocol Parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/epochs/:number/parameters",
+            "params": [
+              {
+                "name": "number",
+                "value": "225",
+                "type": "path",
+                "description": "Number of the epoch"
+              }
+            ]
+          },
+          "docs": "Return the protocol parameters for the epoch specified."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

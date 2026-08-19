@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Ledger API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cardano » Ledger",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Blockchain Genesis",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/genesis"
+          },
+          "docs": "Return the information about blockchain genesis."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

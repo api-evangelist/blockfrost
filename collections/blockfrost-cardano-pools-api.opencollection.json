@@ -1,0 +1,392 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Pools API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cardano » Pools",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost List of Stake Pools",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of pools per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of registered stake pools."
+        },
+        {
+          "info": {
+            "name": "Blockfrost List of Stake Pools with Additional Information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/extended",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of pools per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of registered stake pools with additional information."
+        },
+        {
+          "info": {
+            "name": "Blockfrost List of Retired Stake Pools",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/retired",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of pools per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of already retired pools."
+        },
+        {
+          "info": {
+            "name": "Blockfrost List of Retiring Stake Pools",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/retiring",
+            "params": [
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of stake pools retiring in the upcoming epochs"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Specific Stake Pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/:pool_id",
+            "params": [
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Bech32 or hexadecimal pool ID."
+              }
+            ]
+          },
+          "docs": "Pool information."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Stake Pool History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/:pool_id/history",
+            "params": [
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Bech32 or hexadecimal pool ID."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "History of stake pool parameters over epochs.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Stake Pool Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/:pool_id/metadata",
+            "params": [
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Bech32 or hexadecimal pool ID."
+              }
+            ]
+          },
+          "docs": "Stake pool registration metadata.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Stake Pool Relays",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/:pool_id/relays",
+            "params": [
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Bech32 or hexadecimal pool ID."
+              }
+            ]
+          },
+          "docs": "Relays of a stake pool."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Stake Pool Delegators",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/:pool_id/delegators",
+            "params": [
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Bech32 or hexadecimal pool ID."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of current stake pools delegators."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Stake Pool Blocks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/:pool_id/blocks",
+            "params": [
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Bech32 or hexadecimal pool ID."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of stake pools blocks."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Stake Pool Updates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/:pool_id/updates",
+            "params": [
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Bech32 or hexadecimal pool ID."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "List of certificate updates to the stake pool."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Stake Pool Votes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/pools/:pool_id/votes",
+            "params": [
+              {
+                "name": "pool_id",
+                "value": "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
+                "type": "path",
+                "description": "Bech32 or hexadecimal pool ID."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "History of stake pools votes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

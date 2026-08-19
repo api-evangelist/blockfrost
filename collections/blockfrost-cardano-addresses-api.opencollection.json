@@ -1,0 +1,249 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Addresses API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cardano » Addresses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Specific Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/addresses/:address",
+            "params": [
+              {
+                "name": "address",
+                "value": "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
+                "type": "path",
+                "description": "Bech32 address."
+              }
+            ]
+          },
+          "docs": "Obtain information about a specific address."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Extended Information of a Specific Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/addresses/:address/extended",
+            "params": [
+              {
+                "name": "address",
+                "value": "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
+                "type": "path",
+                "description": "Bech32 address."
+              }
+            ]
+          },
+          "docs": "Obtain extended information about a specific address.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Address Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/addresses/:address/total",
+            "params": [
+              {
+                "name": "address",
+                "value": "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
+                "type": "path",
+                "description": "Bech32 address."
+              }
+            ]
+          },
+          "docs": "Obtain details about an address."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Address UTXOs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/addresses/:address/utxos",
+            "params": [
+              {
+                "name": "address",
+                "value": "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
+                "type": "path",
+                "description": "Bech32 address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "UTXOs of the address."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Address UTXOs of a Given Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/addresses/:address/utxos/:asset",
+            "params": [
+              {
+                "name": "address",
+                "value": "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
+                "type": "path",
+                "description": "Bech32 address."
+              },
+              {
+                "name": "asset",
+                "value": "b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e",
+                "type": "path",
+                "description": "Concatenation of the policy_id and hex-encoded asset_name"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "UTXOs of the address."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Address Txs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/addresses/:address/txs",
+            "params": [
+              {
+                "name": "address",
+                "value": "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
+                "type": "path",
+                "description": "Bech32 address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of transactions per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Transactions on the address."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Address Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/addresses/:address/transactions",
+            "params": [
+              {
+                "name": "address",
+                "value": "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
+                "type": "path",
+                "description": "Bech32 address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of transactions per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              },
+              {
+                "name": "from",
+                "value": "8929261",
+                "type": "query",
+                "description": "The block number and optionally also index from which (inclusive) to start search for results, concatenated using colon.\nHas to be lower than or equal to `to` parameter.\n"
+              },
+              {
+                "name": "to",
+                "value": "9999269:10",
+                "type": "query",
+                "description": "The block number and optionally also index where (inclusive) to end the search for results, concatenated using colon.\nHas to be higher than or equal to `from` parameter.\n"
+              }
+            ]
+          },
+          "docs": "Transactions on the address."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

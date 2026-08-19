@@ -1,0 +1,446 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cardano » Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Specific Account Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              }
+            ]
+          },
+          "docs": "Obtain information about a specific stake account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Account Reward History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/rewards",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Obtain information about the reward history of a specific account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Account History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/history",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Obtain information about the history of a specific account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Account Delegation History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/delegations",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Obtain information about the delegation of a specific account."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Account Registration History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/registrations",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Obtain information about the registrations and deregistrations of a specific account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Account Withdrawal History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/withdrawals",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Obtain information about the withdrawals of a specific account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Account MIR History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/mirs",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Obtain information about the MIRs of a specific account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Account Associated Addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/addresses",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Obtain information about the addresses of a specific account.\n<b>Be careful</b>, as an account could be part of a mangled address and does not necessarily mean the addresses are owned by user as the account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Assets Associated with the Account Addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/addresses/assets",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "Obtain information about assets associated with addresses of a specific account.\n<b>Be careful</b>, as an account could be part of a mangled address and does not necessarily mean the addresses are owned by user as the account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Detailed Information About Account Associated Addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/addresses/total",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
+                "type": "path",
+                "description": "Bech32 address."
+              }
+            ]
+          },
+          "docs": "Obtain summed details about all addresses associated with a given account.\n<b>Be careful</b>, as an account could be part of a mangled address and does not necessarily mean the addresses are owned by user as the account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Account UTXOs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/utxos",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of results displayed on one page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              }
+            ]
+          },
+          "docs": "UTXOs associated with the account.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Account Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/accounts/:stake_address/transactions",
+            "params": [
+              {
+                "name": "stake_address",
+                "value": "stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc",
+                "type": "path",
+                "description": "Bech32 stake address."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "The number of transactions per page."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number for listing the results."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The ordering of items from the point of view of the blockchain,\nnot the page listing itself. By default, we return oldest first, newest last.\n"
+              },
+              {
+                "name": "from",
+                "value": "8929261",
+                "type": "query",
+                "description": "The block number and optionally also index from which (inclusive) to start search for results, concatenated using colon.\nHas to be lower than or equal to `to` parameter.\n"
+              },
+              {
+                "name": "to",
+                "value": "9999269:10",
+                "type": "query",
+                "description": "The block number and optionally also index where (inclusive) to end the search for results, concatenated using colon.\nHas to be higher than or equal to `from` parameter.\n"
+              }
+            ]
+          },
+          "docs": "Transactions associated with the stake address."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

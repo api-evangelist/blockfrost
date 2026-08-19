@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts Health API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Root Endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/"
+          },
+          "docs": "Root endpoint has no other function than to point end users to documentation.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Backend Health Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/health"
+          },
+          "docs": "Return backend status as a boolean. Your application should handle situations when backend for the given chain is unavailable.\n"
+        },
+        {
+          "info": {
+            "name": "Blockfrost Current Backend Time",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/health/clock"
+          },
+          "docs": "This endpoint provides the current UNIX time. Your application might\nuse this to verify if the client clock is not out of sync.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

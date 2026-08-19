@@ -1,0 +1,48 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Blockfrost.io ~ API Documentation Cardano » Accounts Metrics API",
+    "version": "0.1.87"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "project_id",
+      "value": "{{project_id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blockfrost Usage Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/metrics"
+          },
+          "docs": "History of your Blockfrost usage metrics in the past 30 days."
+        },
+        {
+          "info": {
+            "name": "Blockfrost Endpoint Usage Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cardano-mainnet.blockfrost.io/api/v0/metrics/endpoints"
+          },
+          "docs": "History of your Blockfrost usage metrics per endpoint in the past 30 days.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
