@@ -33,7 +33,7 @@ access: 3rd-Party
 created: '2024-09-27'
 modified: '2026-05-19'
 position: Consuming
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: blockfrost:blockfrost-cardano-accounts-api
   name: Blockfrost Cardano » Accounts API
