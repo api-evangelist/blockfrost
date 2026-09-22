@@ -7,6 +7,9 @@ description: Blockfrost is a RESTful API service providing access to the Cardano
   provides endpoints for querying blocks, transactions, accounts, addresses, native
   assets, epochs, governance data, and IPFS storage, supporting both mainnet and testnet
   networks.
+x-docs-platform: docusaurus
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-09-20
 tags:
 - Blockchain
 - Cardano
