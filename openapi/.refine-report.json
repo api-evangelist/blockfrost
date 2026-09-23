@@ -1,27 +1,7 @@
 {
   "provider": "blockfrost",
   "sources": [
-    "blockfrost-cardano-accounts-api-openapi.yml",
-    "blockfrost-cardano-addresses-api-openapi.yml",
-    "blockfrost-cardano-assets-api-openapi.yml",
-    "blockfrost-cardano-blocks-api-openapi.yml",
-    "blockfrost-cardano-epochs-api-openapi.yml",
-    "blockfrost-cardano-governance-api-openapi.yml",
-    "blockfrost-cardano-ledger-api-openapi.yml",
-    "blockfrost-cardano-mempool-api-openapi.yml",
-    "blockfrost-cardano-metadata-api-openapi.yml",
-    "blockfrost-cardano-network-api-openapi.yml",
-    "blockfrost-cardano-pools-api-openapi.yml",
-    "blockfrost-cardano-scripts-api-openapi.yml",
-    "blockfrost-cardano-transactions-api-openapi.yml",
-    "blockfrost-cardano-utilities-api-openapi.yml",
-    "blockfrost-health-api-openapi.yml",
-    "blockfrost-ipfs-add-api-openapi.yml",
-    "blockfrost-ipfs-gateway-api-openapi.yml",
-    "blockfrost-ipfs-pins-api-openapi.yml",
-    "blockfrost-metrics-api-openapi.yml",
-    "blockfrost-nut-link-api-openapi.yml",
-    "openapi.yml"
+    "_original/blockfrost-openapi.yaml"
   ],
   "outputs": [
     "blockfrost-cardano-accounts-api-openapi.yml",
@@ -45,13 +25,37 @@
     "blockfrost-metrics-api-openapi.yml",
     "blockfrost-nut-link-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
-    "discovered stray spec: openapi.yml"
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "blockfrost-openapi.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "blockfrost-openapi.yaml: declared missing tag: Nut.link",
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "_original/openapi.yml: archived document superseded by a larger archived document",
+    "blockfrost-cardano-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-addresses-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-assets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-blocks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-epochs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-governance-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-ledger-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-mempool-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-network-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-pools-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-scripts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-cardano-utilities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-ipfs-add-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-ipfs-gateway-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-ipfs-pins-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blockfrost-nut-link-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
