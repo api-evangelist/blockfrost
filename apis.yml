@@ -66,8 +66,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-addresses-api
   name: Blockfrost Cardano » Addresses API
   description: The Cardano » Addresses API from Blockfrost — 7 operation(s) for cardano » addresses.
@@ -83,8 +81,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-assets-api
   name: Blockfrost Cardano » Assets API
   description: The Cardano » Assets API from Blockfrost — 7 operation(s) for cardano » assets.
@@ -100,8 +96,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-blocks-api
   name: Blockfrost Cardano » Blocks API
   description: The Cardano » Blocks API from Blockfrost — 11 operation(s) for cardano » blocks.
@@ -117,8 +111,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-epochs-api
   name: Blockfrost Cardano » Epochs API
   description: The Cardano » Epochs API from Blockfrost — 10 operation(s) for cardano » epochs.
@@ -134,8 +126,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-governance-api
   name: Blockfrost Cardano » Governance API
   description: The Cardano » Governance API from Blockfrost — 17 operation(s) for cardano » governance.
@@ -151,8 +141,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-ledger-api
   name: Blockfrost Cardano » Ledger API
   description: The Cardano » Ledger API from Blockfrost — 1 operation(s) for cardano » ledger.
@@ -168,8 +156,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-mempool-api
   name: Blockfrost Cardano » Mempool API
   description: The Cardano » Mempool API from Blockfrost — 3 operation(s) for cardano » mempool.
@@ -185,8 +171,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-metadata-api
   name: Blockfrost Cardano » Metadata API
   description: The Cardano » Metadata API from Blockfrost — 3 operation(s) for cardano » metadata.
@@ -202,8 +186,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-network-api
   name: Blockfrost Cardano » Network API
   description: The Cardano » Network API from Blockfrost — 2 operation(s) for cardano » network.
@@ -219,8 +201,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-pools-api
   name: Blockfrost Cardano » Pools API
   description: The Cardano » Pools API from Blockfrost — 12 operation(s) for cardano » pools.
@@ -236,8 +216,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-scripts-api
   name: Blockfrost Cardano » Scripts API
   description: The Cardano » Scripts API from Blockfrost — 7 operation(s) for cardano » scripts.
@@ -253,8 +231,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-transactions-api
   name: Blockfrost Cardano » Transactions API
   description: >-
@@ -271,8 +247,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-cardano-utilities-api
   name: Blockfrost Cardano » Utilities API
   description: The Cardano » Utilities API from Blockfrost — 3 operation(s) for cardano » utilities.
@@ -288,8 +262,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-health-api
   name: Blockfrost Health API
   description: The Health API from Blockfrost — 3 operation(s) for health.
@@ -305,8 +277,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-ipfs-add-api
   name: Blockfrost IPFS » Add API
   description: The IPFS » Add API from Blockfrost — 1 operation(s) for ipfs » add.
@@ -322,8 +292,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-ipfs-gateway-api
   name: Blockfrost IPFS » Gateway API
   description: The IPFS » Gateway API from Blockfrost — 1 operation(s) for ipfs » gateway.
@@ -339,8 +307,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-ipfs-pins-api
   name: Blockfrost IPFS » Pins API
   description: The IPFS » Pins API from Blockfrost — 4 operation(s) for ipfs » pins.
@@ -356,8 +322,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-metrics-api
   name: Blockfrost Metrics API
   description: The Metrics API from Blockfrost — 2 operation(s) for metrics.
@@ -373,8 +337,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 - aid: blockfrost:blockfrost-nut-link-api
   name: Blockfrost Nut.link API
   description: The Nut.link API from Blockfrost — 4 operation(s) for nut.link.
@@ -390,8 +352,6 @@ apis:
     url: rules/blockfrost-spectral-rules.yml
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
-  - type: GraphQL
-    url: graphql/blockfrost-graphql.md
 common:
 - type: PostmanWorkspace
   url: https://www.postman.com/kinlaneapi/blockfrost/overview
