@@ -280,6 +280,26 @@ paths:
       x-operation-id-source: derived
 components:
   responses:
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
     '403':
       description: Authentication secret is missing or invalid
       content:
@@ -296,46 +316,6 @@ components:
               message:
                 type: string
                 example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
-            required:
-            - error
-            - message
-            - status_code
-    '400':
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 400
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Backend did not understand your request.
             required:
             - error
             - message
@@ -360,26 +340,6 @@ components:
             - error
             - message
             - status_code
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
     '418':
       description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
       content:
@@ -400,7 +360,101 @@ components:
             - error
             - message
             - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
+            required:
+            - error
+            - message
+            - status_code
   schemas:
+    nutlink_address_tickers:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Name of the ticker
+          count:
+            type: integer
+            description: Number of ticker records
+          latest_block:
+            type: integer
+            description: Block height of the latest record
+        required:
+        - name
+        - count
+        - latest_block
+      example:
+      - name: ADAUSD
+        count: 1980038
+        latest_block: 2657092
+      - name: ADAEUR
+        count: 1980038
+        latest_block: 2657092
+      - name: ADABTC
+        count: 1980038
+        latest_block: 2657092
+    nutlink_address:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Bech32 encoded address
+          example: addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz
+        metadata_url:
+          type: string
+          description: URL of the specific metadata file
+          example: https://nut.link/metadata.json
+        metadata_hash:
+          type: string
+          description: Hash of the metadata file
+          example: 6bf124f217d0e5a0a8adb1dbd8540e1334280d49ab861127868339f43b3948af
+        metadata:
+          type:
+          - object
+          - 'null'
+          description: The cached metadata of the `metadata_url` file.
+          additionalProperties: true
+      required:
+      - address
+      - metadata_url
+      - metadata_hash
+      - metadata
     nutlink_address_ticker:
       type: array
       items:
@@ -440,32 +494,6 @@ components:
           value: '1.29'
         - source: cryptoCompare
           value: '1.283'
-    nutlink_address:
-      type: object
-      properties:
-        address:
-          type: string
-          description: Bech32 encoded address
-          example: addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz
-        metadata_url:
-          type: string
-          description: URL of the specific metadata file
-          example: https://nut.link/metadata.json
-        metadata_hash:
-          type: string
-          description: Hash of the metadata file
-          example: 6bf124f217d0e5a0a8adb1dbd8540e1334280d49ab861127868339f43b3948af
-        metadata:
-          type:
-          - object
-          - 'null'
-          description: The cached metadata of the `metadata_url` file.
-          additionalProperties: true
-      required:
-      - address
-      - metadata_url
-      - metadata_hash
-      - metadata
     nutlink_tickers_ticker:
       type: array
       items:
@@ -510,34 +538,6 @@ components:
           value: '1.29'
         - source: cryptoCompare
           value: '1.283'
-    nutlink_address_tickers:
-      type: array
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-            description: Name of the ticker
-          count:
-            type: integer
-            description: Number of ticker records
-          latest_block:
-            type: integer
-            description: Block height of the latest record
-        required:
-        - name
-        - count
-        - latest_block
-      example:
-      - name: ADAUSD
-        count: 1980038
-        latest_block: 2657092
-      - name: ADAEUR
-        count: 1980038
-        latest_block: 2657092
-      - name: ADABTC
-        count: 1980038
-        latest_block: 2657092
   securitySchemes:
     project_id:
       type: apiKey

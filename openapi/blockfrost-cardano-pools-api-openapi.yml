@@ -748,6 +748,70 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    pool_history:
+      type: array
+      items:
+        type: object
+        properties:
+          epoch:
+            type: integer
+            example: 233
+            description: Epoch number
+          blocks:
+            type: integer
+            example: 22
+            description: Number of blocks created by pool
+          active_stake:
+            type: string
+            example: '20485965693569'
+            description: Active (Snapshot of live stake 2 epochs ago) stake in Lovelaces
+          active_size:
+            type: number
+            example: 1.2345
+            description: Pool size (percentage) of overall active stake at that epoch
+          delegators_count:
+            type: integer
+            example: 115
+            description: Number of delegators for epoch
+          rewards:
+            type: string
+            example: '206936253674159'
+            description: Total rewards received before distribution to delegators
+          fees:
+            type: string
+            example: '1290968354'
+            description: Pool operator rewards
+        required:
+        - epoch
+        - blocks
+        - active_stake
+        - active_size
+        - delegators_count
+        - rewards
+        - fees
+    pool_delegators:
+      type: array
+      items:
+        type: object
+        properties:
+          address:
+            type: string
+            description: Bech32 encoded stake addresses
+          live_stake:
+            type: string
+            description: Currently delegated amount
+        required:
+        - address
+        - live_stake
+      example:
+      - address: stake1ux4vspfvwuus9uwyp5p3f0ky7a30jq5j80jxse0fr7pa56sgn8kha
+        live_stake: '1137959159981411'
+      - address: stake1uylayej7esmarzd4mk4aru37zh9yz0luj3g9fsvgpfaxulq564r5u
+        live_stake: '16958865648'
+      - address: stake1u8lr2pnrgf8f7vrs9lt79hc3sxm8s2w4rwvgpncks3axx6q93d4ck
+        live_stake: '18605647'
+    empty_object:
+      type: object
     pool_list_extended:
       type: array
       items:
@@ -978,32 +1042,25 @@ components:
           example: '340000000'
           description: Fixed tax cost of the stake pool
         metadata: null
-    pool_votes:
+    pool_list:
       type: array
       items:
-        type: object
-        properties:
-          tx_hash:
-            type: string
-            description: Hash of the proposal transaction.
-          cert_index:
-            type: integer
-            description: Index of the certificate within the proposal transaction.
-          vote:
-            type: string
-            enum:
-            - 'yes'
-            - 'no'
-            - abstain
-            description: The Vote. Can be one of yes, no, abstain.
-        required:
-        - tx_hash
-        - cert_index
-        - vote
+        type: string
+        description: Bech32 encoded pool ID
       example:
-      - tx_hash: b302de601defdf11a5261ed31a263804dac4a582a888c998ce24dec5
-        cert_index: 2
-        vote: 'yes'
+      - pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+      - pool1hn7hlwrschqykupwwrtdfkvt2u4uaxvsgxyh6z63703p2knj288
+      - pool1ztjyjfsh432eqetadf82uwuxklh28xc85zcphpwq6mmezavzad2
+    pool_blocks:
+      type: array
+      items:
+        type: string
+        description: Block hashes
+      example:
+      - d8982ca42cfe76b747cc681d35d671050a9e41e9cfe26573eb214e94fe6ff21d
+      - 026436c539e2ce84c7f77ffe669f4e4bbbb3b9c53512e5857dcba8bb0b4e9a8c
+      - bcc8487f419b8c668a18ea2120822a05df6dfe1de1f0fac3feba88cf760f303c
+      - 86bf7b4a274e0f8ec9816171667c1b4a0cfc661dc21563f271acea9482b62df7
     pool_metadata:
       type: object
       properties:
@@ -1080,68 +1137,6 @@ components:
       - name
       - description
       - homepage
-    pool_history:
-      type: array
-      items:
-        type: object
-        properties:
-          epoch:
-            type: integer
-            example: 233
-            description: Epoch number
-          blocks:
-            type: integer
-            example: 22
-            description: Number of blocks created by pool
-          active_stake:
-            type: string
-            example: '20485965693569'
-            description: Active (Snapshot of live stake 2 epochs ago) stake in Lovelaces
-          active_size:
-            type: number
-            example: 1.2345
-            description: Pool size (percentage) of overall active stake at that epoch
-          delegators_count:
-            type: integer
-            example: 115
-            description: Number of delegators for epoch
-          rewards:
-            type: string
-            example: '206936253674159'
-            description: Total rewards received before distribution to delegators
-          fees:
-            type: string
-            example: '1290968354'
-            description: Pool operator rewards
-        required:
-        - epoch
-        - blocks
-        - active_stake
-        - active_size
-        - delegators_count
-        - rewards
-        - fees
-    pool_delegators:
-      type: array
-      items:
-        type: object
-        properties:
-          address:
-            type: string
-            description: Bech32 encoded stake addresses
-          live_stake:
-            type: string
-            description: Currently delegated amount
-        required:
-        - address
-        - live_stake
-      example:
-      - address: stake1ux4vspfvwuus9uwyp5p3f0ky7a30jq5j80jxse0fr7pa56sgn8kha
-        live_stake: '1137959159981411'
-      - address: stake1uylayej7esmarzd4mk4aru37zh9yz0luj3g9fsvgpfaxulq564r5u
-        live_stake: '16958865648'
-      - address: stake1u8lr2pnrgf8f7vrs9lt79hc3sxm8s2w4rwvgpncks3axx6q93d4ck
-        live_stake: '18605647'
     pool_relays:
       type: array
       items:
@@ -1181,81 +1176,6 @@ components:
         - dns
         - dns_srv
         - port
-    pool_list_retire:
-      type: array
-      items:
-        type: object
-        properties:
-          pool_id:
-            type: string
-            example: pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt
-            description: Bech32 encoded pool ID
-          epoch:
-            type: integer
-            example: 242
-            description: Retirement epoch number
-        required:
-        - pool_id
-        - epoch
-      example:
-      - pool_id: pool19u64770wqp6s95gkajc8udheske5e6ljmpq33awxk326zjaza0q
-        epoch: 225
-      - pool_id: pool1dvla4zq98hpvacv20snndupjrqhuc79zl6gjap565nku6et5zdx
-        epoch: 215
-      - pool_id: pool1wvccajt4eugjtf3k0ja3exjqdj7t8egsujwhcw4tzj4rzsxzw5w
-        epoch: 231
-    pool_blocks:
-      type: array
-      items:
-        type: string
-        description: Block hashes
-      example:
-      - d8982ca42cfe76b747cc681d35d671050a9e41e9cfe26573eb214e94fe6ff21d
-      - 026436c539e2ce84c7f77ffe669f4e4bbbb3b9c53512e5857dcba8bb0b4e9a8c
-      - bcc8487f419b8c668a18ea2120822a05df6dfe1de1f0fac3feba88cf760f303c
-      - 86bf7b4a274e0f8ec9816171667c1b4a0cfc661dc21563f271acea9482b62df7
-    empty_object:
-      type: object
-    pool_updates:
-      type: array
-      items:
-        type: object
-        properties:
-          tx_hash:
-            type: string
-            description: Transaction ID
-          cert_index:
-            type: integer
-            description: Certificate within the transaction
-          action:
-            type: string
-            enum:
-            - registered
-            - deregistered
-            description: Action in the certificate
-        required:
-        - tx_hash
-        - cert_index
-        - action
-      example:
-      - tx_hash: 6804edf9712d2b619edb6ac86861fe93a730693183a262b165fcc1ba1bc99cad
-        cert_index: 0
-        action: registered
-      - tx_hash: 9c190bc1ac88b2ab0c05a82d7de8b71b67a9316377e865748a89d4426c0d3005
-        cert_index: 0
-        action: deregistered
-      - tx_hash: e14a75b0eb2625de7055f1f580d70426311b78e0d36dd695a6bdc96c7b3d80e0
-        cert_index: 1
-        action: registered
-    pool_list:
-      type: array
-      items:
-        type: string
-        description: Bech32 encoded pool ID
-      example:
-      - pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-      - pool1hn7hlwrschqykupwwrtdfkvt2u4uaxvsgxyh6z63703p2knj288
-      - pool1ztjyjfsh432eqetadf82uwuxklh28xc85zcphpwq6mmezavzad2
     pool:
       type: object
       properties:
@@ -1402,7 +1322,107 @@ components:
       - registration
       - retirement
       - calidus_key
+    pool_updates:
+      type: array
+      items:
+        type: object
+        properties:
+          tx_hash:
+            type: string
+            description: Transaction ID
+          cert_index:
+            type: integer
+            description: Certificate within the transaction
+          action:
+            type: string
+            enum:
+            - registered
+            - deregistered
+            description: Action in the certificate
+        required:
+        - tx_hash
+        - cert_index
+        - action
+      example:
+      - tx_hash: 6804edf9712d2b619edb6ac86861fe93a730693183a262b165fcc1ba1bc99cad
+        cert_index: 0
+        action: registered
+      - tx_hash: 9c190bc1ac88b2ab0c05a82d7de8b71b67a9316377e865748a89d4426c0d3005
+        cert_index: 0
+        action: deregistered
+      - tx_hash: e14a75b0eb2625de7055f1f580d70426311b78e0d36dd695a6bdc96c7b3d80e0
+        cert_index: 1
+        action: registered
+    pool_votes:
+      type: array
+      items:
+        type: object
+        properties:
+          tx_hash:
+            type: string
+            description: Hash of the proposal transaction.
+          cert_index:
+            type: integer
+            description: Index of the certificate within the proposal transaction.
+          vote:
+            type: string
+            enum:
+            - 'yes'
+            - 'no'
+            - abstain
+            description: The Vote. Can be one of yes, no, abstain.
+        required:
+        - tx_hash
+        - cert_index
+        - vote
+      example:
+      - tx_hash: b302de601defdf11a5261ed31a263804dac4a582a888c998ce24dec5
+        cert_index: 2
+        vote: 'yes'
+    pool_list_retire:
+      type: array
+      items:
+        type: object
+        properties:
+          pool_id:
+            type: string
+            example: pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt
+            description: Bech32 encoded pool ID
+          epoch:
+            type: integer
+            example: 242
+            description: Retirement epoch number
+        required:
+        - pool_id
+        - epoch
+      example:
+      - pool_id: pool19u64770wqp6s95gkajc8udheske5e6ljmpq33awxk326zjaza0q
+        epoch: 225
+      - pool_id: pool1dvla4zq98hpvacv20snndupjrqhuc79zl6gjap565nku6et5zdx
+        epoch: 215
+      - pool_id: pool1wvccajt4eugjtf3k0ja3exjqdj7t8egsujwhcw4tzj4rzsxzw5w
+        epoch: 231
   responses:
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
     '403':
       description: Authentication secret is missing or invalid
       content:
@@ -1419,46 +1439,6 @@ components:
               message:
                 type: string
                 example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
-            required:
-            - error
-            - message
-            - status_code
-    '400':
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 400
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Backend did not understand your request.
             required:
             - error
             - message
@@ -1483,26 +1463,6 @@ components:
             - error
             - message
             - status_code
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
     '418':
       description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
       content:
@@ -1519,6 +1479,46 @@ components:
               message:
                 type: string
                 example: IP has been auto-banned for flooding.
+            required:
+            - error
+            - message
+            - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
             required:
             - error
             - message

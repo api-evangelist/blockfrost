@@ -93,61 +93,148 @@ paths:
       operationId: getNetworkEras
       x-operation-id-source: derived
 components:
+  responses:
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
+    '403':
+      description: Authentication secret is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 403
+              error:
+                type: string
+                example: Forbidden
+              message:
+                type: string
+                example: Invalid project token.
+            required:
+            - error
+            - message
+            - status_code
+    '404':
+      description: Component not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 404
+              error:
+                type: string
+                example: Not Found
+              message:
+                type: string
+                example: The requested component has not been found.
+            required:
+            - error
+            - message
+            - status_code
+    '418':
+      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 418
+              error:
+                type: string
+                example: Requested Banned
+              message:
+                type: string
+                example: IP has been auto-banned for flooding.
+            required:
+            - error
+            - message
+            - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
+    '425':
+      description: Mempool is already full, not accepting new txs straight away
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 425
+              error:
+                type: string
+                example: Mempool Full
+              message:
+                type: string
+                example: Mempool is full, please try resubmitting again later.
+            required:
+            - error
+            - message
+            - status_code
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
+            required:
+            - error
+            - message
+            - status_code
   schemas:
-    network:
-      type: object
-      properties:
-        supply:
-          type: object
-          properties:
-            max:
-              type: string
-              description: Maximum supply in Lovelaces
-              example: '45000000000000000'
-            total:
-              type: string
-              description: Current total (max supply - reserves) supply in Lovelaces
-              example: '32890715183299160'
-            circulating:
-              type: string
-              description: Current circulating (UTXOs + withdrawables) supply in Lovelaces
-              example: '32412601976210393'
-            locked:
-              type: string
-              description: Current supply locked by scripts in Lovelaces
-              example: '125006953355'
-            treasury:
-              type: string
-              description: Current supply locked in treasury
-              example: '98635632000000'
-            reserves:
-              type: string
-              description: Current supply locked in reserves
-              example: '46635632000000'
-          required:
-          - max
-          - total
-          - circulating
-          - locked
-          - treasury
-          - reserves
-        stake:
-          type: object
-          properties:
-            live:
-              type: string
-              example: '23204950463991654'
-              description: Current live stake in Lovelaces
-            active:
-              type: string
-              description: Current active stake in Lovelaces
-              example: '22210233523456321'
-          required:
-          - live
-          - active
-      required:
-      - supply
-      - stake
     network-eras:
       type: array
       items:
@@ -241,147 +328,60 @@ components:
           epoch_length: 432000
           slot_length: 1
           safe_zone: 129600
-  responses:
-    '425':
-      description: Mempool is already full, not accepting new txs straight away
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 425
-              error:
-                type: string
-                example: Mempool Full
-              message:
-                type: string
-                example: Mempool is full, please try resubmitting again later.
-            required:
-            - error
-            - message
-            - status_code
-    '403':
-      description: Authentication secret is missing or invalid
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 403
-              error:
-                type: string
-                example: Forbidden
-              message:
-                type: string
-                example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
-            required:
-            - error
-            - message
-            - status_code
-    '400':
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 400
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Backend did not understand your request.
-            required:
-            - error
-            - message
-            - status_code
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
-    '418':
-      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 418
-              error:
-                type: string
-                example: Requested Banned
-              message:
-                type: string
-                example: IP has been auto-banned for flooding.
-            required:
-            - error
-            - message
-            - status_code
-    '404':
-      description: Component not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 404
-              error:
-                type: string
-                example: Not Found
-              message:
-                type: string
-                example: The requested component has not been found.
-            required:
-            - error
-            - message
-            - status_code
+    network:
+      type: object
+      properties:
+        supply:
+          type: object
+          properties:
+            max:
+              type: string
+              description: Maximum supply in Lovelaces
+              example: '45000000000000000'
+            total:
+              type: string
+              description: Current total (max supply - reserves) supply in Lovelaces
+              example: '32890715183299160'
+            circulating:
+              type: string
+              description: Current circulating (UTXOs + withdrawables) supply in Lovelaces
+              example: '32412601976210393'
+            locked:
+              type: string
+              description: Current supply locked by scripts in Lovelaces
+              example: '125006953355'
+            treasury:
+              type: string
+              description: Current supply locked in treasury
+              example: '98635632000000'
+            reserves:
+              type: string
+              description: Current supply locked in reserves
+              example: '46635632000000'
+          required:
+          - max
+          - total
+          - circulating
+          - locked
+          - treasury
+          - reserves
+        stake:
+          type: object
+          properties:
+            live:
+              type: string
+              example: '23204950463991654'
+              description: Current live stake in Lovelaces
+            active:
+              type: string
+              description: Current active stake in Lovelaces
+              example: '22210233523456321'
+          required:
+          - live
+          - active
+      required:
+      - supply
+      - stake
   securitySchemes:
     project_id:
       type: apiKey

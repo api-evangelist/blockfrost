@@ -544,62 +544,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    epoch_content:
-      type: object
-      properties:
-        epoch:
-          type: integer
-          example: 225
-          description: Epoch number
-        start_time:
-          type: integer
-          example: 1603403091
-          description: Unix time of the start of the epoch
-        end_time:
-          type: integer
-          example: 1603835086
-          description: Unix time of the end of the epoch
-        first_block_time:
-          type: integer
-          example: 1603403092
-          description: Unix time of the first block of the epoch
-        last_block_time:
-          type: integer
-          example: 1603835084
-          description: Unix time of the last block of the epoch
-        block_count:
-          type: integer
-          example: 21298
-          description: Number of blocks within the epoch
-        tx_count:
-          type: integer
-          example: 17856
-          description: Number of transactions within the epoch
-        output:
-          type: string
-          example: '7849943934049314'
-          description: Sum of all the transactions within the epoch in Lovelaces
-        fees:
-          type: string
-          example: '4203312194'
-          description: Sum of all the fees within the epoch in Lovelaces
-        active_stake:
-          type:
-          - string
-          - 'null'
-          example: '784953934049314'
-          description: Sum of all the active stakes within the epoch in Lovelaces
-      required:
-      - epoch
-      - start_time
-      - end_time
-      - first_block_time
-      - last_block_time
-      - block_count
-      - tx_count
-      - output
-      - fees
-      - active_stake
     epoch_block_content:
       type: array
       items:
@@ -609,6 +553,27 @@ components:
       - d0fa315687e99ccdc96b14cc2ea74a767405d64427b648c470731a9b69e4606e
       - 38bc6efb92a830a0ed22a64f979d120d26483fd3c811f6622a8c62175f530878
       - f3258fcd8b975c061b4fcdcfcbb438807134d6961ec278c200151274893b6b7d
+    epoch_stake_content:
+      type: array
+      items:
+        type: object
+        properties:
+          stake_address:
+            type: string
+            example: stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk
+            description: Stake address
+          pool_id:
+            type: string
+            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+            description: Bech32 prefix of the pool delegated to
+          amount:
+            type: string
+            example: '4440295078'
+            description: Amount of active delegated stake in Lovelaces
+        required:
+        - stake_address
+        - pool_id
+        - amount
     epoch_param_content:
       type: object
       properties:
@@ -974,32 +939,87 @@ components:
         required:
         - stake_address
         - amount
+    epoch_content:
+      type: object
+      properties:
+        epoch:
+          type: integer
+          example: 225
+          description: Epoch number
+        start_time:
+          type: integer
+          example: 1603403091
+          description: Unix time of the start of the epoch
+        end_time:
+          type: integer
+          example: 1603835086
+          description: Unix time of the end of the epoch
+        first_block_time:
+          type: integer
+          example: 1603403092
+          description: Unix time of the first block of the epoch
+        last_block_time:
+          type: integer
+          example: 1603835084
+          description: Unix time of the last block of the epoch
+        block_count:
+          type: integer
+          example: 21298
+          description: Number of blocks within the epoch
+        tx_count:
+          type: integer
+          example: 17856
+          description: Number of transactions within the epoch
+        output:
+          type: string
+          example: '7849943934049314'
+          description: Sum of all the transactions within the epoch in Lovelaces
+        fees:
+          type: string
+          example: '4203312194'
+          description: Sum of all the fees within the epoch in Lovelaces
+        active_stake:
+          type:
+          - string
+          - 'null'
+          example: '784953934049314'
+          description: Sum of all the active stakes within the epoch in Lovelaces
+      required:
+      - epoch
+      - start_time
+      - end_time
+      - first_block_time
+      - last_block_time
+      - block_count
+      - tx_count
+      - output
+      - fees
+      - active_stake
     epoch_content_array:
       type: array
       items:
         $ref: '#/components/schemas/epoch_content'
-    epoch_stake_content:
-      type: array
-      items:
-        type: object
-        properties:
-          stake_address:
-            type: string
-            example: stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk
-            description: Stake address
-          pool_id:
-            type: string
-            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-            description: Bech32 prefix of the pool delegated to
-          amount:
-            type: string
-            example: '4440295078'
-            description: Amount of active delegated stake in Lovelaces
-        required:
-        - stake_address
-        - pool_id
-        - amount
   responses:
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
     '403':
       description: Authentication secret is missing or invalid
       content:
@@ -1016,46 +1036,6 @@ components:
               message:
                 type: string
                 example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
-            required:
-            - error
-            - message
-            - status_code
-    '400':
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 400
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Backend did not understand your request.
             required:
             - error
             - message
@@ -1080,26 +1060,6 @@ components:
             - error
             - message
             - status_code
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
     '418':
       description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
       content:
@@ -1116,6 +1076,46 @@ components:
               message:
                 type: string
                 example: IP has been auto-banned for flooding.
+            required:
+            - error
+            - message
+            - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
             required:
             - error
             - message

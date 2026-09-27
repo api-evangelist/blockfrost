@@ -602,46 +602,6 @@ paths:
       x-operation-id-source: derived
 components:
   responses:
-    '425':
-      description: Mempool is already full, not accepting new txs straight away
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 425
-              error:
-                type: string
-                example: Mempool Full
-              message:
-                type: string
-                example: Mempool is full, please try resubmitting again later.
-            required:
-            - error
-            - message
-            - status_code
-    '400':
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 400
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Backend did not understand your request.
-            required:
-            - error
-            - message
-            - status_code
     '403':
       description: Authentication secret is missing or invalid
       content:
@@ -658,26 +618,6 @@ components:
               message:
                 type: string
                 example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
             required:
             - error
             - message
@@ -702,6 +642,26 @@ components:
             - error
             - message
             - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
     '500':
       description: Internal Server Error
       content:
@@ -718,6 +678,26 @@ components:
               message:
                 type: string
                 example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
+    '425':
+      description: Mempool is already full, not accepting new txs straight away
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 425
+              error:
+                type: string
+                example: Mempool Full
+              message:
+                type: string
+                example: Mempool is full, please try resubmitting again later.
             required:
             - error
             - message
@@ -742,234 +722,27 @@ components:
             - error
             - message
             - status_code
-  schemas:
-    tx_content_cbor:
-      type: object
-      properties:
-        cbor:
-          type: string
-          description: CBOR serialized transaction
-      required:
-      - cbor
-      example:
-        cbor: 84a40081825820203e5b61e0949ffc8fe594727cf7ed73c7396cc2bd212af9a680c9423b5880eb00018282583900f0c60254ecb0addd4c7e40c28fd05b65014ab4c8ecece06c7dcee5a0724bf93336a8225e7ef152b41aea955173be91af19250edea1ddafab1a000f42408258390014beadb876d0a2a593fe2f1b539389e00731290910170e9a1be78e847d2ccdc7af469706878018739bcfde9ae23f009c4ae38aee0a4b4f3a1b0000000253fa0f93021a0002922d031a0303c827a100818258207d3ae39f9a1c916ac7c13f10c7d67c70b870c286a1af71485455c5022a3f391d5840e2f481acd1601a3f39fa976317bba685ddd774621a92611edaaa3df9f48a3b13d8b25ecb2f28b031c1602512418efed3033e463a0dcd22a856c808033cc9e00ff5f6
-    tx_content_mirs:
-      type: array
-      items:
-        type: object
-        properties:
-          pot:
-            type: string
-            enum:
-            - reserve
-            - treasury
-            example: reserve
-            description: Source of MIR funds
-          cert_index:
-            type: integer
-            example: 0
-            description: Index of the certificate within the transaction
-          address:
-            type: string
-            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
-            description: Bech32 stake address
-          amount:
-            type: string
-            example: '431833601'
-            description: MIR amount in Lovelaces
-        required:
-        - pot
-        - cert_index
-        - address
-        - amount
-    tx_content_withdrawals:
-      type: array
-      items:
-        type: object
-        properties:
-          address:
-            type: string
-            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
-            description: Bech32 withdrawal address
-          amount:
-            type: string
-            example: '431833601'
-            description: Withdrawal amount in Lovelaces
-        required:
-        - address
-        - amount
-    tx_content_delegations:
-      type: array
-      items:
-        type: object
-        properties:
-          index:
-            type: integer
-            example: 0
-            description: Index of the certificate within the transaction
-            deprecated: true
-          cert_index:
-            type: integer
-            example: 0
-            description: Index of the certificate within the transaction
-          address:
-            type: string
-            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
-            description: Bech32 delegation stake address
-          pool_id:
-            type: string
-            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-            description: Bech32 ID of delegated stake pool
-          active_epoch:
-            type: integer
-            example: 210
-            description: Epoch in which the delegation becomes active
-        required:
-        - index
-        - cert_index
-        - address
-        - pool_id
-        - active_epoch
-    tx_content:
-      type: object
-      properties:
-        hash:
-          type: string
-          example: 1e043f100dce12d107f679685acd2fc0610e10f72a92d412794c9773d11d8477
-          description: Transaction hash
-        block:
-          type: string
-          example: 356b7d7dbb696ccd12775c016941057a9dc70898d87a63fc752271bb46856940
-          description: Block hash
-        block_height:
-          type: integer
-          example: 123456
-          description: Block number
-        block_time:
-          type: integer
-          example: 1635505891
-          description: Block creation time in UNIX time
-        slot:
-          type: integer
-          example: 42000000
-          description: Slot number
-        index:
-          type: integer
-          example: 1
-          description: Transaction index within the block
-        output_amount:
-          type: array
-          items:
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
             type: object
-            description: The sum of all the UTXO per asset
             properties:
-              unit:
+              status_code:
+                type: integer
+                example: 429
+              error:
                 type: string
-                format: Lovelace or concatenation of asset policy_id and hex-encoded asset_name
-                description: The unit of the value
-              quantity:
+                example: Project Over Limit
+              message:
                 type: string
-                description: The quantity of the unit
+                example: Usage is over limit.
             required:
-            - unit
-            - quantity
-          example:
-          - unit: lovelace
-            quantity: '42000000'
-          - unit: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
-            quantity: '12'
-        fees:
-          type: string
-          example: '182485'
-          description: Fees of the transaction in Lovelaces
-        deposit:
-          type: string
-          example: '0'
-          description: Deposit within the transaction in Lovelaces
-        size:
-          type: integer
-          example: 433
-          description: Size of the transaction in Bytes
-        invalid_before:
-          type:
-          - string
-          - 'null'
-          example: null
-          description: Left (included) endpoint of the timelock validity intervals
-        invalid_hereafter:
-          type:
-          - string
-          - 'null'
-          example: '13885913'
-          description: Right (excluded) endpoint of the timelock validity intervals
-        utxo_count:
-          type: integer
-          example: 4
-          description: Count of UTXOs within the transaction
-        withdrawal_count:
-          type: integer
-          example: 0
-          description: Count of the withdrawals within the transaction
-        mir_cert_count:
-          type: integer
-          example: 0
-          description: Count of the MIR certificates within the transaction
-        delegation_count:
-          type: integer
-          example: 0
-          description: Count of the delegations within the transaction
-        stake_cert_count:
-          type: integer
-          example: 0
-          description: Count of the stake keys (de)registration within the transaction
-        pool_update_count:
-          type: integer
-          example: 0
-          description: Count of the stake pool registration and update certificates within the transaction
-        pool_retire_count:
-          type: integer
-          example: 0
-          description: Count of the stake pool retirement certificates within the transaction
-        asset_mint_or_burn_count:
-          type: integer
-          example: 0
-          description: Count of asset mints and burns within the transaction
-        redeemer_count:
-          type: integer
-          example: 0
-          description: Count of redeemers within the transaction
-        valid_contract:
-          type: boolean
-          example: true
-          description: True if contract script passed validation
-        treasury_donation:
-          type: string
-          example: '0'
-          description: Treasury donation in Lovelaces
-      required:
-      - hash
-      - block
-      - block_height
-      - block_time
-      - slot
-      - index
-      - output_amount
-      - fees
-      - deposit
-      - size
-      - invalid_before
-      - invalid_hereafter
-      - utxo_count
-      - withdrawal_count
-      - mir_cert_count
-      - delegation_count
-      - stake_cert_count
-      - pool_update_count
-      - pool_retire_count
-      - asset_mint_or_burn_count
-      - redeemer_count
-      - valid_contract
-      - treasury_donation
+            - error
+            - message
+            - status_code
+  schemas:
     tx_content_metadata:
       type: array
       items:
@@ -997,6 +770,186 @@ components:
           ADAUSD:
           - value: '0.10409800535729975'
             source: ergoOracles
+    tx_content_withdrawals:
+      type: array
+      items:
+        type: object
+        properties:
+          address:
+            type: string
+            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
+            description: Bech32 withdrawal address
+          amount:
+            type: string
+            example: '431833601'
+            description: Withdrawal amount in Lovelaces
+        required:
+        - address
+        - amount
+    tx_content_pool_retires:
+      type: array
+      items:
+        type: object
+        properties:
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          pool_id:
+            type: string
+            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+            description: Bech32 stake pool ID
+          retiring_epoch:
+            type: integer
+            example: 216
+            description: Epoch in which the pool becomes retired
+        required:
+        - cert_index
+        - pool_id
+        - retiring_epoch
+    tx_content_pool_certs:
+      type: array
+      items:
+        type: object
+        properties:
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          pool_id:
+            type: string
+            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+            description: Bech32 encoded pool ID
+          vrf_key:
+            type: string
+            example: 0b5245f9934ec2151116fb8ec00f35fd00e0aa3b075c4ed12cce440f999d8233
+            description: VRF key hash
+          pledge:
+            type: string
+            example: '5000000000'
+            description: Stake pool certificate pledge in Lovelaces
+          margin_cost:
+            type: number
+            example: 0.05
+            description: Margin tax cost of the stake pool
+          fixed_cost:
+            type: string
+            example: '340000000'
+            description: Fixed tax cost of the stake pool in Lovelaces
+          reward_account:
+            type: string
+            example: stake1uxkptsa4lkr55jleztw43t37vgdn88l6ghclfwuxld2eykgpgvg3f
+            description: Bech32 reward account of the stake pool
+          owners:
+            type: array
+            items:
+              type: string
+              description: Bech32 accounts of the pool owners
+            example:
+            - stake1u98nnlkvkk23vtvf9273uq7cph5ww6u2yq2389psuqet90sv4xv9v
+          metadata:
+            type:
+            - object
+            - 'null'
+            properties:
+              url:
+                type:
+                - string
+                - 'null'
+                example: https://stakenuts.com/mainnet.json
+                description: URL to the stake pool metadata
+              hash:
+                type:
+                - string
+                - 'null'
+                example: 47c0c68cb57f4a5b4a87bad896fc274678e7aea98e200fa14a1cb40c0cab1d8c
+                description: Hash of the metadata file
+              ticker:
+                type:
+                - string
+                - 'null'
+                example: NUTS
+                description: Ticker of the stake pool
+              name:
+                type:
+                - string
+                - 'null'
+                example: Stake Nuts
+                description: Name of the stake pool
+              description:
+                type:
+                - string
+                - 'null'
+                example: The best pool ever
+                description: Description of the stake pool
+              homepage:
+                type:
+                - string
+                - 'null'
+                example: https://stakentus.com/
+                description: Home page of the stake pool
+            required:
+            - url
+            - hash
+            - ticker
+            - name
+            - description
+            - homepage
+          relays:
+            type: array
+            items:
+              type: object
+              properties:
+                ipv4:
+                  type:
+                  - string
+                  - 'null'
+                  example: 4.4.4.4
+                  description: IPv4 address of the relay
+                ipv6:
+                  type:
+                  - string
+                  - 'null'
+                  example: https://stakenuts.com/mainnet.json
+                  description: IPv6 address of the relay
+                dns:
+                  type:
+                  - string
+                  - 'null'
+                  example: relay1.stakenuts.com
+                  description: DNS name of the relay
+                dns_srv:
+                  type:
+                  - string
+                  - 'null'
+                  example: _relays._tcp.relays.stakenuts.com
+                  description: DNS SRV entry of the relay
+                port:
+                  type: integer
+                  example: 3001
+                  description: Network port of the relay
+              required:
+              - ipv4
+              - ipv6
+              - dns
+              - dns_srv
+              - port
+          active_epoch:
+            type: integer
+            example: 210
+            description: Epoch in which the update becomes active
+        required:
+        - cert_index
+        - pool_id
+        - vrf_key
+        - pledge
+        - margin_cost
+        - fixed_cost
+        - reward_account
+        - owners
+        - metadata
+        - relays
+        - active_epoch
     tx_content_utxo:
       type: object
       properties:
@@ -1151,27 +1104,212 @@ components:
       - hash
       - inputs
       - outputs
-    tx_content_pool_retires:
+    tx_content_cbor:
+      type: object
+      properties:
+        cbor:
+          type: string
+          description: CBOR serialized transaction
+      required:
+      - cbor
+      example:
+        cbor: 84a40081825820203e5b61e0949ffc8fe594727cf7ed73c7396cc2bd212af9a680c9423b5880eb00018282583900f0c60254ecb0addd4c7e40c28fd05b65014ab4c8ecece06c7dcee5a0724bf93336a8225e7ef152b41aea955173be91af19250edea1ddafab1a000f42408258390014beadb876d0a2a593fe2f1b539389e00731290910170e9a1be78e847d2ccdc7af469706878018739bcfde9ae23f009c4ae38aee0a4b4f3a1b0000000253fa0f93021a0002922d031a0303c827a100818258207d3ae39f9a1c916ac7c13f10c7d67c70b870c286a1af71485455c5022a3f391d5840e2f481acd1601a3f39fa976317bba685ddd774621a92611edaaa3df9f48a3b13d8b25ecb2f28b031c1602512418efed3033e463a0dcd22a856c808033cc9e00ff5f6
+    tx_content_mirs:
       type: array
       items:
         type: object
         properties:
+          pot:
+            type: string
+            enum:
+            - reserve
+            - treasury
+            example: reserve
+            description: Source of MIR funds
           cert_index:
             type: integer
             example: 0
             description: Index of the certificate within the transaction
-          pool_id:
+          address:
             type: string
-            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-            description: Bech32 stake pool ID
-          retiring_epoch:
-            type: integer
-            example: 216
-            description: Epoch in which the pool becomes retired
+            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
+            description: Bech32 stake address
+          amount:
+            type: string
+            example: '431833601'
+            description: MIR amount in Lovelaces
         required:
+        - pot
         - cert_index
-        - pool_id
-        - retiring_epoch
+        - address
+        - amount
+    tx_content:
+      type: object
+      properties:
+        hash:
+          type: string
+          example: 1e043f100dce12d107f679685acd2fc0610e10f72a92d412794c9773d11d8477
+          description: Transaction hash
+        block:
+          type: string
+          example: 356b7d7dbb696ccd12775c016941057a9dc70898d87a63fc752271bb46856940
+          description: Block hash
+        block_height:
+          type: integer
+          example: 123456
+          description: Block number
+        block_time:
+          type: integer
+          example: 1635505891
+          description: Block creation time in UNIX time
+        slot:
+          type: integer
+          example: 42000000
+          description: Slot number
+        index:
+          type: integer
+          example: 1
+          description: Transaction index within the block
+        output_amount:
+          type: array
+          items:
+            type: object
+            description: The sum of all the UTXO per asset
+            properties:
+              unit:
+                type: string
+                format: Lovelace or concatenation of asset policy_id and hex-encoded asset_name
+                description: The unit of the value
+              quantity:
+                type: string
+                description: The quantity of the unit
+            required:
+            - unit
+            - quantity
+          example:
+          - unit: lovelace
+            quantity: '42000000'
+          - unit: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
+            quantity: '12'
+        fees:
+          type: string
+          example: '182485'
+          description: Fees of the transaction in Lovelaces
+        deposit:
+          type: string
+          example: '0'
+          description: Deposit within the transaction in Lovelaces
+        size:
+          type: integer
+          example: 433
+          description: Size of the transaction in Bytes
+        invalid_before:
+          type:
+          - string
+          - 'null'
+          example: null
+          description: Left (included) endpoint of the timelock validity intervals
+        invalid_hereafter:
+          type:
+          - string
+          - 'null'
+          example: '13885913'
+          description: Right (excluded) endpoint of the timelock validity intervals
+        utxo_count:
+          type: integer
+          example: 4
+          description: Count of UTXOs within the transaction
+        withdrawal_count:
+          type: integer
+          example: 0
+          description: Count of the withdrawals within the transaction
+        mir_cert_count:
+          type: integer
+          example: 0
+          description: Count of the MIR certificates within the transaction
+        delegation_count:
+          type: integer
+          example: 0
+          description: Count of the delegations within the transaction
+        stake_cert_count:
+          type: integer
+          example: 0
+          description: Count of the stake keys (de)registration within the transaction
+        pool_update_count:
+          type: integer
+          example: 0
+          description: Count of the stake pool registration and update certificates within the transaction
+        pool_retire_count:
+          type: integer
+          example: 0
+          description: Count of the stake pool retirement certificates within the transaction
+        asset_mint_or_burn_count:
+          type: integer
+          example: 0
+          description: Count of asset mints and burns within the transaction
+        redeemer_count:
+          type: integer
+          example: 0
+          description: Count of redeemers within the transaction
+        valid_contract:
+          type: boolean
+          example: true
+          description: True if contract script passed validation
+        treasury_donation:
+          type: string
+          example: '0'
+          description: Treasury donation in Lovelaces
+      required:
+      - hash
+      - block
+      - block_height
+      - block_time
+      - slot
+      - index
+      - output_amount
+      - fees
+      - deposit
+      - size
+      - invalid_before
+      - invalid_hereafter
+      - utxo_count
+      - withdrawal_count
+      - mir_cert_count
+      - delegation_count
+      - stake_cert_count
+      - pool_update_count
+      - pool_retire_count
+      - asset_mint_or_burn_count
+      - redeemer_count
+      - valid_contract
+      - treasury_donation
+    tx_content_metadata_cbor:
+      type: array
+      items:
+        type: object
+        properties:
+          label:
+            type: string
+            description: Metadata label
+          cbor_metadata:
+            deprecated: true
+            type:
+            - string
+            - 'null'
+            description: Content of the CBOR metadata
+          metadata:
+            type:
+            - string
+            - 'null'
+            description: Content of the CBOR metadata in hex
+        required:
+        - label
+        - cbor_metadata
+        - metadata
+      example:
+      - label: '1968'
+        cbor_metadata: \xa100a16b436f6d62696e6174696f6e8601010101010c
+        metadata: a100a16b436f6d62696e6174696f6e8601010101010c
     tx_content_stake_addr:
       type: array
       items:
@@ -1256,176 +1394,38 @@ components:
         - redeemer_data_hash
         - datum_hash
         - fee
-    tx_content_pool_certs:
+    tx_content_delegations:
       type: array
       items:
         type: object
         properties:
+          index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+            deprecated: true
           cert_index:
             type: integer
             example: 0
             description: Index of the certificate within the transaction
+          address:
+            type: string
+            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
+            description: Bech32 delegation stake address
           pool_id:
             type: string
             example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-            description: Bech32 encoded pool ID
-          vrf_key:
-            type: string
-            example: 0b5245f9934ec2151116fb8ec00f35fd00e0aa3b075c4ed12cce440f999d8233
-            description: VRF key hash
-          pledge:
-            type: string
-            example: '5000000000'
-            description: Stake pool certificate pledge in Lovelaces
-          margin_cost:
-            type: number
-            example: 0.05
-            description: Margin tax cost of the stake pool
-          fixed_cost:
-            type: string
-            example: '340000000'
-            description: Fixed tax cost of the stake pool in Lovelaces
-          reward_account:
-            type: string
-            example: stake1uxkptsa4lkr55jleztw43t37vgdn88l6ghclfwuxld2eykgpgvg3f
-            description: Bech32 reward account of the stake pool
-          owners:
-            type: array
-            items:
-              type: string
-              description: Bech32 accounts of the pool owners
-            example:
-            - stake1u98nnlkvkk23vtvf9273uq7cph5ww6u2yq2389psuqet90sv4xv9v
-          metadata:
-            type:
-            - object
-            - 'null'
-            properties:
-              url:
-                type:
-                - string
-                - 'null'
-                example: https://stakenuts.com/mainnet.json
-                description: URL to the stake pool metadata
-              hash:
-                type:
-                - string
-                - 'null'
-                example: 47c0c68cb57f4a5b4a87bad896fc274678e7aea98e200fa14a1cb40c0cab1d8c
-                description: Hash of the metadata file
-              ticker:
-                type:
-                - string
-                - 'null'
-                example: NUTS
-                description: Ticker of the stake pool
-              name:
-                type:
-                - string
-                - 'null'
-                example: Stake Nuts
-                description: Name of the stake pool
-              description:
-                type:
-                - string
-                - 'null'
-                example: The best pool ever
-                description: Description of the stake pool
-              homepage:
-                type:
-                - string
-                - 'null'
-                example: https://stakentus.com/
-                description: Home page of the stake pool
-            required:
-            - url
-            - hash
-            - ticker
-            - name
-            - description
-            - homepage
-          relays:
-            type: array
-            items:
-              type: object
-              properties:
-                ipv4:
-                  type:
-                  - string
-                  - 'null'
-                  example: 4.4.4.4
-                  description: IPv4 address of the relay
-                ipv6:
-                  type:
-                  - string
-                  - 'null'
-                  example: https://stakenuts.com/mainnet.json
-                  description: IPv6 address of the relay
-                dns:
-                  type:
-                  - string
-                  - 'null'
-                  example: relay1.stakenuts.com
-                  description: DNS name of the relay
-                dns_srv:
-                  type:
-                  - string
-                  - 'null'
-                  example: _relays._tcp.relays.stakenuts.com
-                  description: DNS SRV entry of the relay
-                port:
-                  type: integer
-                  example: 3001
-                  description: Network port of the relay
-              required:
-              - ipv4
-              - ipv6
-              - dns
-              - dns_srv
-              - port
+            description: Bech32 ID of delegated stake pool
           active_epoch:
             type: integer
             example: 210
-            description: Epoch in which the update becomes active
+            description: Epoch in which the delegation becomes active
         required:
+        - index
         - cert_index
+        - address
         - pool_id
-        - vrf_key
-        - pledge
-        - margin_cost
-        - fixed_cost
-        - reward_account
-        - owners
-        - metadata
-        - relays
         - active_epoch
-    tx_content_metadata_cbor:
-      type: array
-      items:
-        type: object
-        properties:
-          label:
-            type: string
-            description: Metadata label
-          cbor_metadata:
-            deprecated: true
-            type:
-            - string
-            - 'null'
-            description: Content of the CBOR metadata
-          metadata:
-            type:
-            - string
-            - 'null'
-            description: Content of the CBOR metadata in hex
-        required:
-        - label
-        - cbor_metadata
-        - metadata
-      example:
-      - label: '1968'
-        cbor_metadata: \xa100a16b436f6d62696e6174696f6e8601010101010c
-        metadata: a100a16b436f6d62696e6174696f6e8601010101010c
   securitySchemes:
     project_id:
       type: apiKey
