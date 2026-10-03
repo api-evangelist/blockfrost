@@ -352,7 +352,168 @@ paths:
       operationId: getScriptsDatumByDatumHashCbor
       x-operation-id-source: derived
 components:
+  responses:
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
+            required:
+            - error
+            - message
+            - status_code
+    '404':
+      description: Component not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 404
+              error:
+                type: string
+                example: Not Found
+              message:
+                type: string
+                example: The requested component has not been found.
+            required:
+            - error
+            - message
+            - status_code
+    '418':
+      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 418
+              error:
+                type: string
+                example: Requested Banned
+              message:
+                type: string
+                example: IP has been auto-banned for flooding.
+            required:
+            - error
+            - message
+            - status_code
+    '403':
+      description: Authentication secret is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 403
+              error:
+                type: string
+                example: Forbidden
+              message:
+                type: string
+                example: Invalid project token.
+            required:
+            - error
+            - message
+            - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
   schemas:
+    script:
+      type: object
+      properties:
+        script_hash:
+          type: string
+          example: 13a3efd825703a352a8f71f4e2758d08c28c564e8dfcce9f77776ad1
+          description: Script hash
+        type:
+          type: string
+          enum:
+          - timelock
+          - plutusV1
+          - plutusV2
+          - plutusV3
+          example: plutusV1
+          description: Type of the script language
+        serialised_size:
+          type:
+          - integer
+          - 'null'
+          description: The size of the CBOR serialised script, if a Plutus script
+          example: 3119
+      required:
+      - script_hash
+      - type
+      - serialised_size
+    scripts:
+      type: array
+      items:
+        type: object
+        properties:
+          script_hash:
+            type: string
+            description: Script hash
+        required:
+        - script_hash
+      example:
+      - script_hash: 13a3efd825703a352a8f71f4e2758d08c28c564e8dfcce9f77776ad1
+      - script_hash: e1457a0c47dfb7a2f6b8fbb059bdceab163c05d34f195b87b9f2b30e
+      - script_hash: a6e63c0ff05c96943d1cc30bf53112ffff0f34b45986021ca058ec54
     script_json:
       type: object
       properties:
@@ -381,58 +542,16 @@ components:
           - type: sig
             keyHash: cb0f3b3f91693374ff7ce1d473cf6e721c7bab52b0737f04164e5a2d
           required: 2
-    script:
-      type: object
-      properties:
-        script_hash:
-          type: string
-          example: 13a3efd825703a352a8f71f4e2758d08c28c564e8dfcce9f77776ad1
-          description: Script hash
-        type:
-          type: string
-          enum:
-          - timelock
-          - plutusV1
-          - plutusV2
-          - plutusV3
-          example: plutusV1
-          description: Type of the script language
-        serialised_size:
-          type:
-          - integer
-          - 'null'
-          description: The size of the CBOR serialised script, if a Plutus script
-          example: 3119
-      required:
-      - script_hash
-      - type
-      - serialised_size
-    script_cbor:
+    script_datum_cbor:
       type: object
       properties:
         cbor:
-          type:
-          - string
-          - 'null'
-          description: CBOR contents of the `plutus` script, null for `timelocks`
+          type: string
+          description: CBOR serialized datum
       required:
       - cbor
       example:
-        cbor: 4e4d01000033222220051200120011
-    scripts:
-      type: array
-      items:
-        type: object
-        properties:
-          script_hash:
-            type: string
-            description: Script hash
-        required:
-        - script_hash
-      example:
-      - script_hash: 13a3efd825703a352a8f71f4e2758d08c28c564e8dfcce9f77776ad1
-      - script_hash: e1457a0c47dfb7a2f6b8fbb059bdceab163c05d34f195b87b9f2b30e
-      - script_hash: a6e63c0ff05c96943d1cc30bf53112ffff0f34b45986021ca058ec54
+        cbor: 19a6aa
     script_datum:
       type: object
       properties:
@@ -445,16 +564,18 @@ components:
       example:
         json_value:
           int: 42
-    script_datum_cbor:
+    script_cbor:
       type: object
       properties:
         cbor:
-          type: string
-          description: CBOR serialized datum
+          type:
+          - string
+          - 'null'
+          description: CBOR contents of the `plutus` script, null for `timelocks`
       required:
       - cbor
       example:
-        cbor: 19a6aa
+        cbor: 4e4d01000033222220051200120011
     script_redeemers:
       type: array
       items:
@@ -507,127 +628,6 @@ components:
         - unit_mem
         - unit_steps
         - fee
-  responses:
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
-    '403':
-      description: Authentication secret is missing or invalid
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 403
-              error:
-                type: string
-                example: Forbidden
-              message:
-                type: string
-                example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '404':
-      description: Component not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 404
-              error:
-                type: string
-                example: Not Found
-              message:
-                type: string
-                example: The requested component has not been found.
-            required:
-            - error
-            - message
-            - status_code
-    '418':
-      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 418
-              error:
-                type: string
-                example: Requested Banned
-              message:
-                type: string
-                example: IP has been auto-banned for flooding.
-            required:
-            - error
-            - message
-            - status_code
-    '400':
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 400
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Backend did not understand your request.
-            required:
-            - error
-            - message
-            - status_code
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
-            required:
-            - error
-            - message
-            - status_code
   securitySchemes:
     project_id:
       type: apiKey

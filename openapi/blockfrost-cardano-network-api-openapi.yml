@@ -114,8 +114,8 @@ components:
             - error
             - message
             - status_code
-    '403':
-      description: Authentication secret is missing or invalid
+    '429':
+      description: Usage limit reached
       content:
         application/json:
           schema:
@@ -123,13 +123,33 @@ components:
             properties:
               status_code:
                 type: integer
-                example: 403
+                example: 429
               error:
                 type: string
-                example: Forbidden
+                example: Project Over Limit
               message:
                 type: string
-                example: Invalid project token.
+                example: Usage is over limit.
+            required:
+            - error
+            - message
+            - status_code
+    '425':
+      description: Mempool is already full, not accepting new txs straight away
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 425
+              error:
+                type: string
+                example: Mempool Full
+              message:
+                type: string
+                example: Mempool is full, please try resubmitting again later.
             required:
             - error
             - message
@@ -174,6 +194,26 @@ components:
             - error
             - message
             - status_code
+    '403':
+      description: Authentication secret is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 403
+              error:
+                type: string
+                example: Forbidden
+              message:
+                type: string
+                example: Invalid project token.
+            required:
+            - error
+            - message
+            - status_code
     '400':
       description: Bad request
       content:
@@ -190,46 +230,6 @@ components:
               message:
                 type: string
                 example: Backend did not understand your request.
-            required:
-            - error
-            - message
-            - status_code
-    '425':
-      description: Mempool is already full, not accepting new txs straight away
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 425
-              error:
-                type: string
-                example: Mempool Full
-              message:
-                type: string
-                example: Mempool is full, please try resubmitting again later.
-            required:
-            - error
-            - message
-            - status_code
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
             required:
             - error
             - message

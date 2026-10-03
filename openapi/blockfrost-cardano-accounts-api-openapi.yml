@@ -833,154 +833,22 @@ paths:
       operationId: getAccountsByStakeAddressTransactions
       x-operation-id-source: derived
 components:
-  responses:
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
-    '403':
-      description: Authentication secret is missing or invalid
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 403
-              error:
-                type: string
-                example: Forbidden
-              message:
-                type: string
-                example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '418':
-      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 418
-              error:
-                type: string
-                example: Requested Banned
-              message:
-                type: string
-                example: IP has been auto-banned for flooding.
-            required:
-            - error
-            - message
-            - status_code
-    '404':
-      description: Component not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 404
-              error:
-                type: string
-                example: Not Found
-              message:
-                type: string
-                example: The requested component has not been found.
-            required:
-            - error
-            - message
-            - status_code
-    '400':
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 400
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Backend did not understand your request.
-            required:
-            - error
-            - message
-            - status_code
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
-            required:
-            - error
-            - message
-            - status_code
   schemas:
-    account_history_content:
+    account_addresses_content:
       type: array
       items:
         type: object
         properties:
-          active_epoch:
-            type: integer
-            example: 210
-            description: Epoch in which the stake was active
-          amount:
+          address:
             type: string
-            description: Stake amount in Lovelaces
-          pool_id:
-            type: string
-            description: Bech32 ID of pool being delegated to
+            description: Address associated with the stake key
         required:
-        - active_epoch
-        - amount
-        - pool_id
+        - address
       example:
-      - active_epoch: 210
-        amount: '12695385'
-        pool_id: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-      - active_epoch: 211
-        amount: '22695385'
-        pool_id: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+      - address: addr1qx2kd28nq8ac5prwg32hhvudlwggpgfp8utlyqxu6wqgz62f79qsdmm5dsknt9ecr5w468r9ey0fxwkdrwh08ly3tu9sy0f4qd
+      - address: addr1qys3czp8s9thc6u2fqed9yq3h24nyw28uk0m6mkgn9dkckjf79qsdmm5dsknt9ecr5w468r9ey0fxwkdrwh08ly3tu9suth4w4
+      - address: addr1q8j55h253zcvl326sk5qdt2n8z7eghzspe0ekxgncr796s2f79qsdmm5dsknt9ecr5w468r9ey0fxwkdrwh08ly3tu9sjmd35m
+      - address: addr1q8f7gxrprank3drhx8k5grlux7ene0nlwun8y9thu8mc3yjf79qsdmm5dsknt9ecr5w468r9ey0fxwkdrwh08ly3tu9sls6vnt
     account_utxo_content:
       type: array
       items:
@@ -1079,104 +947,48 @@ components:
         data_hash: null
         inline_datum: null
         reference_script_hash: null
-    account_addresses_assets:
-      type: array
-      items:
-        type: object
-        description: The sum of all assets of all addresses associated with a given account
-        properties:
-          unit:
-            type: string
-            format: Concatenation of asset policy_id and hex-encoded asset_name
-            description: The unit of the value
-          quantity:
-            type: string
-            description: The quantity of the unit
-        required:
-        - unit
-        - quantity
-      example:
-      - unit: d5e6bf0500378d4f0da4e8dde6becec7621cd8cbf5cbb9b87013d4cc537061636542756433343132
-        quantity: '1'
-      - unit: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
-        quantity: '125'
-    account_mir_content:
+    account_transactions_content:
       type: array
       items:
         type: object
         properties:
+          address:
+            type: string
+            description: Bech32 address
           tx_hash:
             type: string
-            description: Hash of the transaction containing the MIR
-          amount:
-            type: string
-            description: MIR amount in Lovelaces
-          tx_slot:
+            description: Hash of the transaction
+          tx_index:
             type: integer
-            description: Slot of the transaction containing the MIR
-          block_time:
-            type: integer
-            description: Block creation time in UNIX time of the transaction containing the MIR
+            description: Transaction index within the block
           block_height:
             type: integer
-            description: Block height of the transaction containing the MIR
-        required:
-        - tx_hash
-        - amount
-        - tx_slot
-        - block_time
-        - block_height
-      example:
-      - tx_hash: 69705bba1d687a816ff5a04ec0c358a1f1ef075ab7f9c6cc2763e792581cec6d
-        amount: '2193707473'
-        tx_slot: 45093580
-        block_time: 1646437200
-        block_height: 6745358
-      - tx_hash: baaa77b63d4d7d2bb3ab02c9b85978c2092c336dede7f59e31ad65452d510c13
-        amount: '14520198574'
-        tx_slot: 48093580
-        block_time: 1649033600
-        block_height: 7126896
-    account_registration_content:
-      type: array
-      items:
-        type: object
-        properties:
-          tx_hash:
-            type: string
-            description: Hash of the transaction containing the (de)registration certificate
-          action:
-            type: string
-            enum:
-            - registered
-            - deregistered
-            description: Action in the certificate
-          tx_slot:
-            type: integer
-            description: Slot of the transaction containing the (de)registration certificate
+            description: Block height
           block_time:
             type: integer
-            description: Block creation time in UNIX time of the transaction containing the (de)registration certificate
-          block_height:
-            type: integer
-            description: Block height of the transaction containing the (de)registration certificate
+            description: Block creation time in UNIX time
         required:
+        - address
         - tx_hash
-        - action
-        - tx_slot
-        - block_time
+        - tx_index
         - block_height
+        - block_time
       example:
-      - tx_hash: 2dd15e0ef6e6a17841cb9541c27724072ce4d4b79b91e58432fbaa32d9572531
-        action: registered
-        tx_slot: 45093580
-        block_time: 1646437200
-        block_height: 6745358
-      - tx_hash: 1a0570af966fb355a7160e4f82d5a80b8681b7955f5d44bec0dde628516157f0
-        action: deregistered
-        tx_slot: 48093580
-        block_time: 1649033600
-        block_height: 7126896
+      - address: addr1q8zsjx7vxkl4esfejafhxthyew8c54c9ch95gkv3nz37sxrc9ty742qncmffaesxqarvqjmxmy36d9aht2duhmhvekgq3jd3w2
+        tx_hash: bd78e0e73fb1691f08746a331bd764d11552c3a36ef766d4f1a3bbdc7f29918d
+        tx_index: 34
+        block_height: 7900364
+        block_time: 1666114079
+      - address: addr1q8zsjx7vxkl4esfejafhxthyew8c54c9ch95gkv3nz37sxrc9ty742qncmffaesxqarvqjmxmy36d9aht2duhmhvekgq3jd3w2
+        tx_hash: 67e9a201bc08a92bcc6f447a4ed032300d933545ccd7f1da94ec1e8dbeb4a696
+        tx_index: 6
+        block_height: 7900557
+        block_time: 1666118180
+      - address: addr1qxrrzqsqnzqx3p8sxxsry936h6c78ml4rdl224f33l7pmcnc9ty742qncmffaesxqarvqjmxmy36d9aht2duhmhvekgqr735lq
+        tx_hash: 67e9a201bc08a92bcc6f447a4ed032300d933545ccd7f1da94ec1e8dbeb4a696
+        tx_index: 6
+        block_height: 7900557
+        block_time: 1666118180
     account_reward_content:
       type: array
       items:
@@ -1228,6 +1040,97 @@ components:
         amount: '500000000'
         pool_id: pool1cytwr0n7eas6du2h2xshl8ypa1yqr18f0erlhhjcuczysiunjcs
         type: pool_deposit_refund
+    account_content:
+      type: object
+      properties:
+        stake_address:
+          type: string
+          example: stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7
+          description: Bech32 stake address
+        active:
+          type: boolean
+          example: true
+          description: Delegation state of the account. **Note:** For registration state, use the `registered` field instead.
+        registered:
+          type: boolean
+          example: true
+          description: Registration state of an account
+        active_epoch:
+          type:
+          - integer
+          - 'null'
+          example: 412
+          description: Epoch of the most recent action - registration or deregistration
+        controlled_amount:
+          type: string
+          example: '619154618165'
+          description: Balance of the account in Lovelaces
+        rewards_sum:
+          type: string
+          example: '319154618165'
+          description: Sum of all rewards for the account in the Lovelaces
+        withdrawals_sum:
+          type: string
+          example: '12125369253'
+          description: Sum of all the withdrawals for the account in Lovelaces
+        reserves_sum:
+          type: string
+          example: '319154618165'
+          description: Sum of all  funds from reserves for the account in the Lovelaces
+        treasury_sum:
+          type: string
+          example: '12000000'
+          description: Sum of all funds from treasury for the account in the Lovelaces
+        withdrawable_amount:
+          type: string
+          example: '319154618165'
+          description: Sum of available rewards that haven't been withdrawn yet for the account in the Lovelaces
+        pool_id:
+          type:
+          - string
+          - 'null'
+          example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+          description: Bech32 pool ID to which this account is delegated
+        drep_id:
+          type:
+          - string
+          - 'null'
+          example: drep15cfxz9exyn5rx0807zvxfrvslrjqfchrd4d47kv9e0f46uedqtc
+          description: Bech32 drep ID to which this account is delegated
+      required:
+      - stake_address
+      - active
+      - registered
+      - active_epoch
+      - controlled_amount
+      - rewards_sum
+      - withdrawals_sum
+      - reserves_sum
+      - treasury_sum
+      - withdrawable_amount
+      - pool_id
+      - drep_id
+    account_addresses_assets:
+      type: array
+      items:
+        type: object
+        description: The sum of all assets of all addresses associated with a given account
+        properties:
+          unit:
+            type: string
+            format: Concatenation of asset policy_id and hex-encoded asset_name
+            description: The unit of the value
+          quantity:
+            type: string
+            description: The quantity of the unit
+        required:
+        - unit
+        - quantity
+      example:
+      - unit: d5e6bf0500378d4f0da4e8dde6becec7621cd8cbf5cbb9b87013d4cc537061636542756433343132
+        quantity: '1'
+      - unit: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
+        quantity: '125'
     account_withdrawal_content:
       type: array
       items:
@@ -1323,6 +1226,109 @@ components:
       - received_sum
       - sent_sum
       - tx_count
+    account_history_content:
+      type: array
+      items:
+        type: object
+        properties:
+          active_epoch:
+            type: integer
+            example: 210
+            description: Epoch in which the stake was active
+          amount:
+            type: string
+            description: Stake amount in Lovelaces
+          pool_id:
+            type: string
+            description: Bech32 ID of pool being delegated to
+        required:
+        - active_epoch
+        - amount
+        - pool_id
+      example:
+      - active_epoch: 210
+        amount: '12695385'
+        pool_id: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+      - active_epoch: 211
+        amount: '22695385'
+        pool_id: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+    account_registration_content:
+      type: array
+      items:
+        type: object
+        properties:
+          tx_hash:
+            type: string
+            description: Hash of the transaction containing the (de)registration certificate
+          action:
+            type: string
+            enum:
+            - registered
+            - deregistered
+            description: Action in the certificate
+          tx_slot:
+            type: integer
+            description: Slot of the transaction containing the (de)registration certificate
+          block_time:
+            type: integer
+            description: Block creation time in UNIX time of the transaction containing the (de)registration certificate
+          block_height:
+            type: integer
+            description: Block height of the transaction containing the (de)registration certificate
+        required:
+        - tx_hash
+        - action
+        - tx_slot
+        - block_time
+        - block_height
+      example:
+      - tx_hash: 2dd15e0ef6e6a17841cb9541c27724072ce4d4b79b91e58432fbaa32d9572531
+        action: registered
+        tx_slot: 45093580
+        block_time: 1646437200
+        block_height: 6745358
+      - tx_hash: 1a0570af966fb355a7160e4f82d5a80b8681b7955f5d44bec0dde628516157f0
+        action: deregistered
+        tx_slot: 48093580
+        block_time: 1649033600
+        block_height: 7126896
+    account_mir_content:
+      type: array
+      items:
+        type: object
+        properties:
+          tx_hash:
+            type: string
+            description: Hash of the transaction containing the MIR
+          amount:
+            type: string
+            description: MIR amount in Lovelaces
+          tx_slot:
+            type: integer
+            description: Slot of the transaction containing the MIR
+          block_time:
+            type: integer
+            description: Block creation time in UNIX time of the transaction containing the MIR
+          block_height:
+            type: integer
+            description: Block height of the transaction containing the MIR
+        required:
+        - tx_hash
+        - amount
+        - tx_slot
+        - block_time
+        - block_height
+      example:
+      - tx_hash: 69705bba1d687a816ff5a04ec0c358a1f1ef075ab7f9c6cc2763e792581cec6d
+        amount: '2193707473'
+        tx_slot: 45093580
+        block_time: 1646437200
+        block_height: 6745358
+      - tx_hash: baaa77b63d4d7d2bb3ab02c9b85978c2092c336dede7f59e31ad65452d510c13
+        amount: '14520198574'
+        tx_slot: 48093580
+        block_time: 1649033600
+        block_height: 7126896
     account_delegation_content:
       type: array
       items:
@@ -1373,133 +1379,127 @@ components:
         tx_slot: 48093580
         block_time: 1649033600
         block_height: 7126896
-    account_transactions_content:
-      type: array
-      items:
-        type: object
-        properties:
-          address:
-            type: string
-            description: Bech32 address
-          tx_hash:
-            type: string
-            description: Hash of the transaction
-          tx_index:
-            type: integer
-            description: Transaction index within the block
-          block_height:
-            type: integer
-            description: Block height
-          block_time:
-            type: integer
-            description: Block creation time in UNIX time
-        required:
-        - address
-        - tx_hash
-        - tx_index
-        - block_height
-        - block_time
-      example:
-      - address: addr1q8zsjx7vxkl4esfejafhxthyew8c54c9ch95gkv3nz37sxrc9ty742qncmffaesxqarvqjmxmy36d9aht2duhmhvekgq3jd3w2
-        tx_hash: bd78e0e73fb1691f08746a331bd764d11552c3a36ef766d4f1a3bbdc7f29918d
-        tx_index: 34
-        block_height: 7900364
-        block_time: 1666114079
-      - address: addr1q8zsjx7vxkl4esfejafhxthyew8c54c9ch95gkv3nz37sxrc9ty742qncmffaesxqarvqjmxmy36d9aht2duhmhvekgq3jd3w2
-        tx_hash: 67e9a201bc08a92bcc6f447a4ed032300d933545ccd7f1da94ec1e8dbeb4a696
-        tx_index: 6
-        block_height: 7900557
-        block_time: 1666118180
-      - address: addr1qxrrzqsqnzqx3p8sxxsry936h6c78ml4rdl224f33l7pmcnc9ty742qncmffaesxqarvqjmxmy36d9aht2duhmhvekgqr735lq
-        tx_hash: 67e9a201bc08a92bcc6f447a4ed032300d933545ccd7f1da94ec1e8dbeb4a696
-        tx_index: 6
-        block_height: 7900557
-        block_time: 1666118180
-    account_content:
-      type: object
-      properties:
-        stake_address:
-          type: string
-          example: stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7
-          description: Bech32 stake address
-        active:
-          type: boolean
-          example: true
-          description: Delegation state of the account. **Note:** For registration state, use the `registered` field instead.
-        registered:
-          type: boolean
-          example: true
-          description: Registration state of an account
-        active_epoch:
-          type:
-          - integer
-          - 'null'
-          example: 412
-          description: Epoch of the most recent action - registration or deregistration
-        controlled_amount:
-          type: string
-          example: '619154618165'
-          description: Balance of the account in Lovelaces
-        rewards_sum:
-          type: string
-          example: '319154618165'
-          description: Sum of all rewards for the account in the Lovelaces
-        withdrawals_sum:
-          type: string
-          example: '12125369253'
-          description: Sum of all the withdrawals for the account in Lovelaces
-        reserves_sum:
-          type: string
-          example: '319154618165'
-          description: Sum of all  funds from reserves for the account in the Lovelaces
-        treasury_sum:
-          type: string
-          example: '12000000'
-          description: Sum of all funds from treasury for the account in the Lovelaces
-        withdrawable_amount:
-          type: string
-          example: '319154618165'
-          description: Sum of available rewards that haven't been withdrawn yet for the account in the Lovelaces
-        pool_id:
-          type:
-          - string
-          - 'null'
-          example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-          description: Bech32 pool ID to which this account is delegated
-        drep_id:
-          type:
-          - string
-          - 'null'
-          example: drep15cfxz9exyn5rx0807zvxfrvslrjqfchrd4d47kv9e0f46uedqtc
-          description: Bech32 drep ID to which this account is delegated
-      required:
-      - stake_address
-      - active
-      - registered
-      - active_epoch
-      - controlled_amount
-      - rewards_sum
-      - withdrawals_sum
-      - reserves_sum
-      - treasury_sum
-      - withdrawable_amount
-      - pool_id
-      - drep_id
-    account_addresses_content:
-      type: array
-      items:
-        type: object
-        properties:
-          address:
-            type: string
-            description: Address associated with the stake key
-        required:
-        - address
-      example:
-      - address: addr1qx2kd28nq8ac5prwg32hhvudlwggpgfp8utlyqxu6wqgz62f79qsdmm5dsknt9ecr5w468r9ey0fxwkdrwh08ly3tu9sy0f4qd
-      - address: addr1qys3czp8s9thc6u2fqed9yq3h24nyw28uk0m6mkgn9dkckjf79qsdmm5dsknt9ecr5w468r9ey0fxwkdrwh08ly3tu9suth4w4
-      - address: addr1q8j55h253zcvl326sk5qdt2n8z7eghzspe0ekxgncr796s2f79qsdmm5dsknt9ecr5w468r9ey0fxwkdrwh08ly3tu9sjmd35m
-      - address: addr1q8f7gxrprank3drhx8k5grlux7ene0nlwun8y9thu8mc3yjf79qsdmm5dsknt9ecr5w468r9ey0fxwkdrwh08ly3tu9sls6vnt
+  responses:
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
+            required:
+            - error
+            - message
+            - status_code
+    '418':
+      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 418
+              error:
+                type: string
+                example: Requested Banned
+              message:
+                type: string
+                example: IP has been auto-banned for flooding.
+            required:
+            - error
+            - message
+            - status_code
+    '404':
+      description: Component not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 404
+              error:
+                type: string
+                example: Not Found
+              message:
+                type: string
+                example: The requested component has not been found.
+            required:
+            - error
+            - message
+            - status_code
+    '403':
+      description: Authentication secret is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 403
+              error:
+                type: string
+                example: Forbidden
+              message:
+                type: string
+                example: Invalid project token.
+            required:
+            - error
+            - message
+            - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
   securitySchemes:
     project_id:
       type: apiKey
