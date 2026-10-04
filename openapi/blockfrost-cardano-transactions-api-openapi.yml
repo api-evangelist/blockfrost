@@ -602,6 +602,99 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    tx_content_mirs:
+      type: array
+      items:
+        type: object
+        properties:
+          pot:
+            type: string
+            enum:
+            - reserve
+            - treasury
+            example: reserve
+            description: Source of MIR funds
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          address:
+            type: string
+            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
+            description: Bech32 stake address
+          amount:
+            type: string
+            example: '431833601'
+            description: MIR amount in Lovelaces
+        required:
+        - pot
+        - cert_index
+        - address
+        - amount
+    tx_content_metadata_cbor:
+      type: array
+      items:
+        type: object
+        properties:
+          label:
+            type: string
+            description: Metadata label
+          cbor_metadata:
+            deprecated: true
+            type:
+            - string
+            - 'null'
+            description: Content of the CBOR metadata
+          metadata:
+            type:
+            - string
+            - 'null'
+            description: Content of the CBOR metadata in hex
+        required:
+        - label
+        - cbor_metadata
+        - metadata
+      example:
+      - label: '1968'
+        cbor_metadata: \xa100a16b436f6d62696e6174696f6e8601010101010c
+        metadata: a100a16b436f6d62696e6174696f6e8601010101010c
+    tx_content_pool_retires:
+      type: array
+      items:
+        type: object
+        properties:
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          pool_id:
+            type: string
+            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+            description: Bech32 stake pool ID
+          retiring_epoch:
+            type: integer
+            example: 216
+            description: Epoch in which the pool becomes retired
+        required:
+        - cert_index
+        - pool_id
+        - retiring_epoch
+    tx_content_withdrawals:
+      type: array
+      items:
+        type: object
+        properties:
+          address:
+            type: string
+            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
+            description: Bech32 withdrawal address
+          amount:
+            type: string
+            example: '431833601'
+            description: Withdrawal amount in Lovelaces
+        required:
+        - address
+        - amount
     tx_content_pool_certs:
       type: array
       items:
@@ -745,6 +838,16 @@ components:
         - metadata
         - relays
         - active_epoch
+    tx_content_cbor:
+      type: object
+      properties:
+        cbor:
+          type: string
+          description: CBOR serialized transaction
+      required:
+      - cbor
+      example:
+        cbor: 84a40081825820203e5b61e0949ffc8fe594727cf7ed73c7396cc2bd212af9a680c9423b5880eb00018282583900f0c60254ecb0addd4c7e40c28fd05b65014ab4c8ecece06c7dcee5a0724bf93336a8225e7ef152b41aea955173be91af19250edea1ddafab1a000f42408258390014beadb876d0a2a593fe2f1b539389e00731290910170e9a1be78e847d2ccdc7af469706878018739bcfde9ae23f009c4ae38aee0a4b4f3a1b0000000253fa0f93021a0002922d031a0303c827a100818258207d3ae39f9a1c916ac7c13f10c7d67c70b870c286a1af71485455c5022a3f391d5840e2f481acd1601a3f39fa976317bba685ddd774621a92611edaaa3df9f48a3b13d8b25ecb2f28b031c1602512418efed3033e463a0dcd22a856c808033cc9e00ff5f6
     tx_content_required_signers:
       type: array
       items:
@@ -756,16 +859,138 @@ components:
             description: Hash of the witness
         required:
         - witness_hash
-    tx_content_cbor:
-      type: object
-      properties:
-        cbor:
-          type: string
-          description: CBOR serialized transaction
-      required:
-      - cbor
+    tx_content_redeemers:
+      type: array
+      items:
+        type: object
+        properties:
+          tx_index:
+            type: integer
+            example: 0
+            description: Index of the redeemer within the transaction
+          purpose:
+            type: string
+            enum:
+            - spend
+            - mint
+            - cert
+            - reward
+            example: spend
+            description: Validation purpose
+          script_hash:
+            type: string
+            example: ec26b89af41bef0f7585353831cb5da42b5b37185e0c8a526143b824
+            description: Script hash
+          redeemer_data_hash:
+            type: string
+            example: 923918e403bf43c34b4ef6b48eb2ee04babed17320d8d1b9ff9ad086e86f44ec
+            description: Redeemer data hash
+          datum_hash:
+            type: string
+            example: 923918e403bf43c34b4ef6b48eb2ee04babed17320d8d1b9ff9ad086e86f44ec
+            deprecated: true
+            description: Datum hash
+          unit_mem:
+            type: string
+            example: '1700'
+            description: The budget in Memory to run a script
+          unit_steps:
+            type: string
+            example: '476468'
+            description: The budget in CPU steps to run a script
+          fee:
+            type: string
+            example: '172033'
+            description: The fee consumed to run the script
+        required:
+        - tx_index
+        - purpose
+        - unit_mem
+        - unit_steps
+        - script_hash
+        - redeemer_data_hash
+        - datum_hash
+        - fee
+    tx_content_metadata:
+      type: array
+      items:
+        type: object
+        properties:
+          label:
+            type: string
+            description: Metadata label
+          json_metadata:
+            oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+            description: Content of the metadata
+        required:
+        - label
+        - json_metadata
       example:
-        cbor: 84a40081825820203e5b61e0949ffc8fe594727cf7ed73c7396cc2bd212af9a680c9423b5880eb00018282583900f0c60254ecb0addd4c7e40c28fd05b65014ab4c8ecece06c7dcee5a0724bf93336a8225e7ef152b41aea955173be91af19250edea1ddafab1a000f42408258390014beadb876d0a2a593fe2f1b539389e00731290910170e9a1be78e847d2ccdc7af469706878018739bcfde9ae23f009c4ae38aee0a4b4f3a1b0000000253fa0f93021a0002922d031a0303c827a100818258207d3ae39f9a1c916ac7c13f10c7d67c70b870c286a1af71485455c5022a3f391d5840e2f481acd1601a3f39fa976317bba685ddd774621a92611edaaa3df9f48a3b13d8b25ecb2f28b031c1602512418efed3033e463a0dcd22a856c808033cc9e00ff5f6
+      - label: '1967'
+        json_metadata:
+          metadata: https://nut.link/metadata.json
+          hash: 6bf124f217d0e5a0a8adb1dbd8540e1334280d49ab861127868339f43b3948af
+      - label: '1968'
+        json_metadata:
+          ADAUSD:
+          - value: '0.10409800535729975'
+            source: ergoOracles
+    tx_content_stake_addr:
+      type: array
+      items:
+        type: object
+        properties:
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          address:
+            type: string
+            example: stake1u9t3a0tcwune5xrnfjg4q7cpvjlgx9lcv0cuqf5mhfjwrvcwrulda
+            description: Delegation stake address
+          registration:
+            type: boolean
+            example: true
+            description: Registration boolean, false if deregistration
+        required:
+        - cert_index
+        - address
+        - registration
+    tx_content_delegations:
+      type: array
+      items:
+        type: object
+        properties:
+          index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+            deprecated: true
+          cert_index:
+            type: integer
+            example: 0
+            description: Index of the certificate within the transaction
+          address:
+            type: string
+            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
+            description: Bech32 delegation stake address
+          pool_id:
+            type: string
+            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+            description: Bech32 ID of delegated stake pool
+          active_epoch:
+            type: integer
+            example: 210
+            description: Epoch in which the delegation becomes active
+        required:
+        - index
+        - cert_index
+        - address
+        - pool_id
+        - active_epoch
     tx_content:
       type: object
       properties:
@@ -906,189 +1131,6 @@ components:
       - redeemer_count
       - valid_contract
       - treasury_donation
-    tx_content_metadata:
-      type: array
-      items:
-        type: object
-        properties:
-          label:
-            type: string
-            description: Metadata label
-          json_metadata:
-            oneOf:
-            - type: string
-            - type: object
-              additionalProperties: true
-            description: Content of the metadata
-        required:
-        - label
-        - json_metadata
-      example:
-      - label: '1967'
-        json_metadata:
-          metadata: https://nut.link/metadata.json
-          hash: 6bf124f217d0e5a0a8adb1dbd8540e1334280d49ab861127868339f43b3948af
-      - label: '1968'
-        json_metadata:
-          ADAUSD:
-          - value: '0.10409800535729975'
-            source: ergoOracles
-    tx_content_metadata_cbor:
-      type: array
-      items:
-        type: object
-        properties:
-          label:
-            type: string
-            description: Metadata label
-          cbor_metadata:
-            deprecated: true
-            type:
-            - string
-            - 'null'
-            description: Content of the CBOR metadata
-          metadata:
-            type:
-            - string
-            - 'null'
-            description: Content of the CBOR metadata in hex
-        required:
-        - label
-        - cbor_metadata
-        - metadata
-      example:
-      - label: '1968'
-        cbor_metadata: \xa100a16b436f6d62696e6174696f6e8601010101010c
-        metadata: a100a16b436f6d62696e6174696f6e8601010101010c
-    tx_content_withdrawals:
-      type: array
-      items:
-        type: object
-        properties:
-          address:
-            type: string
-            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
-            description: Bech32 withdrawal address
-          amount:
-            type: string
-            example: '431833601'
-            description: Withdrawal amount in Lovelaces
-        required:
-        - address
-        - amount
-    tx_content_delegations:
-      type: array
-      items:
-        type: object
-        properties:
-          index:
-            type: integer
-            example: 0
-            description: Index of the certificate within the transaction
-            deprecated: true
-          cert_index:
-            type: integer
-            example: 0
-            description: Index of the certificate within the transaction
-          address:
-            type: string
-            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
-            description: Bech32 delegation stake address
-          pool_id:
-            type: string
-            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-            description: Bech32 ID of delegated stake pool
-          active_epoch:
-            type: integer
-            example: 210
-            description: Epoch in which the delegation becomes active
-        required:
-        - index
-        - cert_index
-        - address
-        - pool_id
-        - active_epoch
-    tx_content_redeemers:
-      type: array
-      items:
-        type: object
-        properties:
-          tx_index:
-            type: integer
-            example: 0
-            description: Index of the redeemer within the transaction
-          purpose:
-            type: string
-            enum:
-            - spend
-            - mint
-            - cert
-            - reward
-            example: spend
-            description: Validation purpose
-          script_hash:
-            type: string
-            example: ec26b89af41bef0f7585353831cb5da42b5b37185e0c8a526143b824
-            description: Script hash
-          redeemer_data_hash:
-            type: string
-            example: 923918e403bf43c34b4ef6b48eb2ee04babed17320d8d1b9ff9ad086e86f44ec
-            description: Redeemer data hash
-          datum_hash:
-            type: string
-            example: 923918e403bf43c34b4ef6b48eb2ee04babed17320d8d1b9ff9ad086e86f44ec
-            deprecated: true
-            description: Datum hash
-          unit_mem:
-            type: string
-            example: '1700'
-            description: The budget in Memory to run a script
-          unit_steps:
-            type: string
-            example: '476468'
-            description: The budget in CPU steps to run a script
-          fee:
-            type: string
-            example: '172033'
-            description: The fee consumed to run the script
-        required:
-        - tx_index
-        - purpose
-        - unit_mem
-        - unit_steps
-        - script_hash
-        - redeemer_data_hash
-        - datum_hash
-        - fee
-    tx_content_mirs:
-      type: array
-      items:
-        type: object
-        properties:
-          pot:
-            type: string
-            enum:
-            - reserve
-            - treasury
-            example: reserve
-            description: Source of MIR funds
-          cert_index:
-            type: integer
-            example: 0
-            description: Index of the certificate within the transaction
-          address:
-            type: string
-            example: stake1u9r76ypf5fskppa0cmttas05cgcswrttn6jrq4yd7jpdnvc7gt0yc
-            description: Bech32 stake address
-          amount:
-            type: string
-            example: '431833601'
-            description: MIR amount in Lovelaces
-        required:
-        - pot
-        - cert_index
-        - address
-        - amount
     tx_content_utxo:
       type: object
       properties:
@@ -1243,49 +1285,27 @@ components:
       - hash
       - inputs
       - outputs
-    tx_content_pool_retires:
-      type: array
-      items:
-        type: object
-        properties:
-          cert_index:
-            type: integer
-            example: 0
-            description: Index of the certificate within the transaction
-          pool_id:
-            type: string
-            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-            description: Bech32 stake pool ID
-          retiring_epoch:
-            type: integer
-            example: 216
-            description: Epoch in which the pool becomes retired
-        required:
-        - cert_index
-        - pool_id
-        - retiring_epoch
-    tx_content_stake_addr:
-      type: array
-      items:
-        type: object
-        properties:
-          cert_index:
-            type: integer
-            example: 0
-            description: Index of the certificate within the transaction
-          address:
-            type: string
-            example: stake1u9t3a0tcwune5xrnfjg4q7cpvjlgx9lcv0cuqf5mhfjwrvcwrulda
-            description: Delegation stake address
-          registration:
-            type: boolean
-            example: true
-            description: Registration boolean, false if deregistration
-        required:
-        - cert_index
-        - address
-        - registration
   responses:
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
+            required:
+            - error
+            - message
+            - status_code
     '404':
       description: Component not found
       content:
@@ -1326,26 +1346,6 @@ components:
             - error
             - message
             - status_code
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
     '418':
       description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
       content:
@@ -1366,8 +1366,8 @@ components:
             - error
             - message
             - status_code
-    '429':
-      description: Usage limit reached
+    '425':
+      description: Mempool is already full, not accepting new txs straight away
       content:
         application/json:
           schema:
@@ -1375,13 +1375,33 @@ components:
             properties:
               status_code:
                 type: integer
-                example: 429
+                example: 425
               error:
                 type: string
-                example: Project Over Limit
+                example: Mempool Full
               message:
                 type: string
-                example: Usage is over limit.
+                example: Mempool is full, please try resubmitting again later.
+            required:
+            - error
+            - message
+            - status_code
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
             required:
             - error
             - message
@@ -1402,26 +1422,6 @@ components:
               message:
                 type: string
                 example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '425':
-      description: Mempool is already full, not accepting new txs straight away
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 425
-              error:
-                type: string
-                example: Mempool Full
-              message:
-                type: string
-                example: Mempool is full, please try resubmitting again later.
             required:
             - error
             - message

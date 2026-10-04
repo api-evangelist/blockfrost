@@ -486,15 +486,101 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    asset_txs:
+    asset_addresses:
       type: array
       items:
-        type: string
-        description: Hash of the transaction
+        type: object
+        properties:
+          address:
+            type: string
+            description: Address containing the specific asset
+          quantity:
+            type: string
+            description: Asset quantity on the specific address
+        required:
+        - address
+        - quantity
       example:
-      - 8788591983aa73981fc92d6cddbbe643959f5a784e84b8bee0db15823f575a5b
-      - 52e748c4dec58b687b90b0b40d383b9fe1f24c1a833b7395cdf07dd67859f46f
-      - e8073fd5318ff43eca18a852527166aa8008bee9ee9e891f585612b7e4ba700b
+      - address: addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz
+        quantity: '1'
+      - address: addr1qyhr4exrgavdcn3qhfcc9f939fzsch2re5ry9cwvcdyh4x4re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qdpvhza
+        quantity: '100000'
+      - address: addr1q8zup8m9ue3p98kxlxl9q8rnyan8hw3ul282tsl9s326dfj088lvedv4zckcj24arcpasr0gua4c5gq4zw2rpcpjk2lq8cmd9l
+        quantity: '18605647'
+    asset_policy:
+      type: array
+      items:
+        type: object
+        properties:
+          asset:
+            type: string
+            description: Concatenation of the policy_id and hex-encoded asset_name
+          quantity:
+            type: string
+            description: Current asset quantity
+        required:
+        - asset
+        - quantity
+      example:
+      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
+        quantity: '1'
+      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a766e
+        quantity: '100000'
+      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb574636f696e
+        quantity: '18605647'
+    assets:
+      type: array
+      items:
+        type: object
+        properties:
+          asset:
+            type: string
+            format: Concatenation of the policy_id and hex-encoded asset_name
+            description: Asset identifier
+          quantity:
+            type: string
+            description: Current asset quantity
+        required:
+        - asset
+        - quantity
+      example:
+      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
+        quantity: '1'
+      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e75d
+        quantity: '100000'
+      - asset: 6804edf9712d2b619edb6ac86861fe93a730693183a262b165fcc1ba1bc99cad
+        quantity: '18605647'
+    asset_history:
+      type: array
+      items:
+        type: object
+        properties:
+          tx_hash:
+            type: string
+            description: Hash of the transaction containing the asset action
+          action:
+            type: string
+            enum:
+            - minted
+            - burned
+            description: Action executed upon the asset policy
+          amount:
+            type: string
+            description: Asset amount of the specific action
+        required:
+        - tx_hash
+        - action
+        - amount
+      example:
+      - tx_hash: 2dd15e0ef6e6a17841cb9541c27724072ce4d4b79b91e58432fbaa32d9572531
+        amount: '10'
+        action: minted
+      - tx_hash: 9c190bc1ac88b2ab0c05a82d7de8b71b67a9316377e865748a89d4426c0d3005
+        amount: '5'
+        action: burned
+      - tx_hash: 1a0570af966fb355a7160e4f82d5a80b8681b7955f5d44bec0dde628516157f0
+        amount: '5'
+        action: burned
     asset_transactions:
       type: array
       items:
@@ -531,49 +617,6 @@ components:
         tx_index: 0
         block_height: 564654
         block_time: 1834505492
-    asset_addresses:
-      type: array
-      items:
-        type: object
-        properties:
-          address:
-            type: string
-            description: Address containing the specific asset
-          quantity:
-            type: string
-            description: Asset quantity on the specific address
-        required:
-        - address
-        - quantity
-      example:
-      - address: addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz
-        quantity: '1'
-      - address: addr1qyhr4exrgavdcn3qhfcc9f939fzsch2re5ry9cwvcdyh4x4re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qdpvhza
-        quantity: '100000'
-      - address: addr1q8zup8m9ue3p98kxlxl9q8rnyan8hw3ul282tsl9s326dfj088lvedv4zckcj24arcpasr0gua4c5gq4zw2rpcpjk2lq8cmd9l
-        quantity: '18605647'
-    assets:
-      type: array
-      items:
-        type: object
-        properties:
-          asset:
-            type: string
-            format: Concatenation of the policy_id and hex-encoded asset_name
-            description: Asset identifier
-          quantity:
-            type: string
-            description: Current asset quantity
-        required:
-        - asset
-        - quantity
-      example:
-      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
-        quantity: '1'
-      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e75d
-        quantity: '100000'
-      - asset: 6804edf9712d2b619edb6ac86861fe93a730693183a262b165fcc1ba1bc99cad
-        quantity: '18605647'
     asset:
       type: object
       properties:
@@ -702,79 +745,16 @@ components:
       - mint_or_burn_count
       - metadata
       - onchain_metadata
-    asset_history:
+    asset_txs:
       type: array
       items:
-        type: object
-        properties:
-          tx_hash:
-            type: string
-            description: Hash of the transaction containing the asset action
-          action:
-            type: string
-            enum:
-            - minted
-            - burned
-            description: Action executed upon the asset policy
-          amount:
-            type: string
-            description: Asset amount of the specific action
-        required:
-        - tx_hash
-        - action
-        - amount
+        type: string
+        description: Hash of the transaction
       example:
-      - tx_hash: 2dd15e0ef6e6a17841cb9541c27724072ce4d4b79b91e58432fbaa32d9572531
-        amount: '10'
-        action: minted
-      - tx_hash: 9c190bc1ac88b2ab0c05a82d7de8b71b67a9316377e865748a89d4426c0d3005
-        amount: '5'
-        action: burned
-      - tx_hash: 1a0570af966fb355a7160e4f82d5a80b8681b7955f5d44bec0dde628516157f0
-        amount: '5'
-        action: burned
-    asset_policy:
-      type: array
-      items:
-        type: object
-        properties:
-          asset:
-            type: string
-            description: Concatenation of the policy_id and hex-encoded asset_name
-          quantity:
-            type: string
-            description: Current asset quantity
-        required:
-        - asset
-        - quantity
-      example:
-      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e
-        quantity: '1'
-      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a766e
-        quantity: '100000'
-      - asset: b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb574636f696e
-        quantity: '18605647'
+      - 8788591983aa73981fc92d6cddbbe643959f5a784e84b8bee0db15823f575a5b
+      - 52e748c4dec58b687b90b0b40d383b9fe1f24c1a833b7395cdf07dd67859f46f
+      - e8073fd5318ff43eca18a852527166aa8008bee9ee9e891f585612b7e4ba700b
   responses:
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
     '429':
       description: Usage limit reached
       content:
@@ -835,8 +815,8 @@ components:
             - error
             - message
             - status_code
-    '403':
-      description: Authentication secret is missing or invalid
+    '500':
+      description: Internal Server Error
       content:
         application/json:
           schema:
@@ -844,13 +824,13 @@ components:
             properties:
               status_code:
                 type: integer
-                example: 403
+                example: 500
               error:
                 type: string
-                example: Forbidden
+                example: Internal Server Error
               message:
                 type: string
-                example: Invalid project token.
+                example: An unexpected response was received from the backend.
             required:
             - error
             - message
@@ -871,6 +851,26 @@ components:
               message:
                 type: string
                 example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
+    '403':
+      description: Authentication secret is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 403
+              error:
+                type: string
+                example: Forbidden
+              message:
+                type: string
+                example: Invalid project token.
             required:
             - error
             - message

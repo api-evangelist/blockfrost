@@ -280,26 +280,6 @@ paths:
       x-operation-id-source: derived
 components:
   responses:
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
     '429':
       description: Usage limit reached
       content:
@@ -360,6 +340,26 @@ components:
             - error
             - message
             - status_code
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
     '403':
       description: Authentication secret is missing or invalid
       content:
@@ -401,6 +401,45 @@ components:
             - message
             - status_code
   schemas:
+    nutlink_address_ticker:
+      type: array
+      items:
+        type: object
+        properties:
+          tx_hash:
+            type: string
+            description: Hash of the transaction
+          block_height:
+            type: integer
+            description: Block height of the record
+          tx_index:
+            type: integer
+            description: Transaction index within the block
+          payload:
+            anyOf:
+            - type: string
+            - type: object
+            - type: array
+              items: {}
+            - type: integer
+            - type: number
+            - type: boolean
+            additionalProperties: true
+            description: Content of the ticker
+        required:
+        - tx_hash
+        - tx_index
+        - block_height
+        - payload
+      example:
+      - tx_hash: e8073fd5318ff43eca18a852527166aa8008bee9ee9e891f585612b7e4ba700b
+        block_height: 2657092
+        tx_index: 8
+        payload:
+        - source: coinGecko
+          value: '1.29'
+        - source: cryptoCompare
+          value: '1.283'
     nutlink_address:
       type: object
       properties:
@@ -455,45 +494,6 @@ components:
       - name: ADABTC
         count: 1980038
         latest_block: 2657092
-    nutlink_address_ticker:
-      type: array
-      items:
-        type: object
-        properties:
-          tx_hash:
-            type: string
-            description: Hash of the transaction
-          block_height:
-            type: integer
-            description: Block height of the record
-          tx_index:
-            type: integer
-            description: Transaction index within the block
-          payload:
-            anyOf:
-            - type: string
-            - type: object
-            - type: array
-              items: {}
-            - type: integer
-            - type: number
-            - type: boolean
-            additionalProperties: true
-            description: Content of the ticker
-        required:
-        - tx_hash
-        - tx_index
-        - block_height
-        - payload
-      example:
-      - tx_hash: e8073fd5318ff43eca18a852527166aa8008bee9ee9e891f585612b7e4ba700b
-        block_height: 2657092
-        tx_index: 8
-        payload:
-        - source: coinGecko
-          value: '1.29'
-        - source: cryptoCompare
-          value: '1.283'
     nutlink_tickers_ticker:
       type: array
       items:

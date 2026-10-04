@@ -747,147 +747,128 @@ paths:
       operationId: getPoolsByPoolIdVotes
       x-operation-id-source: derived
 components:
+  responses:
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
+            required:
+            - error
+            - message
+            - status_code
+    '404':
+      description: Component not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 404
+              error:
+                type: string
+                example: Not Found
+              message:
+                type: string
+                example: The requested component has not been found.
+            required:
+            - error
+            - message
+            - status_code
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
+    '403':
+      description: Authentication secret is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 403
+              error:
+                type: string
+                example: Forbidden
+              message:
+                type: string
+                example: Invalid project token.
+            required:
+            - error
+            - message
+            - status_code
+    '418':
+      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 418
+              error:
+                type: string
+                example: Requested Banned
+              message:
+                type: string
+                example: IP has been auto-banned for flooding.
+            required:
+            - error
+            - message
+            - status_code
   schemas:
-    pool_list_retire:
-      type: array
-      items:
-        type: object
-        properties:
-          pool_id:
-            type: string
-            example: pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt
-            description: Bech32 encoded pool ID
-          epoch:
-            type: integer
-            example: 242
-            description: Retirement epoch number
-        required:
-        - pool_id
-        - epoch
-      example:
-      - pool_id: pool19u64770wqp6s95gkajc8udheske5e6ljmpq33awxk326zjaza0q
-        epoch: 225
-      - pool_id: pool1dvla4zq98hpvacv20snndupjrqhuc79zl6gjap565nku6et5zdx
-        epoch: 215
-      - pool_id: pool1wvccajt4eugjtf3k0ja3exjqdj7t8egsujwhcw4tzj4rzsxzw5w
-        epoch: 231
-    pool_blocks:
-      type: array
-      items:
-        type: string
-        description: Block hashes
-      example:
-      - d8982ca42cfe76b747cc681d35d671050a9e41e9cfe26573eb214e94fe6ff21d
-      - 026436c539e2ce84c7f77ffe669f4e4bbbb3b9c53512e5857dcba8bb0b4e9a8c
-      - bcc8487f419b8c668a18ea2120822a05df6dfe1de1f0fac3feba88cf760f303c
-      - 86bf7b4a274e0f8ec9816171667c1b4a0cfc661dc21563f271acea9482b62df7
-    pool_updates:
-      type: array
-      items:
-        type: object
-        properties:
-          tx_hash:
-            type: string
-            description: Transaction ID
-          cert_index:
-            type: integer
-            description: Certificate within the transaction
-          action:
-            type: string
-            enum:
-            - registered
-            - deregistered
-            description: Action in the certificate
-        required:
-        - tx_hash
-        - cert_index
-        - action
-      example:
-      - tx_hash: 6804edf9712d2b619edb6ac86861fe93a730693183a262b165fcc1ba1bc99cad
-        cert_index: 0
-        action: registered
-      - tx_hash: 9c190bc1ac88b2ab0c05a82d7de8b71b67a9316377e865748a89d4426c0d3005
-        cert_index: 0
-        action: deregistered
-      - tx_hash: e14a75b0eb2625de7055f1f580d70426311b78e0d36dd695a6bdc96c7b3d80e0
-        cert_index: 1
-        action: registered
-    pool_metadata:
-      type: object
-      properties:
-        pool_id:
-          type: string
-          example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-          description: Bech32 pool ID
-        hex:
-          type: string
-          example: 0f292fcaa02b8b2f9b3c8f9fd8e0bb21abedb692a6d5058df3ef2735
-          description: Hexadecimal pool ID
-        url:
-          type:
-          - string
-          - 'null'
-          example: https://stakenuts.com/mainnet.json
-          description: URL to the stake pool metadata
-        hash:
-          type:
-          - string
-          - 'null'
-          example: 47c0c68cb57f4a5b4a87bad896fc274678e7aea98e200fa14a1cb40c0cab1d8c
-          description: Hash of the metadata file
-        error:
-          type: object
-          description: Present when metadata could not be fetched or validated.
-          properties:
-            code:
-              type: string
-              description: Stable machine-readable error code.
-              enum:
-              - HASH_MISMATCH
-              - CONNECTION_ERROR
-              - HTTP_RESPONSE_ERROR
-              - DECODE_ERROR
-              - SIZE_EXCEEDED
-              - UNKNOWN_ERROR
-            message:
-              type: string
-              description: Human-readable description of the error.
-          required:
-          - code
-          - message
-        ticker:
-          type:
-          - string
-          - 'null'
-          example: NUTS
-          description: Ticker of the stake pool
-        name:
-          type:
-          - string
-          - 'null'
-          example: Stake Nuts
-          description: Name of the stake pool
-        description:
-          type:
-          - string
-          - 'null'
-          example: The best pool ever
-          description: Description of the stake pool
-        homepage:
-          type:
-          - string
-          - 'null'
-          example: https://stakentus.com/
-          description: Home page of the stake pool
-      required:
-      - pool_id
-      - hex
-      - url
-      - hash
-      - ticker
-      - name
-      - description
-      - homepage
     pool_list_extended:
       type: array
       items:
@@ -1118,45 +1099,172 @@ components:
           example: '340000000'
           description: Fixed tax cost of the stake pool
         metadata: null
-    pool_relays:
+    pool_votes:
       type: array
       items:
         type: object
         properties:
-          ipv4:
-            type:
-            - string
-            - 'null'
-            example: 4.4.4.4
-            description: IPv4 address of the relay
-          ipv6:
-            type:
-            - string
-            - 'null'
-            example: https://stakenuts.com/mainnet.json
-            description: IPv6 address of the relay
-          dns:
-            type:
-            - string
-            - 'null'
-            example: relay1.stakenuts.com
-            description: DNS name of the relay
-          dns_srv:
-            type:
-            - string
-            - 'null'
-            example: _relays._tcp.relays.stakenuts.com
-            description: DNS SRV entry of the relay
-          port:
+          tx_hash:
+            type: string
+            description: Hash of the proposal transaction.
+          cert_index:
             type: integer
-            example: 3001
-            description: Network port of the relay
+            description: Index of the certificate within the proposal transaction.
+          vote:
+            type: string
+            enum:
+            - 'yes'
+            - 'no'
+            - abstain
+            description: The Vote. Can be one of yes, no, abstain.
         required:
-        - ipv4
-        - ipv6
-        - dns
-        - dns_srv
-        - port
+        - tx_hash
+        - cert_index
+        - vote
+      example:
+      - tx_hash: b302de601defdf11a5261ed31a263804dac4a582a888c998ce24dec5
+        cert_index: 2
+        vote: 'yes'
+    pool_list_retire:
+      type: array
+      items:
+        type: object
+        properties:
+          pool_id:
+            type: string
+            example: pool1z5uqdk7dzdxaae5633fqfcu2eqzy3a3rgtuvy087fdld7yws0xt
+            description: Bech32 encoded pool ID
+          epoch:
+            type: integer
+            example: 242
+            description: Retirement epoch number
+        required:
+        - pool_id
+        - epoch
+      example:
+      - pool_id: pool19u64770wqp6s95gkajc8udheske5e6ljmpq33awxk326zjaza0q
+        epoch: 225
+      - pool_id: pool1dvla4zq98hpvacv20snndupjrqhuc79zl6gjap565nku6et5zdx
+        epoch: 215
+      - pool_id: pool1wvccajt4eugjtf3k0ja3exjqdj7t8egsujwhcw4tzj4rzsxzw5w
+        epoch: 231
+    pool_updates:
+      type: array
+      items:
+        type: object
+        properties:
+          tx_hash:
+            type: string
+            description: Transaction ID
+          cert_index:
+            type: integer
+            description: Certificate within the transaction
+          action:
+            type: string
+            enum:
+            - registered
+            - deregistered
+            description: Action in the certificate
+        required:
+        - tx_hash
+        - cert_index
+        - action
+      example:
+      - tx_hash: 6804edf9712d2b619edb6ac86861fe93a730693183a262b165fcc1ba1bc99cad
+        cert_index: 0
+        action: registered
+      - tx_hash: 9c190bc1ac88b2ab0c05a82d7de8b71b67a9316377e865748a89d4426c0d3005
+        cert_index: 0
+        action: deregistered
+      - tx_hash: e14a75b0eb2625de7055f1f580d70426311b78e0d36dd695a6bdc96c7b3d80e0
+        cert_index: 1
+        action: registered
+    pool_metadata:
+      type: object
+      properties:
+        pool_id:
+          type: string
+          example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+          description: Bech32 pool ID
+        hex:
+          type: string
+          example: 0f292fcaa02b8b2f9b3c8f9fd8e0bb21abedb692a6d5058df3ef2735
+          description: Hexadecimal pool ID
+        url:
+          type:
+          - string
+          - 'null'
+          example: https://stakenuts.com/mainnet.json
+          description: URL to the stake pool metadata
+        hash:
+          type:
+          - string
+          - 'null'
+          example: 47c0c68cb57f4a5b4a87bad896fc274678e7aea98e200fa14a1cb40c0cab1d8c
+          description: Hash of the metadata file
+        error:
+          type: object
+          description: Present when metadata could not be fetched or validated.
+          properties:
+            code:
+              type: string
+              description: Stable machine-readable error code.
+              enum:
+              - HASH_MISMATCH
+              - CONNECTION_ERROR
+              - HTTP_RESPONSE_ERROR
+              - DECODE_ERROR
+              - SIZE_EXCEEDED
+              - UNKNOWN_ERROR
+            message:
+              type: string
+              description: Human-readable description of the error.
+          required:
+          - code
+          - message
+        ticker:
+          type:
+          - string
+          - 'null'
+          example: NUTS
+          description: Ticker of the stake pool
+        name:
+          type:
+          - string
+          - 'null'
+          example: Stake Nuts
+          description: Name of the stake pool
+        description:
+          type:
+          - string
+          - 'null'
+          example: The best pool ever
+          description: Description of the stake pool
+        homepage:
+          type:
+          - string
+          - 'null'
+          example: https://stakentus.com/
+          description: Home page of the stake pool
+      required:
+      - pool_id
+      - hex
+      - url
+      - hash
+      - ticker
+      - name
+      - description
+      - homepage
+    pool_blocks:
+      type: array
+      items:
+        type: string
+        description: Block hashes
+      example:
+      - d8982ca42cfe76b747cc681d35d671050a9e41e9cfe26573eb214e94fe6ff21d
+      - 026436c539e2ce84c7f77ffe669f4e4bbbb3b9c53512e5857dcba8bb0b4e9a8c
+      - bcc8487f419b8c668a18ea2120822a05df6dfe1de1f0fac3feba88cf760f303c
+      - 86bf7b4a274e0f8ec9816171667c1b4a0cfc661dc21563f271acea9482b62df7
     pool_history:
       type: array
       items:
@@ -1198,64 +1306,6 @@ components:
         - delegators_count
         - rewards
         - fees
-    pool_list:
-      type: array
-      items:
-        type: string
-        description: Bech32 encoded pool ID
-      example:
-      - pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-      - pool1hn7hlwrschqykupwwrtdfkvt2u4uaxvsgxyh6z63703p2knj288
-      - pool1ztjyjfsh432eqetadf82uwuxklh28xc85zcphpwq6mmezavzad2
-    empty_object:
-      type: object
-    pool_votes:
-      type: array
-      items:
-        type: object
-        properties:
-          tx_hash:
-            type: string
-            description: Hash of the proposal transaction.
-          cert_index:
-            type: integer
-            description: Index of the certificate within the proposal transaction.
-          vote:
-            type: string
-            enum:
-            - 'yes'
-            - 'no'
-            - abstain
-            description: The Vote. Can be one of yes, no, abstain.
-        required:
-        - tx_hash
-        - cert_index
-        - vote
-      example:
-      - tx_hash: b302de601defdf11a5261ed31a263804dac4a582a888c998ce24dec5
-        cert_index: 2
-        vote: 'yes'
-    pool_delegators:
-      type: array
-      items:
-        type: object
-        properties:
-          address:
-            type: string
-            description: Bech32 encoded stake addresses
-          live_stake:
-            type: string
-            description: Currently delegated amount
-        required:
-        - address
-        - live_stake
-      example:
-      - address: stake1ux4vspfvwuus9uwyp5p3f0ky7a30jq5j80jxse0fr7pa56sgn8kha
-        live_stake: '1137959159981411'
-      - address: stake1uylayej7esmarzd4mk4aru37zh9yz0luj3g9fsvgpfaxulq564r5u
-        live_stake: '16958865648'
-      - address: stake1u8lr2pnrgf8f7vrs9lt79hc3sxm8s2w4rwvgpncks3axx6q93d4ck
-        live_stake: '18605647'
     pool:
       type: object
       properties:
@@ -1402,127 +1452,77 @@ components:
       - registration
       - retirement
       - calidus_key
-  responses:
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
-            required:
-            - error
-            - message
-            - status_code
-    '404':
-      description: Component not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 404
-              error:
-                type: string
-                example: Not Found
-              message:
-                type: string
-                example: The requested component has not been found.
-            required:
-            - error
-            - message
-            - status_code
-    '418':
-      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 418
-              error:
-                type: string
-                example: Requested Banned
-              message:
-                type: string
-                example: IP has been auto-banned for flooding.
-            required:
-            - error
-            - message
-            - status_code
-    '403':
-      description: Authentication secret is missing or invalid
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 403
-              error:
-                type: string
-                example: Forbidden
-              message:
-                type: string
-                example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '400':
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 400
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Backend did not understand your request.
-            required:
-            - error
-            - message
-            - status_code
+    pool_list:
+      type: array
+      items:
+        type: string
+        description: Bech32 encoded pool ID
+      example:
+      - pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+      - pool1hn7hlwrschqykupwwrtdfkvt2u4uaxvsgxyh6z63703p2knj288
+      - pool1ztjyjfsh432eqetadf82uwuxklh28xc85zcphpwq6mmezavzad2
+    pool_relays:
+      type: array
+      items:
+        type: object
+        properties:
+          ipv4:
+            type:
+            - string
+            - 'null'
+            example: 4.4.4.4
+            description: IPv4 address of the relay
+          ipv6:
+            type:
+            - string
+            - 'null'
+            example: https://stakenuts.com/mainnet.json
+            description: IPv6 address of the relay
+          dns:
+            type:
+            - string
+            - 'null'
+            example: relay1.stakenuts.com
+            description: DNS name of the relay
+          dns_srv:
+            type:
+            - string
+            - 'null'
+            example: _relays._tcp.relays.stakenuts.com
+            description: DNS SRV entry of the relay
+          port:
+            type: integer
+            example: 3001
+            description: Network port of the relay
+        required:
+        - ipv4
+        - ipv6
+        - dns
+        - dns_srv
+        - port
+    pool_delegators:
+      type: array
+      items:
+        type: object
+        properties:
+          address:
+            type: string
+            description: Bech32 encoded stake addresses
+          live_stake:
+            type: string
+            description: Currently delegated amount
+        required:
+        - address
+        - live_stake
+      example:
+      - address: stake1ux4vspfvwuus9uwyp5p3f0ky7a30jq5j80jxse0fr7pa56sgn8kha
+        live_stake: '1137959159981411'
+      - address: stake1uylayej7esmarzd4mk4aru37zh9yz0luj3g9fsvgpfaxulq564r5u
+        live_stake: '16958865648'
+      - address: stake1u8lr2pnrgf8f7vrs9lt79hc3sxm8s2w4rwvgpncks3axx6q93d4ck
+        live_stake: '18605647'
+    empty_object:
+      type: object
   securitySchemes:
     project_id:
       type: apiKey

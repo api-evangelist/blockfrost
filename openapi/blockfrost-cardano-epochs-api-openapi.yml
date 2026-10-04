@@ -544,26 +544,6 @@ paths:
       x-operation-id-source: derived
 components:
   responses:
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
     '429':
       description: Usage limit reached
       content:
@@ -624,6 +604,26 @@ components:
             - error
             - message
             - status_code
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
     '403':
       description: Authentication secret is missing or invalid
       content:
@@ -665,6 +665,81 @@ components:
             - message
             - status_code
   schemas:
+    epoch_content:
+      type: object
+      properties:
+        epoch:
+          type: integer
+          example: 225
+          description: Epoch number
+        start_time:
+          type: integer
+          example: 1603403091
+          description: Unix time of the start of the epoch
+        end_time:
+          type: integer
+          example: 1603835086
+          description: Unix time of the end of the epoch
+        first_block_time:
+          type: integer
+          example: 1603403092
+          description: Unix time of the first block of the epoch
+        last_block_time:
+          type: integer
+          example: 1603835084
+          description: Unix time of the last block of the epoch
+        block_count:
+          type: integer
+          example: 21298
+          description: Number of blocks within the epoch
+        tx_count:
+          type: integer
+          example: 17856
+          description: Number of transactions within the epoch
+        output:
+          type: string
+          example: '7849943934049314'
+          description: Sum of all the transactions within the epoch in Lovelaces
+        fees:
+          type: string
+          example: '4203312194'
+          description: Sum of all the fees within the epoch in Lovelaces
+        active_stake:
+          type:
+          - string
+          - 'null'
+          example: '784953934049314'
+          description: Sum of all the active stakes within the epoch in Lovelaces
+      required:
+      - epoch
+      - start_time
+      - end_time
+      - first_block_time
+      - last_block_time
+      - block_count
+      - tx_count
+      - output
+      - fees
+      - active_stake
+    epoch_content_array:
+      type: array
+      items:
+        $ref: '#/components/schemas/epoch_content'
+    epoch_stake_pool_content:
+      type: array
+      items:
+        properties:
+          stake_address:
+            type: string
+            example: stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk
+            description: Stake address
+          amount:
+            type: string
+            example: '4440295078'
+            description: Amount of active delegated stake in Lovelaces
+        required:
+        - stake_address
+        - amount
     epoch_block_content:
       type: array
       items:
@@ -1024,21 +1099,6 @@ components:
       - pvtpp_security_group
       - pvt_p_p_security_group
       - min_fee_ref_script_cost_per_byte
-    epoch_stake_pool_content:
-      type: array
-      items:
-        properties:
-          stake_address:
-            type: string
-            example: stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk
-            description: Stake address
-          amount:
-            type: string
-            example: '4440295078'
-            description: Amount of active delegated stake in Lovelaces
-        required:
-        - stake_address
-        - amount
     epoch_stake_content:
       type: array
       items:
@@ -1060,66 +1120,6 @@ components:
         - stake_address
         - pool_id
         - amount
-    epoch_content:
-      type: object
-      properties:
-        epoch:
-          type: integer
-          example: 225
-          description: Epoch number
-        start_time:
-          type: integer
-          example: 1603403091
-          description: Unix time of the start of the epoch
-        end_time:
-          type: integer
-          example: 1603835086
-          description: Unix time of the end of the epoch
-        first_block_time:
-          type: integer
-          example: 1603403092
-          description: Unix time of the first block of the epoch
-        last_block_time:
-          type: integer
-          example: 1603835084
-          description: Unix time of the last block of the epoch
-        block_count:
-          type: integer
-          example: 21298
-          description: Number of blocks within the epoch
-        tx_count:
-          type: integer
-          example: 17856
-          description: Number of transactions within the epoch
-        output:
-          type: string
-          example: '7849943934049314'
-          description: Sum of all the transactions within the epoch in Lovelaces
-        fees:
-          type: string
-          example: '4203312194'
-          description: Sum of all the fees within the epoch in Lovelaces
-        active_stake:
-          type:
-          - string
-          - 'null'
-          example: '784953934049314'
-          description: Sum of all the active stakes within the epoch in Lovelaces
-      required:
-      - epoch
-      - start_time
-      - end_time
-      - first_block_time
-      - last_block_time
-      - block_count
-      - tx_count
-      - output
-      - fees
-      - active_stake
-    epoch_content_array:
-      type: array
-      items:
-        $ref: '#/components/schemas/epoch_content'
   securitySchemes:
     project_id:
       type: apiKey
