@@ -353,6 +353,12 @@ apis:
   - type: Vocabulary
     url: vocabulary/blockfrost-vocabulary.yaml
 common:
+- type: Plans
+  url: plans/blockfrost-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/blockfrost-rate-limits.yml
+- type: FinOps
+  url: finops/blockfrost-finops.yml
 - url: https://blog.blockfrost.io/rss/
   type: BlogRSS
 - type: PostmanWorkspace
