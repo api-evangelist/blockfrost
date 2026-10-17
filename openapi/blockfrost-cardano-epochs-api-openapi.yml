@@ -543,128 +543,32 @@ paths:
       operationId: getEpochsByNumberParameters
       x-operation-id-source: derived
 components:
-  responses:
-    '429':
-      description: Usage limit reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 429
-              error:
-                type: string
-                example: Project Over Limit
-              message:
-                type: string
-                example: Usage is over limit.
-            required:
-            - error
-            - message
-            - status_code
-    '404':
-      description: Component not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 404
-              error:
-                type: string
-                example: Not Found
-              message:
-                type: string
-                example: The requested component has not been found.
-            required:
-            - error
-            - message
-            - status_code
-    '418':
-      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 418
-              error:
-                type: string
-                example: Requested Banned
-              message:
-                type: string
-                example: IP has been auto-banned for flooding.
-            required:
-            - error
-            - message
-            - status_code
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 500
-              error:
-                type: string
-                example: Internal Server Error
-              message:
-                type: string
-                example: An unexpected response was received from the backend.
-            required:
-            - error
-            - message
-            - status_code
-    '403':
-      description: Authentication secret is missing or invalid
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 403
-              error:
-                type: string
-                example: Forbidden
-              message:
-                type: string
-                example: Invalid project token.
-            required:
-            - error
-            - message
-            - status_code
-    '400':
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status_code:
-                type: integer
-                example: 400
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Backend did not understand your request.
-            required:
-            - error
-            - message
-            - status_code
   schemas:
+    epoch_stake_content:
+      type: array
+      items:
+        type: object
+        properties:
+          stake_address:
+            type: string
+            example: stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk
+            description: Stake address
+          pool_id:
+            type: string
+            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
+            description: Bech32 prefix of the pool delegated to
+          amount:
+            type: string
+            example: '4440295078'
+            description: Amount of active delegated stake in Lovelaces
+        required:
+        - stake_address
+        - pool_id
+        - amount
+    epoch_content_array:
+      type: array
+      items:
+        $ref: '#/components/schemas/epoch_content'
     epoch_content:
       type: object
       properties:
@@ -721,25 +625,6 @@ components:
       - output
       - fees
       - active_stake
-    epoch_content_array:
-      type: array
-      items:
-        $ref: '#/components/schemas/epoch_content'
-    epoch_stake_pool_content:
-      type: array
-      items:
-        properties:
-          stake_address:
-            type: string
-            example: stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk
-            description: Stake address
-          amount:
-            type: string
-            example: '4440295078'
-            description: Amount of active delegated stake in Lovelaces
-        required:
-        - stake_address
-        - amount
     epoch_block_content:
       type: array
       items:
@@ -1099,27 +984,142 @@ components:
       - pvtpp_security_group
       - pvt_p_p_security_group
       - min_fee_ref_script_cost_per_byte
-    epoch_stake_content:
+    epoch_stake_pool_content:
       type: array
       items:
-        type: object
         properties:
           stake_address:
             type: string
             example: stake1u9l5q5jwgelgagzyt6nuaasefgmn8pd25c8e9qpeprq0tdcp0e3uk
             description: Stake address
-          pool_id:
-            type: string
-            example: pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy
-            description: Bech32 prefix of the pool delegated to
           amount:
             type: string
             example: '4440295078'
             description: Amount of active delegated stake in Lovelaces
         required:
         - stake_address
-        - pool_id
         - amount
+  responses:
+    '429':
+      description: Usage limit reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 429
+              error:
+                type: string
+                example: Project Over Limit
+              message:
+                type: string
+                example: Usage is over limit.
+            required:
+            - error
+            - message
+            - status_code
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: An unexpected response was received from the backend.
+            required:
+            - error
+            - message
+            - status_code
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Backend did not understand your request.
+            required:
+            - error
+            - message
+            - status_code
+    '404':
+      description: Component not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 404
+              error:
+                type: string
+                example: Not Found
+              message:
+                type: string
+                example: The requested component has not been found.
+            required:
+            - error
+            - message
+            - status_code
+    '418':
+      description: IP has been auto-banned for extensive sending of requests after usage limit has been reached
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 418
+              error:
+                type: string
+                example: Requested Banned
+              message:
+                type: string
+                example: IP has been auto-banned for flooding.
+            required:
+            - error
+            - message
+            - status_code
+    '403':
+      description: Authentication secret is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 403
+              error:
+                type: string
+                example: Forbidden
+              message:
+                type: string
+                example: Invalid project token.
+            required:
+            - error
+            - message
+            - status_code
   securitySchemes:
     project_id:
       type: apiKey
