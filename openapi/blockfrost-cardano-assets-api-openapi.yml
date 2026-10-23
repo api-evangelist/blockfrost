@@ -887,3 +887,9 @@ components:
         see available networks.
 
         '
+x-provenance:
+  method: harvested
+  publisher: Blockfrost
+  source: https://docs.blockfrost.io/blockfrost-openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
