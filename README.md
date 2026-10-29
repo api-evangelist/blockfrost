@@ -1,4 +1,4 @@
-# Blockfrost (blockfrost)
+# Blockfrost
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,134 +66,266 @@
 
 Blockfrost is a RESTful API service providing access to the Cardano blockchain and its ecosystem. It serves as an infrastructure layer for developers building dApps, wallets, NFT platforms, DeFi protocols, and analytics tools on Cardano. Blockfrost provides endpoints for querying blocks, transactions, accounts, addresses, native assets, epochs, governance data, and IPFS storage, supporting both mainnet and testnet networks.
 
-**URL:** [https://blockfrost.io](https://blockfrost.io)
+**Areas:** Blockchain · Cardano · Cryptocurrency · DApps · NFT · Web3
 
-**Run:** [Capabilities Using Naftiko](https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=company-api-evangelist&utm_content=repo)
+## Blockfrost on APIs.io
 
-## Tags:
+Everything profiled for Blockfrost is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/blockfrost/](https://apis.io/providers/blockfrost/)** — or go straight to one of the APIs or properties below.
 
- - Blockchain, Cardano, Cryptocurrency, DApps, NFT, Web3
+### APIs (20)
 
-## Timestamps
+- [Blockfrost Cardano » Accounts API](https://apis.io/apis/blockfrost/blockfrost-cardano-accounts-api/) — The Cardano » Accounts API from Blockfrost — 12 operation(s) for cardano » accounts.
+- [Blockfrost Cardano » Addresses API](https://apis.io/apis/blockfrost/blockfrost-cardano-addresses-api/) — The Cardano » Addresses API from Blockfrost — 7 operation(s) for cardano » addresses.
+- [Blockfrost Cardano » Assets API](https://apis.io/apis/blockfrost/blockfrost-cardano-assets-api/) — The Cardano » Assets API from Blockfrost — 7 operation(s) for cardano » assets.
+- [Blockfrost Cardano » Blocks API](https://apis.io/apis/blockfrost/blockfrost-cardano-blocks-api/) — The Cardano » Blocks API from Blockfrost — 11 operation(s) for cardano » blocks.
+- [Blockfrost Cardano » Epochs API](https://apis.io/apis/blockfrost/blockfrost-cardano-epochs-api/) — The Cardano » Epochs API from Blockfrost — 10 operation(s) for cardano » epochs.
+- [Blockfrost Cardano » Governance API](https://apis.io/apis/blockfrost/blockfrost-cardano-governance-api/) — The Cardano » Governance API from Blockfrost — 17 operation(s) for cardano » governance.
+- [Blockfrost Cardano » Ledger API](https://apis.io/apis/blockfrost/blockfrost-cardano-ledger-api/) — The Cardano » Ledger API from Blockfrost — 1 operation(s) for cardano » ledger.
+- [Blockfrost Cardano » Mempool API](https://apis.io/apis/blockfrost/blockfrost-cardano-mempool-api/) — The Cardano » Mempool API from Blockfrost — 3 operation(s) for cardano » mempool.
+- [Blockfrost Cardano » Metadata API](https://apis.io/apis/blockfrost/blockfrost-cardano-metadata-api/) — The Cardano » Metadata API from Blockfrost — 3 operation(s) for cardano » metadata.
+- [Blockfrost Cardano » Network API](https://apis.io/apis/blockfrost/blockfrost-cardano-network-api/) — The Cardano » Network API from Blockfrost — 2 operation(s) for cardano » network.
+- [Blockfrost Cardano » Pools API](https://apis.io/apis/blockfrost/blockfrost-cardano-pools-api/) — The Cardano » Pools API from Blockfrost — 12 operation(s) for cardano » pools.
+- [Blockfrost Cardano » Scripts API](https://apis.io/apis/blockfrost/blockfrost-cardano-scripts-api/) — The Cardano » Scripts API from Blockfrost — 7 operation(s) for cardano » scripts.
+- [Blockfrost Cardano » Transactions API](https://apis.io/apis/blockfrost/blockfrost-cardano-transactions-api/) — The Cardano » Transactions API from Blockfrost — 14 operation(s) for cardano » transactions.
+- [Blockfrost Cardano » Utilities API](https://apis.io/apis/blockfrost/blockfrost-cardano-utilities-api/) — The Cardano » Utilities API from Blockfrost — 3 operation(s) for cardano » utilities.
+- [Blockfrost Health API](https://apis.io/apis/blockfrost/blockfrost-health-api/) — The Health API from Blockfrost — 3 operation(s) for health.
+- [Blockfrost IPFS » Add API](https://apis.io/apis/blockfrost/blockfrost-ipfs-add-api/) — The IPFS » Add API from Blockfrost — 1 operation(s) for ipfs » add.
+- [Blockfrost IPFS » Gateway API](https://apis.io/apis/blockfrost/blockfrost-ipfs-gateway-api/) — The IPFS » Gateway API from Blockfrost — 1 operation(s) for ipfs » gateway.
+- [Blockfrost IPFS » Pins API](https://apis.io/apis/blockfrost/blockfrost-ipfs-pins-api/) — The IPFS » Pins API from Blockfrost — 4 operation(s) for ipfs » pins.
+- [Blockfrost Metrics API](https://apis.io/apis/blockfrost/blockfrost-metrics-api/) — The Metrics API from Blockfrost — 2 operation(s) for metrics.
+- [Blockfrost Nut.link API](https://apis.io/apis/blockfrost/blockfrost-nut-link-api/) — The Nut.link API from Blockfrost — 4 operation(s) for nut.link.
 
-- **Created:** 2024-09-27
-- **Modified:** 2026-04-19
+### Published properties
 
-## APIs
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-### Blockfrost API
-RESTful API for interacting with the Cardano blockchain and parts of its ecosystem. Provides access to blocks, transactions, accounts, addresses, native assets, epochs, governance data, and IPFS. Requires a project_id obtained from blockfrost.io for authentication. Supports Cardano mainnet, preview testnet, preprod testnet, and Midnight mainnet networks.
+#### GraphQL (1)
 
-**Human URL:** [https://blockfrost.io/](https://blockfrost.io/)
+GraphQL schemas.
 
-#### Tags:
+- [Moved to /providers/blockfrost/](https://apis.io/graphqls/blockfrost/blockfrost-graphql/)
 
- - Blockchain, Cardano, Cryptocurrency, Web3
+#### Agentic access (1)
 
-#### Properties
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Documentation](https://docs.blockfrost.io/)
-- [OpenAPI](openapi/blockfrost-openapi.yaml)
-- [NaftikoCapability](capabilities/blockfrost-cardano-explorer.yaml)
-- [SpectralRules](rules/blockfrost-spectral-rules.yml)
-- [Vocabulary](vocabulary/blockfrost-vocabulary.yaml)
+- [Blockfrost Agentic Access](https://apis.io/agentic-access/blockfrost/blockfrost-agentic-access/)
 
-## Common Properties
+#### JSON Schema (20)
+
+The data models the API reads and writes.
+
+- [block_content](https://apis.io/schemas/blockfrost/blockfrost-block-content/)
+- [block_content_addresses](https://apis.io/schemas/blockfrost/blockfrost-block-content-addresses/)
+- [block_content_array](https://apis.io/schemas/blockfrost/blockfrost-block-content-array/)
+- [block_content_txs](https://apis.io/schemas/blockfrost/blockfrost-block-content-txs/)
+- [block_content_txs_cbor](https://apis.io/schemas/blockfrost/blockfrost-block-content-txs-cbor/)
+- [drep](https://apis.io/schemas/blockfrost/blockfrost-drep/)
+- [drep_delegators](https://apis.io/schemas/blockfrost/blockfrost-drep-delegators/)
+- [drep_metadata](https://apis.io/schemas/blockfrost/blockfrost-drep-metadata/)
+- [drep_updates](https://apis.io/schemas/blockfrost/blockfrost-drep-updates/)
+- [drep_votes](https://apis.io/schemas/blockfrost/blockfrost-drep-votes/)
+- [dreps](https://apis.io/schemas/blockfrost/blockfrost-dreps/)
+- [genesis_content](https://apis.io/schemas/blockfrost/blockfrost-genesis-content/)
+- [onchain_metadata_cip25](https://apis.io/schemas/blockfrost/blockfrost-onchain-metadata-cip25/)
+- [onchain_metadata_cip68_ft_333](https://apis.io/schemas/blockfrost/blockfrost-onchain-metadata-cip68-ft-333/)
+- [onchain_metadata_cip68_nft_222](https://apis.io/schemas/blockfrost/blockfrost-onchain-metadata-cip68-nft-222/)
+- [onchain_metadata_cip68_rft_444](https://apis.io/schemas/blockfrost/blockfrost-onchain-metadata-cip68-rft-444/)
+- [proposal](https://apis.io/schemas/blockfrost/blockfrost-proposal/)
+- [proposal_parameters](https://apis.io/schemas/blockfrost/blockfrost-proposal-parameters/)
+- [proposal_withdrawals](https://apis.io/schemas/blockfrost/blockfrost-proposal-withdrawals/)
+- [proposals](https://apis.io/schemas/blockfrost/blockfrost-proposals/)
+
+#### JSON Structure (20)
+
+Data models expressed in JSON Structure.
+
+- [Blockfrost Block Content Addresses Structure](https://apis.io/json-structure/blockfrost/blockfrost-block-content-addresses-structure/)
+- [Blockfrost Block Content Array Structure](https://apis.io/json-structure/blockfrost/blockfrost-block-content-array-structure/)
+- [Blockfrost Block Content Structure](https://apis.io/json-structure/blockfrost/blockfrost-block-content-structure/)
+- [Blockfrost Block Content Txs Cbor Structure](https://apis.io/json-structure/blockfrost/blockfrost-block-content-txs-cbor-structure/)
+- [Blockfrost Block Content Txs Structure](https://apis.io/json-structure/blockfrost/blockfrost-block-content-txs-structure/)
+- [Blockfrost Drep Delegators Structure](https://apis.io/json-structure/blockfrost/blockfrost-drep-delegators-structure/)
+- [Blockfrost Drep Metadata Structure](https://apis.io/json-structure/blockfrost/blockfrost-drep-metadata-structure/)
+- [Blockfrost Drep Structure](https://apis.io/json-structure/blockfrost/blockfrost-drep-structure/)
+- [Blockfrost Drep Updates Structure](https://apis.io/json-structure/blockfrost/blockfrost-drep-updates-structure/)
+- [Blockfrost Drep Votes Structure](https://apis.io/json-structure/blockfrost/blockfrost-drep-votes-structure/)
+- [Blockfrost Dreps Structure](https://apis.io/json-structure/blockfrost/blockfrost-dreps-structure/)
+- [Blockfrost Genesis Content Structure](https://apis.io/json-structure/blockfrost/blockfrost-genesis-content-structure/)
+- [Blockfrost Onchain Metadata Cip25 Structure](https://apis.io/json-structure/blockfrost/blockfrost-onchain-metadata-cip25-structure/)
+- [Blockfrost Onchain Metadata Cip68 Ft 333 Structure](https://apis.io/json-structure/blockfrost/blockfrost-onchain-metadata-cip68-ft-333-structure/)
+- [Blockfrost Onchain Metadata Cip68 Nft 222 Structure](https://apis.io/json-structure/blockfrost/blockfrost-onchain-metadata-cip68-nft-222-structure/)
+- [Blockfrost Onchain Metadata Cip68 Rft 444 Structure](https://apis.io/json-structure/blockfrost/blockfrost-onchain-metadata-cip68-rft-444-structure/)
+- [Blockfrost Proposal Parameters Structure](https://apis.io/json-structure/blockfrost/blockfrost-proposal-parameters-structure/)
+- [Blockfrost Proposal Structure](https://apis.io/json-structure/blockfrost/blockfrost-proposal-structure/)
+- [Blockfrost Proposal Withdrawals Structure](https://apis.io/json-structure/blockfrost/blockfrost-proposal-withdrawals-structure/)
+- [Blockfrost Proposals Structure](https://apis.io/json-structure/blockfrost/blockfrost-proposals-structure/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Blockfrost Context](https://apis.io/jsonld/blockfrost/blockfrost-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Blockfrost Vocabulary](https://apis.io/vocabularies/blockfrost/blockfrost-vocabulary/)
+
+#### Examples (20)
+
+Example requests and responses.
+
+- [Blockfrost Block Content Addresses Example](https://apis.io/examples/blockfrost/blockfrost-block-content-addresses-example/)
+- [Blockfrost Block Content Array Example](https://apis.io/examples/blockfrost/blockfrost-block-content-array-example/)
+- [Blockfrost Block Content Example](https://apis.io/examples/blockfrost/blockfrost-block-content-example/)
+- [Blockfrost Block Content Txs Cbor Example](https://apis.io/examples/blockfrost/blockfrost-block-content-txs-cbor-example/)
+- [Blockfrost Block Content Txs Example](https://apis.io/examples/blockfrost/blockfrost-block-content-txs-example/)
+- [Blockfrost Drep Delegators Example](https://apis.io/examples/blockfrost/blockfrost-drep-delegators-example/)
+- [Blockfrost Drep Example](https://apis.io/examples/blockfrost/blockfrost-drep-example/)
+- [Blockfrost Drep Metadata Example](https://apis.io/examples/blockfrost/blockfrost-drep-metadata-example/)
+- [Blockfrost Drep Updates Example](https://apis.io/examples/blockfrost/blockfrost-drep-updates-example/)
+- [Blockfrost Drep Votes Example](https://apis.io/examples/blockfrost/blockfrost-drep-votes-example/)
+- [Blockfrost Dreps Example](https://apis.io/examples/blockfrost/blockfrost-dreps-example/)
+- [Blockfrost Genesis Content Example](https://apis.io/examples/blockfrost/blockfrost-genesis-content-example/)
+- [Blockfrost Onchain Metadata Cip25 Example](https://apis.io/examples/blockfrost/blockfrost-onchain-metadata-cip25-example/)
+- [Blockfrost Onchain Metadata Cip68 Ft 333 Example](https://apis.io/examples/blockfrost/blockfrost-onchain-metadata-cip68-ft-333-example/)
+- [Blockfrost Onchain Metadata Cip68 Nft 222 Example](https://apis.io/examples/blockfrost/blockfrost-onchain-metadata-cip68-nft-222-example/)
+- [Blockfrost Onchain Metadata Cip68 Rft 444 Example](https://apis.io/examples/blockfrost/blockfrost-onchain-metadata-cip68-rft-444-example/)
+- [Blockfrost Proposal Example](https://apis.io/examples/blockfrost/blockfrost-proposal-example/)
+- [Blockfrost Proposal Parameters Example](https://apis.io/examples/blockfrost/blockfrost-proposal-parameters-example/)
+- [Blockfrost Proposal Withdrawals Example](https://apis.io/examples/blockfrost/blockfrost-proposal-withdrawals-example/)
+- [Blockfrost Proposals Example](https://apis.io/examples/blockfrost/blockfrost-proposals-example/)
+
+#### Collections (40)
+
+Postman and Open Collection request collections.
+
+- [Blockfrost.io ~ API Documentation Cardano » Accounts API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-accounts-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Addresses API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-addresses-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Assets API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-assets-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Blocks API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-blocks-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Epochs API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-epochs-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Governance API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-governance-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Ledger API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-ledger-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Mempool API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-mempool-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Metadata API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-metadata-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Network API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-network-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Pools API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-pools-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Scripts API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-scripts-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Transactions API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-transactions-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Utilities API](https://apis.io/collections/blockfrost/open-blockfrost-cardano-utilities-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Health API](https://apis.io/collections/blockfrost/open-blockfrost-health-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts IPFS » Add API](https://apis.io/collections/blockfrost/open-blockfrost-ipfs-add-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts IPFS » Gateway API](https://apis.io/collections/blockfrost/open-blockfrost-ipfs-gateway-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts IPFS » Pins API](https://apis.io/collections/blockfrost/open-blockfrost-ipfs-pins-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Metrics API](https://apis.io/collections/blockfrost/open-blockfrost-metrics-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Nut.link API](https://apis.io/collections/blockfrost/open-blockfrost-nut-link-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts API](https://apis.io/collections/blockfrost/postman-blockfrost-cardano-accounts-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Addresses API](https://apis.io/collections/blockfrost/postman-blockfrost-cardano-addresses-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Assets API](https://apis.io/collections/blockfrost/postman-blockfrost-cardano-assets-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Blocks API](https://apis.io/collections/blockfrost/postman-blockfrost-cardano-blocks-api/)
+- [Blockfrost.io ~ API Documentation Cardano » Accounts Cardano » Epochs API](https://apis.io/collections/blockfrost/postman-blockfrost-cardano-epochs-api/)
+- …and 15 more published on APIs.io
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [Blockfrost — jsonschema rules](https://apis.io/rules/blockfrost/blockfrost-jsonschema-spectral-rules/)
+- [Blockfrost API Rules](https://apis.io/rules/blockfrost/blockfrost-spectral-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Blockfrost Authentication](https://apis.io/security/blockfrost/blockfrost-authentication/)
+- [Blockfrost Domain Security](https://apis.io/security/blockfrost/blockfrost-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Blockfrost Plans Pricing](https://apis.io/plans/blockfrost/blockfrost-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Blockfrost Rate Limits](https://apis.io/rate-limits/blockfrost/blockfrost-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Blockfrost Finops](https://apis.io/finops/blockfrost/blockfrost-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://blockfrost.io/)
 - [Documentation](https://blockfrost.dev/)
-- [Getting Started](https://blockfrost.dev/overview/getting-started)
+- [Getting started](https://blockfrost.dev/overview/getting-started)
 - [Pricing](https://blockfrost.io/#pricing)
-- [Status Page](https://status.blockfrost.io/)
 - [Support](https://blockfrost.dev/support)
-- [GitHub Organization](https://github.com/blockfrost)
-- [Discord](https://discord.gg/inputoutput)
-- [Terms of Service](https://blockfrost.io/terms)
-- [Privacy Policy](https://blockfrost.io/privacy)
-- [Login](https://blockfrost.io/auth/signin)
-- [Official SDKs](https://blockfrost.dev/sdks)
+- [Terms of service](https://blockfrost.io/terms)
+- [Privacy policy](https://blockfrost.io/privacy)
+- [GitHub](https://github.com/blockfrost)
+- [Status](https://status.blockfrost.io/)
 
-## Features
+## API Evangelist rating
 
-| Name | Description |
-|------|-------------|
-| Cardano Blockchain Access | Query blocks, transactions, slots, epochs, accounts, and addresses on the Cardano mainnet and testnet networks. |
-| Native Asset Support | Full support for Cardano native assets including fungible tokens, NFTs, and multi-asset UTXOs with on-chain metadata (CIP-25, CIP-68). |
-| Stake Pool and Delegation Data | Query stake pool information, delegation history, rewards, and account activity for Cardano staking workflows. |
-| Governance Data | Access Cardano governance data including proposals, DRep registrations, and voting activity introduced in the Conway era. |
-| IPFS Integration | Built-in IPFS API for storing and retrieving off-chain NFT metadata and other content via Blockfrost's IPFS gateway. |
-| Multi-Network Support | Single API surface covering Cardano mainnet, preview testnet, preprod testnet, and the Midnight blockchain. |
-| Transaction Submission | Submit signed transactions directly to the Cardano network via the Blockfrost API without running a local node. |
+**Kin Score 45.1** — developing · rubric 0.25.0 · scored 2026-10-23
 
-## Use Cases
+| Facet | Score |
+|---|---|
+| Discoverability | 57.1 |
+| Contract quality | 58.2 |
+| Contract governance | 27.3 |
+| Operational transparency | 26.3 |
+| Developer ergonomics | 46.4 |
+| Access clarity | 40.8 |
 
-| Name | Description |
-|------|-------------|
-| dApp Development | Developers build Cardano dApps using Blockfrost to query blockchain state, submit transactions, and interact with smart contracts. |
-| NFT Platform Integration | NFT marketplaces and minting platforms use Blockfrost to track asset minting, transfers, and metadata across the Cardano network. |
-| DeFi Protocol Building | DeFi protocols integrate Blockfrost to monitor liquidity pool states, track DEX transactions, and manage smart contract interactions. |
-| Wallet Development | Cardano wallet applications use Blockfrost to fetch UTXOs, balances, transaction history, and submit transactions. |
-| Blockchain Analytics | Analytics platforms query Blockfrost for on-chain data including block history, epoch statistics, and network activity metrics. |
+**Agent readiness 25.4** — agent-aware
 
-## Integrations
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
 
-| Name | Description |
-|------|-------------|
-| Mesh SDK | The Mesh JavaScript/TypeScript SDK integrates with Blockfrost as a provider for Cardano dApp development. |
-| Lucid Evolution | Lucid Evolution (TypeScript library) supports Blockfrost as a blockchain provider for transaction building and submission. |
-| PyCardano | PyCardano Python library uses Blockfrost as a chain context provider for Cardano smart contract development. |
-| Cardano Serialization Library | The Cardano Serialization Library (CSL) pairs with Blockfrost for transaction construction and UTXO management. |
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
 
-## Artifacts
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/blockfrost/](https://apis.io/providers/blockfrost/).
 
-Machine-readable API specifications organized by format.
+## How this profile is made
 
-### OpenAPI
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
 
-- [Blockfrost API](openapi/blockfrost-openapi.yaml)
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Blockfrost: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
 
-### JSON Schema
+## Open an issue
 
-- [block_content](json-schema/blockfrost--block-content-schema.json)
-- [transaction_content](json-schema/blockfrost--transaction-content-schema.json)
-- See json-schema/ for all 20 schema files
-
-### JSON Structure
-
-- See json-structure/ for all 20 JSON Structure files
-
-### JSON-LD
-
-- [Blockfrost Context](json-ld/blockfrost-context.jsonld)
-
-### Examples
-
-- See examples/ for all 20 example files
-
-## Capabilities
-
-Naftiko capabilities organized as shared per-API definitions composed into customer-facing workflows.
-
-### Shared Per-API Definitions
-
-- [Blockfrost API](capabilities/shared/blockfrost-api.yaml) — 8 operations for blocks, transactions, accounts, addresses, assets, epochs, and transaction submission
-
-### Workflow Capabilities
-
-| Workflow | APIs Combined | Tools | Persona |
-|----------|--------------|-------|---------|
-| [Blockfrost Cardano Explorer](capabilities/blockfrost-cardano-explorer.yaml) | Blockfrost API | 8 | dApp Developers, Blockchain Analysts, NFT Creators, DeFi Users |
-
-## Vocabulary
-
-- [Blockfrost Vocabulary](vocabulary/blockfrost-vocabulary.yaml) — Unified taxonomy mapping 7 resources, 3 actions, 1 workflow, and 4 personas across operational (OpenAPI) and capability (Naftiko) dimensions
-
-## Rules
-
-- [Blockfrost Spectral Rules](rules/blockfrost-spectral-rules.yml) — 29 rules across 12 categories enforcing Blockfrost API conventions
-
-## Maintainers
-
-**FN:** Kin Lane
-
-**Email:** kin@apievangelist.com
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/blockfrost/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
